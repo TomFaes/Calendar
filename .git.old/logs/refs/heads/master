@@ -1,0 +1,70 @@
+0000000000000000000000000000000000000000 ef616ebab24330a4756547a79bb45e60d1158801 Dark_kronic <tomfa@hotmail.com> 1531741099 +0200	commit (initial): Starting from scratch
+ef616ebab24330a4756547a79bb45e60d1158801 094a840efecea225b89075460a4b95f38eaab9b8 Dark_kronic <tomfa@hotmail.com> 1531741297 +0200	commit: Add authentication
+094a840efecea225b89075460a4b95f38eaab9b8 8a7c442b0379483fcd165bdf20d2777b19be5af9 Dark_kronic <tomfa@hotmail.com> 1531813934 +0200	commit: Release 9: adding the default map, installing idea helper, moving the user model
+8a7c442b0379483fcd165bdf20d2777b19be5af9 f8d04aac3dc687bb7271e5d873f4645badb3a8d2 Dark_kronic <tomfa@hotmail.com> 1531896236 +0200	commit: Release 10: user index view
+f8d04aac3dc687bb7271e5d873f4645badb3a8d2 4c2dad5a4d20382d0d0d9527098011781899bda0 Dark_kronic <tomfa@hotmail.com> 1531919308 +0200	commit: Release 10: add update and update profile views
+4c2dad5a4d20382d0d0d9527098011781899bda0 34018ce1d14a054974a91032006ff82aecba3f49 Dark_kronic <tomfa@hotmail.com> 1531978181 +0200	pull origintf master: Fast-forward
+34018ce1d14a054974a91032006ff82aecba3f49 ecd9dffb5a92936c1c7656d761c678704cec0d25 Dark_kronic <tomfa@hotmail.com> 1531981039 +0200	commit: Release 10: adding change password, adding admin middleware
+ecd9dffb5a92936c1c7656d761c678704cec0d25 9eabfa8d9b93861b40c9f44c3d82af0e1b5e0241 Dark_kronic <tomfa@hotmail.com> 1531993048 +0200	commit: Release 11: adding all group options
+9eabfa8d9b93861b40c9f44c3d82af0e1b5e0241 ac6ba9bc172a856d95ebc863ca96460c1ff93473 Dark_kronic <tomfa@hotmail.com> 1531993357 +0200	commit: Release 11: BugFix: Role gets update when there is a change, with creation de default role is set to User
+ac6ba9bc172a856d95ebc863ca96460c1ff93473 fdff5914a8b51d65e151c9e7d897f7a8b051f4aa Dark_kronic <tomfa@hotmail.com> 1531993543 +0200	commit: Release 11: adding middleware admin to the routes
+fdff5914a8b51d65e151c9e7d897f7a8b051f4aa 760c92b2b6f726a2e51eae4e2ca6728518fddade Dark_kronic <tomfa@hotmail.com> 1532324355 +0200	pull origintf master: Fast-forward
+760c92b2b6f726a2e51eae4e2ca6728518fddade c80007d437f61dc047a5e142878c1abad1c86632 Dark_kronic <tomfa@hotmail.com> 1532331182 +0200	commit: Release 17: creating group en user middleware
+c80007d437f61dc047a5e142878c1abad1c86632 7ccb4c654e5cb5033da392815b217023a04d5f65 Dark_kronic <tomfa@hotmail.com> 1532331549 +0200	commit: Release 17: changing the name of the group and season middleware
+7ccb4c654e5cb5033da392815b217023a04d5f65 3f30e09c7cf6a74a5c500326a4f60eede97c0ec5 Dark_kronic <tomfa@hotmail.com> 1532409552 +0200	pull origintf master: Fast-forward
+3f30e09c7cf6a74a5c500326a4f60eede97c0ec5 de0e39c829f3828d4230f615aa28fd7168cbd454 Dark_kronic <tomfa@hotmail.com> 1532410605 +0200	commit: Release 17: add error page to the topics and not on the home page
+de0e39c829f3828d4230f615aa28fd7168cbd454 7a504ea5bb7965b1adcb3eb90b74504743ca1ca0 Dark_kronic <tomfa@hotmail.com> 1532416277 +0200	commit: Release 17: change nav bar
+7a504ea5bb7965b1adcb3eb90b74504743ca1ca0 60530303e37729544fea54c88c5a022f474a8b1a Dark_kronic <tomfa@hotmail.com> 1532422120 +0200	commit: Release 17: removing scrollbar, add season for non admin person, adjust middleware
+60530303e37729544fea54c88c5a022f474a8b1a b9f33b93d6cbe9c9f2546b14a3e956b8bc0a02ff Dark_kronic <tomfa@hotmail.com> 1532497003 +0200	pull origintf master: Fast-forward
+b9f33b93d6cbe9c9f2546b14a3e956b8bc0a02ff 05683ac302882ac5234bc334c2a5d0c6d05a5d96 Dark_kronic <tomfa@hotmail.com> 1532508589 +0200	commit: Release 17: add auto to scroll, set change password under profile, remove changepassword page
+05683ac302882ac5234bc334c2a5d0c6d05a5d96 326fcffabd63bee0f9017ef70d1daccf59e11eb9 Dark_kronic <tomfa@hotmail.com> 1532584060 +0200	pull origintf master: Fast-forward
+326fcffabd63bee0f9017ef70d1daccf59e11eb9 3793c4919b84e9d3c669a1e8467a88f7d2d8459d Dark_kronic <tomfa@hotmail.com> 1532590311 +0200	commit: Release 18: fix bug for seasongenerator and small layout adjustments
+3793c4919b84e9d3c669a1e8467a88f7d2d8459d 02eacf4ac584b5817a982aa71d00a3c83118a7aa Dark_kronic <tomfa@hotmail.com> 1532703109 +0200	commit: Release 18: Fix layout and and buttons to the index pages of a topic
+02eacf4ac584b5817a982aa71d00a3c83118a7aa 1b5ad6b7569bcc68f261b3d09dd67abab467f296 Dark_kronic <tomfa@hotmail.com> 1532703182 +0200	commit: Release 18: small update
+1b5ad6b7569bcc68f261b3d09dd67abab467f296 1ea86d528fc09ed7d7c59106331f53edbc9d8634 Dark_kronic <tomfa@hotmail.com> 1532930398 +0200	pull origintf master: Fast-forward
+1ea86d528fc09ed7d7c59106331f53edbc9d8634 92bbf54cb71ab28457d0b6bb31581262218986e8 Dark_kronic <tomfa@hotmail.com> 1532933566 +0200	commit: Release 19: add new season to home if the date is more then 7 days
+92bbf54cb71ab28457d0b6bb31581262218986e8 d0714874f5fd7c2b6420076ca224639a6c113ec6 Dark_kronic <tomfa@hotmail.com> 1532940377 +0200	commit: Release 19: Adjust season method 'Home' to remove repeated code
+d0714874f5fd7c2b6420076ca224639a6c113ec6 37d155209559b528974a1283cc676055bc110643 Dark_kronic <tomfa@hotmail.com> 1532950492 +0200	commit: Release 19: Small changes
+37d155209559b528974a1283cc676055bc110643 f3abd9c34d842a10eec64466fc5cd78a87022d74 Dark_kronic <tomfa@hotmail.com> 1533014021 +0200	pull origintf master: Fast-forward
+f3abd9c34d842a10eec64466fc5cd78a87022d74 09ce3f258a54c1e29d2b9f568c5115c161459a64 Dark_kronic <tomfa@hotmail.com> 1533018913 +0200	commit: Release 20: Adjust the getNextPlayDay
+09ce3f258a54c1e29d2b9f568c5115c161459a64 40089758d4108a38342e4d000f675e2f0c785496 Dark_kronic <tomfa@hotmail.com> 1535629705 +0200	reset: moving to origintf/master
+40089758d4108a38342e4d000f675e2f0c785496 0f7c47dae0d73d5a116afd4751f4633574cf3cea Dark_kronic <tomfa@hotmail.com> 1535629910 +0200	commit: Release 24: add cookie warning
+0f7c47dae0d73d5a116afd4751f4633574cf3cea ec71da02e96071b7abd0e26d9ebf301bc935f164 Dark_kronic <tomfa@hotmail.com> 1536040185 +0200	pull origintf master: Fast-forward
+ec71da02e96071b7abd0e26d9ebf301bc935f164 857e5531b314c26bc80ae5fd10cec15e44109f27 Dark_kronic <tomfa@hotmail.com> 1536213331 +0200	commit: add some changes
+857e5531b314c26bc80ae5fd10cec15e44109f27 38af51d14f54e3c8c7446affdf19ce5765d524b1 Dark_kronic <tomfa@hotmail.com> 1536213520 +0200	reset: moving to 38af51d
+38af51d14f54e3c8c7446affdf19ce5765d524b1 40089758d4108a38342e4d000f675e2f0c785496 Dark_kronic <tomfa@hotmail.com> 1536213552 +0200	reset: moving to 4008975
+40089758d4108a38342e4d000f675e2f0c785496 a92be380e54c1fa5250ecb0e3e8ade612a191d99 Dark_kronic <tomfa@hotmail.com> 1536213683 +0200	commit: Reset to MTP01.02
+a92be380e54c1fa5250ecb0e3e8ade612a191d99 ce8efb347718188c559241e211e66b3e446be6e8 Dark_kronic <tomfa@hotmail.com> 1536214179 +0200	commit: MTP01.03: change absence colors
+ce8efb347718188c559241e211e66b3e446be6e8 6fff0432d4932256a3cce00bc2ad2e9c747c8dbc Dark_kronic <tomfa@hotmail.com> 1536232472 +0200	commit: MTP01.05: add middle ware to redirect to Https in production
+6fff0432d4932256a3cce00bc2ad2e9c747c8dbc 83a0e5a655fa55ecdd3d6355d7d6ec9176b23877 Dark_kronic <tomfa@hotmail.com> 1536668447 +0200	commit: Make date for season generator random, if someone is absence a lot a the end of the season he or she has less games
+83a0e5a655fa55ecdd3d6355d7d6ec9176b23877 bdb26bb2211c88583802c2c2805677ac5f9a81b1 Dark_kronic <tomfa@hotmail.com> 1536906178 +0200	commit: Release 25: redo home page and login and navbar
+bdb26bb2211c88583802c2c2805677ac5f9a81b1 b77193e59c003786e0141b74112dbe34c62b51f8 Dark_kronic <tomfa@hotmail.com> 1536908190 +0200	commit: Release 25: prepare MTP
+b77193e59c003786e0141b74112dbe34c62b51f8 394bd486ff358a3dd0bb2c9033d6f13ab69501a2 Dark_kronic <tomfa@hotmail.com> 1536918056 +0200	commit: Release25: Add comments to some components
+394bd486ff358a3dd0bb2c9033d6f13ab69501a2 ec7d7c6cf2fb3abc3914589d1c13cf121a3e12fc Dark_kronic <tomfa@hotmail.com> 1537166421 +0200	commit: MTP01.06: put everything from release 25 live
+ec7d7c6cf2fb3abc3914589d1c13cf121a3e12fc c84b6e5720986e8b7f7a742a050d26db62a6a9ec Dark_kronic <tomfa@hotmail.com> 1537272552 +0200	commit: update default user migration file
+c84b6e5720986e8b7f7a742a050d26db62a6a9ec 2b88d3010e0e7a43e42d9b1a1f42563d8fcb9f96 Dark_kronic <tomfa@hotmail.com> 1537348274 +0200	commit: Release 26: GroupController rewrite code to use basic laravel resource routes + update view + middleware + routes
+2b88d3010e0e7a43e42d9b1a1f42563d8fcb9f96 e62fe56976c27275f7570eded72c2683f1977f30 Dark_kronic <tomfa@hotmail.com> 1537348730 +0200	commit: Release 26: GroupController rewrite code to use basic laravel resource routes + update view + middleware + routes
+e62fe56976c27275f7570eded72c2683f1977f30 5a61f4db21c754bca0e49f8a32bba8243c1c36b4 Dark_kronic <tomfa@hotmail.com> 1537349577 +0200	commit: Release 26: GroupController rewrite code to use basic laravel resource routes + update view + middleware + routes
+5a61f4db21c754bca0e49f8a32bba8243c1c36b4 3f3c34df1dc5af631734f0d43fca69cf83146bc3 Dark_kronic <tomfa@hotmail.com> 1537349875 +0200	commit: Release 26: GroupController rewrite code to use basic laravel resource routes + update view + middleware + routes
+3f3c34df1dc5af631734f0d43fca69cf83146bc3 aba145cc9fd3198d4c3b1848bc67feae02e2d907 Dark_kronic <tomfa@hotmail.com> 1537350553 +0200	commit: Release 26: GroupController rewrite code to use basic laravel resource routes + update view + middleware + routes
+aba145cc9fd3198d4c3b1848bc67feae02e2d907 ba976e1653919ea1052466d13989698166af3a4d Dark_kronic <tomfa@hotmail.com> 1537358743 +0200	commit: Release 26: Test calender item spatie
+ba976e1653919ea1052466d13989698166af3a4d 23981dacd48ba72a50708c0ef65817a313ea9c0f Dark_kronic <tomfa@hotmail.com> 1537424073 +0200	commit: Release 26: rewrite AbsencesController
+23981dacd48ba72a50708c0ef65817a313ea9c0f 909d0079d2f4e244fa4327088d110073b1c0f524 Dark_kronic <tomfa@hotmail.com> 1537431859 +0200	commit: Release 26: rewrite SeasonsController
+909d0079d2f4e244fa4327088d110073b1c0f524 8bbcc0a295ad28b02f82bb7c2a7519d4314c1755 Dark_kronic <tomfa@hotmail.com> 1537433887 +0200	commit: Release 26: Bug getNextPlayDay compared hours wrong(h:i changed to H:i)
+8bbcc0a295ad28b02f82bb7c2a7519d4314c1755 edae33e2ae8aa75502ea65304b1c2c4fd5ee4301 Tom Faes <sx19204@antwerpen.local> 1537781409 +0200	commit: Release 26: adjust UsersController, TeamsController
+edae33e2ae8aa75502ea65304b1c2c4fd5ee4301 336b18d7afd7dba9998495a528b56cd513d375cb Tom Faes <sx19204@antwerpen.local> 1537854678 +0200	commit: Release 26: layout controllers
+336b18d7afd7dba9998495a528b56cd513d375cb 2a8d6d68665f57198faaa50bfdd707340501b794 Tom Faes <sx19204@antwerpen.local> 1537854862 +0200	commit (amend): Release 26: layout controllers
+2a8d6d68665f57198faaa50bfdd707340501b794 8443237baf5c958fbd50fd3486d02fd43d0c3f23 Tom Faes <sx19204@antwerpen.local> 1537856440 +0200	commit: Release 26: Hide old Calendars
+8443237baf5c958fbd50fd3486d02fd43d0c3f23 05bea477e2a50d2f5719b6f174db5ed32853c31d Tom Faes <tomfa@hotmail.com> 1537880027 +0200	commit: Release 26: add warning for deleting something
+05bea477e2a50d2f5719b6f174db5ed32853c31d 79a4b3053de51edbe834b04389169c04e6c9a71c Tom Faes <tomfa@hotmail.com> 1537880607 +0200	commit: Release 26: add warning to delete
+79a4b3053de51edbe834b04389169c04e6c9a71c f2e3322ac8787be927e952313900f8c830926ff0 Tom Faes <tomfa@hotmail.com> 1538038708 +0200	commit: Release 26: add calandar option to nextgame and generateThursdaySeason view
+f2e3322ac8787be927e952313900f8c830926ff0 827f3e0f97c5680a26d54b1fecc4ceb835c6bfad Tom Faes <tomfa@hotmail.com> 1538039136 +0200	commit: Release 26: add calandar option to nextgame and generateThursdaySeason view
+827f3e0f97c5680a26d54b1fecc4ceb835c6bfad 1efbc1ac4b5099e8c971780ccbaa0244aa274ffe Tom Faes <tomfa@hotmail.com> 1538039384 +0200	commit: Release 26: add calandar option to nextgame and generateThursdaySeason view
+1efbc1ac4b5099e8c971780ccbaa0244aa274ffe 92b71368243bd99c41b24dcb68685370e5ba95d3 Tom Faes <tomfa@hotmail.com> 1538117517 +0200	commit: Release 26: fixed error on Ipad
+92b71368243bd99c41b24dcb68685370e5ba95d3 cb3c7ffc1b25109163ab4f7944d2637dc407aa33 Tom Faes <tomfa@hotmail.com> 1538119072 +0200	commit: Release 26: changed service
+cb3c7ffc1b25109163ab4f7944d2637dc407aa33 7cae8432c88464f87ad975f681a80e5bae1ebb52 Tom Faes <tomfa@hotmail.com> 1539757982 +0200	commit: MTP01.08: change metags on login page
+7cae8432c88464f87ad975f681a80e5bae1ebb52 75760872fab463e57dda1fd4bb3569adfc8d2811 Tom Faes <tomfa@hotmail.com> 1539930354 +0200	commit: MTP01.09: remove auth for season: index, nextgame, show
+75760872fab463e57dda1fd4bb3569adfc8d2811 6e886f35175aa3ef3b8cb2c58c1edd93d9e1a136 Tom Faes <tomfa@hotmail.com> 1539938858 +0200	commit: MTP01.09: rename login
+6e886f35175aa3ef3b8cb2c58c1edd93d9e1a136 ecc25d5ec183cab5033974c408e940b1e3ef17d7 Tom Faes <tomfa@hotmail.com> 1540205657 +0200	commit: MTP01.09: add script again
+ecc25d5ec183cab5033974c408e940b1e3ef17d7 cb3c7ffc1b25109163ab4f7944d2637dc407aa33 Tom Faes <tomfa@hotmail.com> 1560328752 +0200	reset: moving to cb3c7ff
+cb3c7ffc1b25109163ab4f7944d2637dc407aa33 0253f80b211cc881f748b6d75d15a266e989041f Tom Faes <tomfa@hotmail.com> 1560329320 +0200	commit: Version 27: fix bug generate season

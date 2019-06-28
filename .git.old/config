@@ -1,0 +1,10 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = false
+	logallrefupdates = true
+	symlinks = false
+	ignorecase = true
+[remote "origintf"]
+	url = https://Dark_kronic@bitbucket.org/Dark_kronic/tenniscalendar
+	fetch = +refs/heads/*:refs/remotes/origintf/*
