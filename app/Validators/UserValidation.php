@@ -24,6 +24,19 @@ class UserValidation extends Validation {
         );
     }
 
+    public function validatProfilePassword(Request $request){
+        return $this->validate(
+            $request,
+            [
+                'password' => 'sometimes|string|min:8|confirmed',
+            ],
+            [
+                'password.required' => 'paswoord is een verplicht veld',
+                'password.min' => 'paswoord moet minstens 8 karakters hebben'
+            ]
+        );
+    }
+
     public function validatUserPassword(Request $request){
         return $this->validate(
             $request,

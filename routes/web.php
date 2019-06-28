@@ -17,18 +17,19 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'SeasonsController@index');
 
 /** All User routes */
-
-
 Route::get('/user/updatingProfile', '\App\Http\Controllers\UsersController@updatingProfile');
 Route::put('/user/updateProfile', '\App\Http\Controllers\UsersController@updateProfile');
-Route::get('/user/changeProfilePassword', '\App\Http\Controllers\UsersController@changeProfilePassword');
-Route::put('/user/updateProfilePassword', '\App\Http\Controllers\UsersController@updateProfilePassword');
-
-Route::put('/user/updatePassword/{id}', '\App\Http\Controllers\UsersController@updatePassword')->middleware('admin');
-
 Route::resource('user', 'UsersController')->middleware('admin')->except([
     'show'
 ]);
+
+//Route::get('/user/changeProfilePassword', '\App\Http\Controllers\UsersController@changeProfilePassword');
+//Route::put('/user/updateProfilePassword', '\App\Http\Controllers\UsersController@updateProfilePassword');
+//Route::put('/user/updatePassword/{id}', '\App\Http\Controllers\UsersController@updatePassword')->middleware('admin');
+
+/** Password routes */
+Route::put('/password/update-profile', '\App\Http\Controllers\PasswordController@updateProfilePassword');
+Route::put('/password/update/{id}', '\App\Http\Controllers\PasswordController@updatePassword');
 
 /** All Group routes */
 Route::resource('group', 'GroupsController')->except([

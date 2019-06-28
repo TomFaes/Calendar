@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<a href="{{ action('\App\Http\Controllers\UsersController@index') }}"><span class="btn btn-dark">Gebruiker overzicht</span></a><br><br>
 <div style="width: 100%;">
     @if(request()->is('user/updatingProfile'))
         <form method="post" action="{{ action('\App\Http\Controllers\UsersController@updateProfile')}}">
     @else
+        <a href="{{ action('\App\Http\Controllers\UsersController@index') }}"><span class="btn btn-dark">Gebruiker overzicht</span></a><br><br>
         <form method="post" action="{{ action('\App\Http\Controllers\UsersController@update', ['id' => $user->id])}}">
     @endif
         {{csrf_field()}}
@@ -69,9 +69,9 @@
     <br><hr><br>
     
     @if(request()->is('user/updatingProfile'))
-        <form method="post" action="{{ action('\App\Http\Controllers\UsersController@updateProfilePassword')}}">
+        <form method="post" action="{{ action('\App\Http\Controllers\PasswordController@updateProfilePassword')}}">
     @else
-        <form method="post" action="{{ action('\App\Http\Controllers\UsersController@updatePassword', ['id' => $user->id])}}">
+        <form method="post" action="{{ action('\App\Http\Controllers\PasswordController@updatePassword', ['id' => $user->id])}}">
     @endif
         {{csrf_field()}}
         {{ method_field('PUT')}}

@@ -56,7 +56,6 @@ class UserRepo extends Repository implements Contracts\IUser {
     public function updatePassword(Request $request, $userId){
         $user = $this->getUser($userId);
         if($request->input('password') != ""){
-            echo "B";
             $user->password = bcrypt($request->input('password'));
         }
         $user->save();

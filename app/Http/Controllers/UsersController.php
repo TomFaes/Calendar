@@ -77,19 +77,5 @@ class UsersController extends Controller
 
         //add a redirect to the home page
         return redirect()->to('season/next-game/')->send();
-    }
-    
-    public function updateProfilePassword(Request $request){
-        $this->userValidation->validatUserPassword($request);
-        $this->user->updatePassword($request, Auth::user()->id);
-        return redirect()->to('season/next-game/')->send();
-    }
-    
-    public function updatePassword(Request $request, $id){
-        $this->userValidation->validatUserPassword($request);
-        $this->user->updatePassword($request, $id);        
-        return redirect()->to('user/')->send();
-    }
-
-    
+    }    
 }
