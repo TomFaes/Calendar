@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Validators\UserValidation;
 use App\Repositories\Contracts\IUser;
 
-class UsersController extends Controller
+
+class UserController extends Controller
 {
     /*
     |--------------------------------------------------------------------------

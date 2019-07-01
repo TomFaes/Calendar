@@ -21,7 +21,7 @@
                     </li>
                     @if(Auth::user()->role == 'Admin')
                         <li class="nav-item">
-                            <a class="nav-link js-scroll-trigger" href="{{ action('\App\Http\Controllers\UsersController@index') }}">Gebruikers</a>
+                            <a class="nav-link js-scroll-trigger" href="{{ action('\App\Http\Controllers\User\UserController@index') }}">Gebruikers</a>
                         </li>
                     @endif
                     @if(Auth::user()->role == 'Admin' || Auth::user()->role == 'Editor')
@@ -30,7 +30,7 @@
                         </li>
                     @endif
                     <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="{{ action('\App\Http\Controllers\UsersController@updatingProfile') }}">{{Auth::user()->firstname}}</a>
+                        <a class="nav-link js-scroll-trigger" href="{{ action('\App\Http\Controllers\User\UserController@updatingProfile') }}">{{Auth::user()->firstname}}</a>
                     </li>
 
                     <li class="nav-item">

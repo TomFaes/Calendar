@@ -3,10 +3,10 @@
 @section('content')
 <div style="width: 100%;">
     @if(request()->is('user/updatingProfile'))
-        <form method="post" action="{{ action('\App\Http\Controllers\UsersController@updateProfile')}}">
+        <form method="post" action="{{ action('\App\Http\Controllers\User\UserController@updateProfile')}}">
     @else
-        <a href="{{ action('\App\Http\Controllers\UsersController@index') }}"><span class="btn btn-dark">Gebruiker overzicht</span></a><br><br>
-        <form method="post" action="{{ action('\App\Http\Controllers\UsersController@update', ['id' => $user->id])}}">
+        <a href="{{ action('\App\Http\Controllers\User\UserController@index') }}"><span class="btn btn-dark">Gebruiker overzicht</span></a><br><br>
+        <form method="post" action="{{ action('\App\Http\Controllers\User\UserController@update', ['id' => $user->id])}}">
     @endif
         {{csrf_field()}}
         {{ method_field('PUT')}}

@@ -3,8 +3,8 @@
 @section('content')
 
 <div style="width: 100%;">
-    <a href="{{ action('\App\Http\Controllers\UsersController@index') }}"><span class="btn btn-dark">Gebruikers overzicht</span></a><br><br>
-    <form method="post" action="{{ action('\App\Http\Controllers\UsersController@store')}}">
+    <a href="{{ action('\App\Http\Controllers\User\UserController@index') }}"><span class="btn btn-dark">Gebruikers overzicht</span></a><br><br>
+    <form method="post" action="{{ action('\App\Http\Controllers\User\UserController@store')}}">
     {{csrf_field()}}
     
         <div class="form-group{{ $errors->has('firstname') ? ' has-error' : '' }}">
