@@ -22,12 +22,20 @@ Route::resource('user', '\App\Http\Controllers\User\UserController')->middleware
 ]);
 
 /** Profile routes */
-Route::get('/profile/update', '\App\Http\Controllers\User\ProfileController@edit');
-Route::put('/profile/update/{id}', '\App\Http\Controllers\User\ProfileController@update');
+Route::get('/profile/edit', '\App\Http\Controllers\User\ProfileController@edit');
+Route::put('/profile/update/', '\App\Http\Controllers\User\ProfileController@update');
 
 /** Password routes */
 Route::put('/password/update-profile', '\App\Http\Controllers\PasswordController@updateProfilePassword');
 Route::put('/password/update/{id}', '\App\Http\Controllers\PasswordController@updatePassword');
+
+
+
+
+
+
+
+
 
 /** All Group routes */
 Route::resource('group', 'GroupsController')->except([
