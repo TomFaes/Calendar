@@ -6,7 +6,9 @@
             <a class="navbar-brand js-scroll-trigger" href="{{ action('\App\Http\Controllers\HomeController@index') }}">Kalender</a>
             <div class=" " id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
-                    <li><a class="nav-link js-scroll-trigger" href="{{ route('login') }}">{{ __('Login') }}</a></li>
+                        <li>
+                            <a class="nav-link js-scroll-trigger" href="{{ action('\App\Http\Controllers\Auth\LoginController@showLoginForm') }}">Login</a>
+                        </li>
                 </ul>
             </div>
         @else
@@ -34,13 +36,8 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            {{ __('Logout') }}
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
-                    </li>
+                            <a class="nav-link js-scroll-trigger" href="{{ action('\App\Http\Controllers\Auth\AuthenticationController@logout') }}">Logout</a>
+                        </li>
                 </ul>
             </div>
         @endguest

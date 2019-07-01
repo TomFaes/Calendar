@@ -18,6 +18,13 @@ class UserRepo extends Repository implements Contracts\IUser {
     public function getUsersFromList($listUsers){
         return User::whereIn('id', $listUsers)->get();
     }
+
+    /**
+     * check if a user exist when he logs in with a socialite account
+     */
+    public function existingUser($socialUser){
+        return User::where('email', $socialUser->getEmail())->first();
+    }
     
     /***************************************************************************
      Next function will create or update the user object in de database
@@ -44,6 +51,20 @@ class UserRepo extends Repository implements Contracts\IUser {
         $user = $this->setUser($user, $request);
         $user->save();
         return $user;
+    }
+
+    /**
+     * Creates a user who has been logged in trough Socialite(google, facebook, ....)
+     */
+    public function createSocialUser($socialUser){
+        $newUser = new User();
+        $newUser->firstname = $socialUser['given_name'];
+        $newUser->name = $socialUser['family_name'];
+        $newUser->email = $socialUser['email'];
+        $newUser->password = Hash::make(str_random(16));
+        $newUser->role = 'User';
+        $newUser->save();
+        return $newUser;
     }
     
     public function update(Request $request, $userId){

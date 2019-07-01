@@ -11,10 +11,15 @@
 |
 */
 
-Auth::routes();
-
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'SeasonsController@index');
+
+/** All Auth routes */
+Auth::routes(['register' => false]);
+
+Route::get( '/login/{social}', 'Auth\AuthenticationController@getSocialRedirect' )->middleware('guest');
+Route::get( '/login/{social}/callback', 'Auth\AuthenticationController@getSocialCallback' )->middleware('guest');
+Route::get( '/logout', 'Auth\AuthenticationController@logout' );
 
 /** All User routes */
 Route::resource('user', '\App\Http\Controllers\User\UserController')->middleware('admin')->except([
@@ -28,6 +33,11 @@ Route::put('/profile/update/', '\App\Http\Controllers\User\ProfileController@upd
 /** Password routes */
 Route::put('/password/update-profile', '\App\Http\Controllers\PasswordController@updateProfilePassword');
 Route::put('/password/update/{id}', '\App\Http\Controllers\PasswordController@updatePassword');
+
+
+
+
+
 
 
 

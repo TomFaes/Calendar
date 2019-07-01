@@ -13,4 +13,7 @@ interface IUser {
     public function update(Request $request, $userId);
     public function updatePassword(Request $request, $userId);
     public function delete($userId);
+
+    public function createSocialUser($socialUser);
+    public function existingUser($socialUser);
 }

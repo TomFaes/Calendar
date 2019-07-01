@@ -13,7 +13,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $socialite = $this->app->make('Laravel\Socialite\Contracts\Factory');
+        $socialite->extend(
+            'microsoft',
+            function ($app) use ($socialite) {
+                $config = $app['config']['services.microsoft'];
+                return $socialite->buildProvider(\App\Services\SocialiteProviders\MicrosoftProvider::class, $config);
+            }
+        );
     }
 
     /**
@@ -28,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('App\Repositories\Contracts\ISeason', 'App\Repositories\SeasonRepo');
         $this->app->bind('App\Repositories\Contracts\IAbsence', 'App\Repositories\AbsenceRepo');
         $this->app->bind('App\Repositories\Contracts\ITeam', 'App\Repositories\TeamRepo');
+        
         $this->app->bind('path.public', function()
         {
             return base_path('public_html');

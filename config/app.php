@@ -152,6 +152,8 @@ return [
          * Package Service Providers...
          */
 
+        Laravel\Socialite\SocialiteServiceProvider::class, 
+
         /*
          * Application Service Providers...
          */
@@ -210,7 +212,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'DeviceInfo' => App\Services\DeviceInfo::class,
-        'CalendarLink' => App\Services\CalendarLink::class,    
+        'CalendarLink' => App\Services\CalendarLink::class,
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
     ],
 
