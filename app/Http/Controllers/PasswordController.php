@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\Auth;
 
 class PasswordController extends Controller
 {
-    
-
     /** @var App\Validators\UserValidation */
     protected $userValidation;
     /** @var App\Repositories\Contracts\IUser */
@@ -40,30 +38,5 @@ class PasswordController extends Controller
         $this->userValidation->validatUserPassword($request);
         $this->user->updatePassword($request, $id);
         return redirect()->to('season/next-game/')->send();
-
-        dd($request);
-        //$this->user->updatePassword($request, Auth::user()->id);
-        //return redirect()->to('season/next-game/')->send();
     }
-
-
-
-    /*
-
-    public function updateProfilePassword(Request $request){
-        $this->userValidation->validatUserPassword($request);
-        $this->user->updatePassword($request, Auth::user()->id);
-        return redirect()->to('season/next-game/')->send();
-    }
-    
-    public function updatePassword(Request $request, $id){
-        $this->userValidation->validatUserPassword($request);
-        $this->user->updatePassword($request, $id);        
-        return redirect()->to('user/')->send();
-    }
-
-
-    */
-
-    
 }
