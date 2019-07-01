@@ -17,15 +17,13 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'SeasonsController@index');
 
 /** All User routes */
-Route::get('/user/updatingProfile', '\App\Http\Controllers\User\UserController@updatingProfile');
-Route::put('/user/updateProfile', '\App\Http\Controllers\User\UserController@updateProfile');
 Route::resource('user', '\App\Http\Controllers\User\UserController')->middleware('admin')->except([
     'show'
 ]);
 
-//Route::get('/user/changeProfilePassword', '\App\Http\Controllers\UserController@changeProfilePassword');
-//Route::put('/user/updateProfilePassword', '\App\Http\Controllers\UserController@updateProfilePassword');
-//Route::put('/user/updatePassword/{id}', '\App\Http\Controllers\UserController@updatePassword')->middleware('admin');
+/** Profile routes */
+Route::get('/profile/update', '\App\Http\Controllers\User\ProfileController@edit');
+Route::put('/profile/update/{id}', '\App\Http\Controllers\User\ProfileController@update');
 
 /** Password routes */
 Route::put('/password/update-profile', '\App\Http\Controllers\PasswordController@updateProfilePassword');

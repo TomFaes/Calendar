@@ -30,7 +30,7 @@
                         </li>
                     @endif
                     <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="{{ action('\App\Http\Controllers\User\UserController@updatingProfile') }}">{{Auth::user()->firstname}}</a>
+                        <a class="nav-link js-scroll-trigger" href="{{ action('\App\Http\Controllers\User\ProfileController@edit') }}">{{Auth::user()->firstname}}</a>
                     </li>
 
                     <li class="nav-item">
