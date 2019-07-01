@@ -58,6 +58,25 @@
                                 </button>
                             </div>
                         </div>
+
+                        <hr>
+
+                        <div class="form-group row mb-0">
+                            <div class="col-md-8 offset-md-4">
+                                <a class="social btn btn-block btn-social btn-sm btn-google" href="http://localhost/tenniscalendar/public_html/login/google"><i class="fa fa-google"></i>Sign in with Google</a>
+                                <a class="social btn btn-block btn-social btn-sm btn-microsoft" href="http://localhost/tenniscalendar/public_html/login/microsoft"><i class="fa fa-windows"></i>Sign in with Microsoft</a>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+                        
+
+
                     </form>
                 </div>
             </div>

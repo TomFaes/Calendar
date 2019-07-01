@@ -5,6 +5,7 @@ namespace App\Repositories;
 use Illuminate\Http\Request;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserRepo extends Repository implements Contracts\IUser {
     public function getAllUsers(){
