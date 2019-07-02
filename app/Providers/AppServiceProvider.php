@@ -21,6 +21,13 @@ class AppServiceProvider extends ServiceProvider
                 return $socialite->buildProvider(\App\Services\SocialiteProviders\MicrosoftProvider::class, $config);
             }
         );
+        $socialite->extend(
+            'facebook',
+            function ($app) use ($socialite) {
+                $config = $app['config']['services.facebook'];
+                return $socialite->buildProvider(\App\Services\SocialiteProviders\FacebookProvider::class, $config);
+            }
+        );
     }
 
     /**
