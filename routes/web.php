@@ -34,6 +34,10 @@ Route::put('/profile/update/', '\App\Http\Controllers\User\ProfileController@upd
 Route::put('/password/update-profile', '\App\Http\Controllers\PasswordController@updateProfilePassword');
 Route::put('/password/update/{id}', '\App\Http\Controllers\PasswordController@updatePassword');
 
+/**All Team Routes*/
+Route::resource('/season/{seasonId}/team', '\App\Http\Controllers\Season\TeamController')->except([
+    'index', 'create', 'edit', 'show', 'update'
+]);
 
 
 
@@ -67,7 +71,3 @@ Route::post('/season/saveSeason/{season}', '\App\Http\Controllers\SeasonsControl
 Route::resource('absence', 'AbsencesController')->except([
     'index', 'edit', 'create', 'store'
 ]);
-
-/** All teams */
-Route::post('/season/calendar/addTeam/{id}', '\App\Http\Controllers\TeamsController@addTeam')->middleware('admin:Editor');
-Route::get('/season/deleteTeam/{id}', '\App\Http\Controllers\TeamsController@destroy')->middleware('admin:Editor');

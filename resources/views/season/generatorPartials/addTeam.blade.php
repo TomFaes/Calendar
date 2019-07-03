@@ -1,5 +1,6 @@
-<form method="post" action="{{ action('\App\Http\Controllers\TeamsController@addTeam', ['id' => $season->id])}}">
+<form method="post" action="{{ action('\App\Http\Controllers\Season\TeamController@store', ['seasonId' => $season->id])}}">
     {{csrf_field()}}
+    <input id="seasonId" type="text" class="form-control" name="seasonId" value="{{ $season->id }}" hidden>
     <div class="form-group{{ $errors->has('date') ? ' has-error' : '' }}">
         <div class="row">
             <div class="col-0 col-lg-2"></div>

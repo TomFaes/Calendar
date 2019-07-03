@@ -17,7 +17,11 @@
 
                 @if($season->admin_id == Auth::user()->id)
                 <td>
-                    <a href="{{ action('\App\Http\Controllers\TeamsController@destroy', ['id' => $team->id]) }}"><span class="btn btn-dark" onclick="return confirm('Are you sure?')">Delete</span></a>
+                    <form action="{{ action('\App\Http\Controllers\Season\TeamController@destroy', ['seasonId' => $team->season_id ,'id' => $team->id]) }}" method="POST">
+                        @method('DELETE')
+                        @csrf
+                        <button class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
                 </td>
                 @endif
             </tr>

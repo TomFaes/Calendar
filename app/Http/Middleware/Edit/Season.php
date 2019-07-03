@@ -54,6 +54,6 @@ class Season
             return redirect('season')->with('error', 'Er zitten nog '.$season->team->count().' teams in dit seizoen');
         }
         
-        return redirect('group')->with('error', 'er is een fout '.$type);
+        return redirect('season')->with('error', 'er is een fout '.$type);
     }
 }
