@@ -101,7 +101,8 @@ class SeasonsController extends Controller
         $this->season->delete($id);
         return redirect()->to('season/')->send();
     }
-    
+
+    //new controller -> create
     public function generateSeason($seasonId){
         $season = $this->season->getSeason($seasonId);
         $listUsers = $this->group->getArrayOfGroupUsers($season->group_id);
@@ -117,7 +118,7 @@ class SeasonsController extends Controller
         
         return view('season.generateSeason')->with('days', $days)->with('season', $season)->with('seasonAbsences', $seasonAbsences)->with('seasonArray', $seasonArray)->with('seasonUsers', $seasonUsers)->with('seasonJson', $seasonJson);
     }
-    
+    // new controller save
     public function saveSeason(Request $request, $seasonId){
         
         $season = $this->season->getSeason($seasonId);
@@ -129,6 +130,7 @@ class SeasonsController extends Controller
         return redirect()->to('season/')->send();
     }
     
+    //new controller -> move to generator
     public function nextGame(){
         $playData = array();
         $seasons = $this->season->getSeasonsFromList($this->team->getArrayOfSeasons(Auth::user()->id));
