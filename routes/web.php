@@ -12,7 +12,7 @@
 */
 
 Route::get('/', 'HomeController@index')->name('home');
-Route::get('/home', 'SeasonsController@index');
+Route::get('/home', '\App\Http\Controllers\Season\SeasonController@index');
 
 /** All Auth routes */
 Auth::routes(['register' => false]);
@@ -27,8 +27,8 @@ Route::resource('user', '\App\Http\Controllers\User\UserController')->middleware
 ]);
 
 /** Profile routes */
-Route::get('/profile/edit', '\App\Http\Controllers\User\ProfileController@edit');
-Route::put('/profile/update/', '\App\Http\Controllers\User\ProfileController@update');
+Route::get('/profile/edit', '\App\Http\Controllers\User\ProfileController@edit')->name('profile.edit');
+Route::put('/profile/update/', '\App\Http\Controllers\User\ProfileController@update')->name('profile.update');;
 
 /** Password routes */
 Route::put('/password/update-profile', '\App\Http\Controllers\PasswordController@updateProfilePassword');
@@ -44,7 +44,7 @@ Route::resource('season/generate-season', '\App\Http\Controllers\Season\SeasonGe
     'create', 'store', 'show', 'destroy'
 ]);
 /** All season routes */
-Route::resource('season', 'SeasonsController');
+Route::resource('season', '\App\Http\Controllers\Season\SeasonController');
 
 
 

@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Season;
+
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +15,7 @@ use App\Repositories\Contracts\IAbsence;
 
 use App\Validators\SeasonValidation;
 
-class SeasonsController extends Controller
+class SeasonController extends Controller
 {
     /** @var App\Repositories\Contracts\ISeason */
     protected $season;

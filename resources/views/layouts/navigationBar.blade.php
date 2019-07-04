@@ -7,7 +7,7 @@
             <div class=" " id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
                         <li>
-                            <a class="nav-link js-scroll-trigger" href="{{ action('\App\Http\Controllers\Auth\LoginController@showLoginForm') }}">Login</a>
+                            <a class="nav-link js-scroll-trigger" href="{{  route('login') }}">Login</a>
                         </li>
                 </ul>
             </div>
@@ -19,24 +19,24 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="{{ action('\App\Http\Controllers\SeasonsController@index') }}">Seizoenen</a>
+                        <a class="nav-link js-scroll-trigger" href="{{ route('season.index') }}">Seizoenen</a>
                     </li>
                     @if(Auth::user()->role == 'Admin')
                         <li class="nav-item">
-                            <a class="nav-link js-scroll-trigger" href="{{ action('\App\Http\Controllers\User\UserController@index') }}">Gebruikers</a>
+                            <a class="nav-link js-scroll-trigger" href="{{ route('user.index') }}">Gebruikers</a>
                         </li>
                     @endif
                     @if(Auth::user()->role == 'Admin' || Auth::user()->role == 'Editor')
                         <li class="nav-item">
-                            <a class="nav-link js-scroll-trigger" href="{{ action('\App\Http\Controllers\GroupsController@index') }}">Groepen</a>
+                            <a class="nav-link js-scroll-trigger" href="{{ route('group.index') }}">Groepen</a>
                         </li>
                     @endif
                     <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="{{ action('\App\Http\Controllers\User\ProfileController@edit') }}">{{Auth::user()->firstname}}</a>
+                        <a class="nav-link js-scroll-trigger" href="{{ route('profile.edit') }}">{{Auth::user()->firstname}}</a>
                     </li>
 
                     <li class="nav-item">
-                            <a class="nav-link js-scroll-trigger" href="{{ action('\App\Http\Controllers\Auth\AuthenticationController@logout') }}">Logout</a>
+                            <a class="nav-link js-scroll-trigger" href="{{ route('logout') }}">Logout</a>
                         </li>
                 </ul>
             </div>
