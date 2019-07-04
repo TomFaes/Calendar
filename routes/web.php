@@ -39,10 +39,17 @@ Route::resource('/season/{seasonId}/team', '\App\Http\Controllers\Season\TeamCon
     'index', 'create', 'edit', 'show', 'update'
 ]);
 
+/** All generate Season routes(must be before season) */
+Route::resource('season/generate-season', '\App\Http\Controllers\Season\SeasonGeneratorController')->except([
+    'create', 'store', 'show', 'destroy'
+]);
+/** All season routes */
+Route::resource('season', 'SeasonsController');
 
 
 
-
+//Route::get('season/generate-season/{season}', '\App\Http\Controllers\Season\SeasonGeneratorController@generateSeason')->name('generateSeason.create');
+//Route::post('season/save-season/{season}', '\App\Http\Controllers\Season\SeasonGeneratorController@saveSeason')->name('generateSeason.store')->middleware('season');
 
 
 
@@ -61,10 +68,10 @@ Route::post('/group/add-users/{group}', '\App\Http\Controllers\GroupsController@
 Route::post('/group/delete-user/{group}', '\App\Http\Controllers\GroupsController@deleteGroupUser')->name('deleteUser');
 
 /** All season routes */
-Route::get('/season/next-game', '\App\Http\Controllers\SeasonsController@nextGame');
-Route::resource('season', 'SeasonsController');
-Route::get('/season/generateSeason/{season}', '\App\Http\Controllers\SeasonsController@generateSeason')->name('generateSeason');
-Route::post('/season/saveSeason/{season}', '\App\Http\Controllers\SeasonsController@saveSeason')->middleware('season');
+//Route::get('/season/next-game', '\App\Http\Controllers\SeasonsController@nextGame');
+//Route::resource('season', 'SeasonsController');
+//Route::get('/season/generateSeason/{season}', '\App\Http\Controllers\SeasonsController@generateSeason')->name('generateSeason');
+//Route::post('/season/saveSeason/{season}', '\App\Http\Controllers\SeasonsController@saveSeason')->middleware('season');
 
 
 /**All Absence Routes*/

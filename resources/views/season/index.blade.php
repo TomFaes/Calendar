@@ -5,7 +5,7 @@
     <div class="row">
                 <div class="col-12">
             @if(Auth::user()->role == 'Admin' || Auth::user()->role == 'Editor')
-                <a href="{{ action('\App\Http\Controllers\SeasonsController@create') }}"><span class="btn btn-dark">Seizoen toevoegen</span></a><br>
+                <a href="{{ route('season.create') }}"><span class="btn btn-dark">Seizoen toevoegen</span></a><br>
             @endif
             <br>
         </div>
@@ -39,20 +39,19 @@
                         @endif
                         <td>
                             @if($season->team->count() > 0)
-                                <a href="{{ action('\App\Http\Controllers\SeasonsController@show', ['id' => $season->id]) }}"><span class="btn btn-dark">Kalender</span></a>
+                                <a href="{{ route('season.show',  ['id' => $season->id]) }}"><span class="btn btn-dark">Kalender</span></a>
                             @endif
                             @if(count($season->team) == 0)
-                                <a href="{{ action('\App\Http\Controllers\AbsencesController@show', ['id' => $season->id]) }}"><span class="btn btn-dark">Afwezigheden</span></a>
+                                <a href="{{ route('absence.show',  ['id' => $season->id]) }}"><span class="btn btn-dark">Afwezigheden</span></a>
                             @endif
                         </td>
                         @if(Auth::user()->role == 'Admin' || Auth::user()->role == 'Editor')
                             <td>
                                 @if($season->admin_id == Auth::user()->id && count($season->team) == 0)
-                                    <a href="{{ action('\App\Http\Controllers\SeasonsController@edit', ['id' => $season->id]) }}"><span class="btn btn-dark">Update</span></a>
-                                    <a href="{{ action('\App\Http\Controllers\SeasonsController@show', ['id' => $season->id]) }}"><span class="btn btn-dark">Team toevoegen</span></a>
-                                    <a href="{{ action('\App\Http\Controllers\SeasonsController@generateSeason', ['id' => $season->id]) }}"><span class="btn btn-dark">Genereer seizoen</span></a>
-                                    
-                                    <form action="{{ action('\App\Http\Controllers\SeasonsController@destroy', ['id' => $season->id]) }}" method="POST">
+                                    <a href="{{ route('season.edit',  ['id' => $season->id]) }}"><span class="btn btn-dark">Update</span></a>
+                                    <a href="{{ route('season.show',  ['id' => $season->id]) }}"><span class="btn btn-dark">Team toevoegen</span></a>
+                                    <a href="{{ route('generate-season.edit',  ['id' => $season->id]) }}"><span class="btn btn-dark">Genereer seizoen</span></a>
+                                    <form action="{{ route('season.destroy',  ['id' => $season->id]) }}" method="POST">
                                         @method('DELETE')
                                         @csrf
                                         <button class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
