@@ -2,7 +2,7 @@
 
 @section('content')
 <div style="width: 100%;">
-    <a href="{{ action('\App\Http\Controllers\SeasonsController@index') }}"><span class="btn btn-dark">Seizoen overzicht</span></a><br><br>
+    <a href="{{ route('season.index') }}"><span class="btn btn-dark">Seizoen overzicht</span></a><br><br>
     @if($season->team->count() > 0)
         @include('season/generatorPartials/'.$season->type)
     @endif    

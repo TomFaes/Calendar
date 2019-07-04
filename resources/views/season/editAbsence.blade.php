@@ -2,8 +2,8 @@
 
 @section('content')
     <div style="width: 100%;">
-        <a href="{{ action('\App\Http\Controllers\SeasonsController@index')}}"><span class="btn btn-dark">Seizoen overzicht</span></a><br><br>
-        <form method="post" action="{{ action('\App\Http\Controllers\AbsencesController@update', ['id' => $season->id])}}">
+        <a href="{{ route('season.index') }}"><span class="btn btn-dark">Seizoen overzicht</span></a><br><br>
+        <form method="post" action="{{ route('absence.update', ['id' => $season->id])}}">
             {{csrf_field()}}
             {{ method_field('PUT')}}
             
@@ -55,7 +55,7 @@
                         <tr>
                             <td>{{ \Carbon\Carbon::parse($absence->date)->format('d/m/Y')}}</td>
                             <td>
-                                <form action="{{ action('\App\Http\Controllers\AbsencesController@destroy', ['id' => $absence->id]) }}" method="POST">
+                                <form action="{{ route('absence.destroy', ['id' => $absence->id]) }}" method="POST">
                                     @method('DELETE')
                                     @csrf
                                     <button class="btn btn-dark">Delete</button>

@@ -3,8 +3,9 @@
 @section('content')
     
     <div style="width: 100%;">
-        <a href="{{ action('\App\Http\Controllers\SeasonsController@index') }}"><span class="btn btn-dark">Seizoen overzicht</span></a><br><br>
-        <form method="post" action="{{ action('\App\Http\Controllers\SeasonsController@update', ['id' => $season->id])}}">
+        <a href="{{ route('season.index') }}"><span class="btn btn-dark">Seizoen overzicht</span></a><br><br>
+
+        <form method="post" action="{{ route('season.update', ['id' => $season->id])}}">
             {{csrf_field()}}
             {{ method_field('PUT')}}
             <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">

@@ -3,8 +3,8 @@
 @section('content')
 
     <div style="width: 100%;">
-        <a href="{{ action('\App\Http\Controllers\SeasonsController@index')}}"><span class="btn btn-dark">Seizoen overzicht</span></a><br><br>
-        <form method="post" action="{{ action('\App\Http\Controllers\SeasonsController@store')}}">
+        <a href="{{ route('season.index') }}"><span class="btn btn-dark">Seizoen overzicht</span></a><br><br>
+        <form method="post" action="{{ route('season.store')}}">
             {{csrf_field()}}
             <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                 <div class="row">
@@ -123,8 +123,6 @@
                     </div>
                 </div>
             </div>
-
-
 
             <div class="form-group">
                 <div class="row">
