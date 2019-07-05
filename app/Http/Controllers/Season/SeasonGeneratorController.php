@@ -49,13 +49,14 @@ class SeasonGeneratorController extends Controller
      */
     public function index()
     {
-
-
-        
         $playData = array();
         $seasons = $this->season->getSeasonsFromList($this->team->getArrayOfSeasons(Auth::user()->id));
+
         foreach($seasons as $season){
-            $seasonGenerator = \App\Services\GenerateSeason\GenerateSeasonFactory::generate($season->type);
+            if($season->type == "GenerateThursdaySeason"){
+                continue;
+            }
+            $seasonGenerator = \App\Services\SeasonGeneratorService\GeneratorFactory::generate($season->type);
             $playData['teams'][$season->id] = $seasonGenerator->getNextPlayDay($season->id, \Carbon\Carbon::parse($season->begin)->format('l'), $season->start_hour);
             
             if(count($playData['teams'][$season->id]) == 0) {

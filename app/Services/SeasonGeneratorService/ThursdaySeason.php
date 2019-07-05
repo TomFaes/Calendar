@@ -155,6 +155,30 @@ class ThursdaySeason implements IGenerator{
     }
 
     /**
+     * de default next play day will be in 1 week
+     * @param $seasonId
+     * @param $day
+     * @param $hour
+     * @return mixed
+     */
+    public function getNextPlayDay($seasonId, $day, $hour){
+        $getNow = new \Carbon\Carbon();
+        $nextDate = new \Carbon\Carbon();
+        $playHour = \Carbon\Carbon::parse($hour)->addHour();
+        
+        //if the date is bigger the the date from the season the next playday should appear
+        if($getNow->format('l') == $day AND $getNow->format('H:i') > $playHour->format('H:i')){
+            $nextDate->addDay(7);
+        }else{
+            $getNow->subDay(1);
+            $nextDate->addDay(6);
+        }
+        //get the next play day
+        $nextGameDay = $this->team->getPlayDay($seasonId, $getNow, $nextDate);
+        return $nextGameDay;
+    }
+
+    /**
      * this function will create a json of the season. This will be sent to the screen so when the season is ok it can be saved in an easy way.
      * The json should always have the same structure so it can be saved in the same way if there are more generators
      * @param $gamesArray
