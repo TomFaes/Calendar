@@ -113,7 +113,7 @@
                     <div class="col-lg-4 col-8">
                         <select class="form-control" name="type" id="type">
                             <option value=""></option>
-                            <option value="GenerateThursdaySeason">Donderdag seizoen</option>
+                            <option value="ThursdaySeason">Donderdag seizoen</option>
                         </select>
                         @if ($errors->has('type'))
                             <span class="help-block">

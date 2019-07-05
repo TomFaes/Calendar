@@ -74,14 +74,14 @@ class SeasonController extends Controller
     public function show($id){
         $list = $this->team->getArrayOfSeasonUsers($id);
         $season = $this->season->getSeason($id);
-        $seasonGenerator = \App\Services\GenerateSeason\GenerateSeasonFactory::generate($season->type);
+        $seasonGenerator = \App\Services\SeasonGeneratorService\GeneratorFactory::generate($season->type);
         
-        $days = $this->season->get7DaySeasonDates($id);
+        $days = $seasonGenerator->getPlayDates($season->begin, $season->end);
         $seasonAbsences = $this->absence->getSeasonAbsenceArray($id);
-        $seasonArray = $seasonGenerator->seasonRecap($id);
+        $seasonJson = $seasonGenerator->generateSeason($id);
         $seasonUsers = $this->user->getUsersFromList($list);
-        
-        return view('season.show')->with('days', $days)->with('season', $season)->with('seasonAbsences', $seasonAbsences)->with('seasonArray', $seasonArray)->with('seasonUsers', $seasonUsers);
+
+        return view('season.show')->with('days', $days)->with('season', $season)->with('seasonAbsences', $seasonAbsences)->with('seasonUsers', $seasonUsers)->with('seasonJson', $seasonJson);
     }
     
     public function edit($id){

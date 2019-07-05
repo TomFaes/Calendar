@@ -203,37 +203,35 @@ class ThursdaySeason implements IGenerator{
         return json_encode($arrayJson);
     }
 
-    /*
+     /**
+     * Saves all the teams from the json file to the database
+     * make sure there is a data set
+     * @param $jsonSeason
+     */
+    public function saveSeason($jsonSeason){
+        $jsonArray = json_decode($jsonSeason);
+        foreach($jsonArray->data As $teams){
+            if($teams->user_id1 > 0 AND $teams->user_id2 > 0){
+                $team = new Team();
+                $team->season_id = $teams->seasonId;
+                $team->date = $teams->date;
+                $team->team = $teams->team;
+                $team->player_id = $teams->user_id1;
+                $this->team->saveTeam($team);
 
-        $jsonData = json_decode($jsonSeason);
-        $seasonArray = array();
-        foreach($jsonData as $data){
-            $teamplayerOne = $data->user_id1;
-            $teamplayerTwo = $data->user_id2;
-            $teamNumber = substr($data->team, -1);
-            $teamNumber = $data->team;
-            
-            $seasonArray['datum'][$data->date][$data->team]['player1'] = $teamplayerOne;
-            $seasonArray['datum'][$data->date][$data->team]['player2'] = $teamplayerTwo;
-
-            if($data->team != "team3"){
-                $seasonArray['stats'][$teamplayerOne]['against'][$teamplayerTwo] = $teamplayerTwo;
-                $seasonArray['stats'][$teamplayerTwo]['against'][$teamplayerOne] = $teamplayerOne;
+                $team1 = new Team();
+                $team1->season_id = $teams->seasonId;
+                $team1->date = $teams->date;
+                $team1->team = $teams->team;
+                $team1->player_id = $teams->user_id2;
+                $this->team->saveTeam($team1);
             }
-
-            isset($seasonArray['stats'][$teamplayerOne][$teamNumber]) === true ? $seasonArray['stats'][$teamplayerOne][$teamNumber]++ : $seasonArray['stats'][$teamplayerOne][$teamNumber] = 1;
-            isset($seasonArray['stats'][$teamplayerTwo][$teamNumber]) === true ? $seasonArray['stats'][$teamplayerTwo][$teamNumber]++ : $seasonArray['stats'][$teamplayerTwo][$teamNumber] = 1;
-            isset($seasonArray['stats'][$teamplayerOne]['total']) === true ? $seasonArray['stats'][$teamplayerOne]['total']++ : $seasonArray['stats'][$teamplayerOne]['total'] = 1;
-            isset($seasonArray['stats'][$teamplayerTwo]['total']) === true ? $seasonArray['stats'][$teamplayerTwo]['total']++ : $seasonArray['stats'][$teamplayerTwo]['total'] = 1;
-            
-            $seasonArray['datum'][$data->date][$teamplayerOne] = $data->team;
-            $seasonArray['datum'][$data->date][$teamplayerTwo] = $data->team;
-            $seasonArray['datum'][$data->date]['seasonId'] = $data->seasonId;
-            $seasonArray['datum'][$data->date]['date'] = $data->date;
-            
         }
-        return $seasonArray;
-    */
+    }
+
+
+
+    
 
 
 

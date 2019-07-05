@@ -124,7 +124,7 @@
                         <select class="form-control" name="type" id="type">
                             <option value=""></option>
 
-                            <option value="GenerateThursdaySeason" <?php echo $season->type == "GenerateThursdaySeason" ? "selected=true" : "" ?> >Donderdag seizoen</option>
+                            <option value="ThursdaySeason" <?php echo $season->type == "ThursdaySeason" ? "selected=true" : "" ?> >Donderdag seizoen</option>
                         </select>
                         @if ($errors->has('type'))
                             <span class="help-block">

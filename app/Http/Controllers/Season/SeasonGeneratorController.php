@@ -49,6 +49,9 @@ class SeasonGeneratorController extends Controller
      */
     public function index()
     {
+
+
+        
         $playData = array();
         $seasons = $this->season->getSeasonsFromList($this->team->getArrayOfSeasons(Auth::user()->id));
         foreach($seasons as $season){
@@ -79,6 +82,7 @@ class SeasonGeneratorController extends Controller
             }
         }
         return view('season.nextgame')->with('playData', $playData);
+        
     }
 
     /**
@@ -113,7 +117,8 @@ class SeasonGeneratorController extends Controller
     public function update(Request $request, $seasonId)
     {
         $season = $this->season->getSeason($seasonId);
-        $seasonGenerator = \App\Services\GenerateSeason\GenerateSeasonFactory::generate($season->type);
+        $seasonGenerator = \App\Services\SeasonGeneratorService\GeneratorFactory::generate($season->type);
+        
 
         $request->input('jsonSeason') != "" ? $json = $request->input('jsonSeason') : "";
         $seasonGenerator->saveSeason($json);
