@@ -89,20 +89,18 @@ class SeasonGeneratorController extends Controller
      */
     public function edit($seasonId)
     {
-        //dd($seasonId);
         $season = $this->season->getSeason($seasonId);
         $listUsers = $this->group->getArrayOfGroupUsers($season->group_id);
-        
-        //build controle in to check if no other teams have been created
-        $seasonGenerator = \App\Services\GenerateSeason\GenerateSeasonFactory::generate($season->type);
+
+        $seasonGenerator = \App\Services\SeasonGeneratorService\GeneratorFactory::generate($season->type);
         $seasonJson = $seasonGenerator->generateSeason($seasonId);
-        $seasonArray = $seasonGenerator->convertJsonToArraySeason($seasonJson);
-        
-        $days = $this->season->get7DaySeasonDates($seasonId);
+
+        //$days = $this->season->get7DaySeasonDates($seasonId);
+        $days = $seasonGenerator->getPlayDates($season->begin, $season->end);
         $seasonAbsences = $this->absence->getSeasonAbsenceArray($seasonId);
         $seasonUsers = $this->user->getUsersFromList($listUsers);
-        
-        return view('season.generateSeason')->with('days', $days)->with('season', $season)->with('seasonAbsences', $seasonAbsences)->with('seasonArray', $seasonArray)->with('seasonUsers', $seasonUsers)->with('seasonJson', $seasonJson);
+
+        return view('season.generateSeason')->with('days', $days)->with('season', $season)->with('seasonAbsences', $seasonAbsences)->with('seasonUsers', $seasonUsers)->with('seasonJson', $seasonJson);
     }
 
     /**

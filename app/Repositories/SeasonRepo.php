@@ -94,6 +94,7 @@ class SeasonRepo extends Repository implements ISeason
      * @return array
      * @throws \Exception
      */
+    /** this methode may be removed after the new generator system is active */
     public function get7DaySeasonDates($seasonId){
         $season = $this->getSeason($seasonId);
 

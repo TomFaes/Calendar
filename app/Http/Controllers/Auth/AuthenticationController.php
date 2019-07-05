@@ -43,7 +43,8 @@ class AuthenticationController extends Controller
                 $user = $this->user->createSocialUser($socialUser);
             }
             //if the user exist or is created login
-            Auth::login( $user );
+            Auth::login($user, true);
+            //Auth::login( $user );
             return redirect('/');
         }
         catch (Exception $e) {
