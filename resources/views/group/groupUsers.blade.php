@@ -4,8 +4,8 @@
 
 <div style="width: 100%;">
     @if($group->admin_id == Auth::user()->id)
-        <a href="{{ action('\App\Http\Controllers\GroupsController@index') }}"><span class="btn btn-dark">Groep overzicht</span></a><br><br>
-        <form method="post" action="{{ action('\App\Http\Controllers\GroupsController@addUsers', ['id' => $group->id])}}">
+        <a href="{{ route('group.index') }}"><span class="btn btn-dark">Groep overzicht</span></a><br><br>
+        <form method="post" action="{{ route('group.user.index', ['id' => $group->id])}}">
             {{csrf_field()}}
             <div class="form-group{{ $errors->has('groupUsers') ? ' has-error' : '' }}">
                 <div class="row">
@@ -56,8 +56,9 @@
                 <td>{{$user->firstname}}</td>
                 <td>{{$user->name}}</td>
                 <td>
-                    <form method="post" action="{{ action('\App\Http\Controllers\GroupsController@deleteGroupUser', ['group_id' => $group->id])}}">
+                    <form method="post" action="{{ route('group.user.destroy', ['id' => $group->id, 'user_id' => $user->id])}}">
                         {{csrf_field()}}
+                        @method('DELETE')
                         <input id="userId" type="hidden" class="form-control" name="userId" value="{{ $user->id }}">
                         @if($group->admin_id == Auth::user()->id)
                             <button type="submit" class="btn btn-dark">

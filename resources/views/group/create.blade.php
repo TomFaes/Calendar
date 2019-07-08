@@ -3,8 +3,8 @@
 @section('content')
 
 <div style="width: 100%;">
-    <a href="{{ action('\App\Http\Controllers\GroupsController@index') }}"><span class="btn btn-dark">Groep overzicht</span></a><br><br>
-    <form method="post" action="{{ action('\App\Http\Controllers\GroupsController@store')}}">
+    <a href="{{ route('group.index') }}"><span class="btn btn-dark">Groep overzicht</span></a><br><br>
+    <form method="post" action="{{ route('group.store')}}">
         {{csrf_field()}}
         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
             <div class="row">

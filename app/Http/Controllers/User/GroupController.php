@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Validators\GroupValidation;
 use App\Repositories\Contracts\IGroup;
 use App\Repositories\Contracts\IUser;
 
-class GroupsController extends Controller
+class GroupController extends Controller
 {
     /** @var App\Validators\GroupValidation */
     protected $groupValidation;
@@ -45,7 +46,7 @@ class GroupsController extends Controller
     }
     
     public function show($id){
-        
+        //
     }
     
     public function edit($id){
@@ -58,40 +59,10 @@ class GroupsController extends Controller
         $this->groupValidation->validateCreateGroup($request);
         $this->group->update($request, $id);
         return redirect()->to('group/')->send();
-        //return Redirect::to('group');
     }
     
     public function destroy($id){
         $this->group->delete($id);
         return redirect()->to('group/')->send();
     }
-    
-    public function groupUsers($groupId){
-        $groupUsers = $this->group->getArrayOfGroupUsers($groupId);
-        $nonGroupUsers = array();
-        foreach($this->user->getAllUsers() as $user){
-            if(isset($groupUsers[$user->id]) === false){
-                $nonGroupUsers[$user->id] = $user;
-            }
-        }
-        $group = $this->group->getGroup($groupId);
-        $users = $this->user->getAllUsers();
-        
-        return view('group.groupUsers')->with('group', $group)->with('users', $users)->with('nonGroupUsers', $nonGroupUsers);
-    }
-    
-    public function addUsers(Request $request, $groupId){
-        $this->groupValidation->validateAddUser($request);
-        $this->group->addUsers($request, $groupId);
-        
-        return redirect()->to('group/group-users/'.$groupId);
-    }
-    
-    public function deleteGroupUser(Request $request, $groupId){
-        $this->group->deleteGroupUser($request['userId'], $groupId);
-        return redirect()->to('group/group-users/'.$groupId);
-    }
-    
-    
-    
 }

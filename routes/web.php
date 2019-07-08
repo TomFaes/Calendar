@@ -46,6 +46,15 @@ Route::resource('season/generate-season', '\App\Http\Controllers\Season\SeasonGe
 /** All season routes */
 Route::resource('season', '\App\Http\Controllers\Season\SeasonController');
 
+/** All Group routes */
+Route::resource('group', '\App\Http\Controllers\User\GroupController')->except([
+    'show'
+]);
+
+/** All GroupUser routes */
+Route::resource('group.user', '\App\Http\Controllers\User\GroupUserController')->except([
+    'create', 'show', 'edit', 'update'
+]);
 
 
 //Route::get('season/generate-season/{season}', '\App\Http\Controllers\Season\SeasonGeneratorController@generateSeason')->name('generateSeason.create');
@@ -58,14 +67,11 @@ Route::resource('season', '\App\Http\Controllers\Season\SeasonController');
 
 
 
-/** All Group routes */
-Route::resource('group', 'GroupsController')->except([
-    'show'
-]);
 
-Route::get('/group/group-users/{group}', '\App\Http\Controllers\GroupsController@groupUsers')->middleware('group')->name('groupUsers');
-Route::post('/group/add-users/{group}', '\App\Http\Controllers\GroupsController@addUsers')->middleware('group')->name('addUsers');
-Route::post('/group/delete-user/{group}', '\App\Http\Controllers\GroupsController@deleteGroupUser')->name('deleteUser');
+
+//Route::get('/group/group-users/{group}', '\App\Http\Controllers\User\GroupController@groupUsers')->middleware('group')->name('groupUsers');
+//Route::post('/group/add-users/{group}', '\App\Http\Controllers\User\GroupController@addUsers')->middleware('group')->name('addUsers');
+//Route::post('/group/delete-user/{group}', '\App\Http\Controllers\User\GroupController@deleteGroupUser')->name('deleteUser');
 
 /** All season routes */
 //Route::get('/season/next-game', '\App\Http\Controllers\SeasonsController@nextGame');

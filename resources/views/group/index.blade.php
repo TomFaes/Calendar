@@ -4,7 +4,7 @@
     @if(Auth::user()->role == 'Admin' || Auth::user()->role == 'Editor')
         <div class="row">
             <div class="col-12">
-                <a href="{{ action('\App\Http\Controllers\GroupsController@create') }}"><span class="btn btn-dark">Group toevoegen</span></a>
+                <a href="{{ route('group.create') }}"><span class="btn btn-dark">Group toevoegen</span></a>
             </div>
         </div><br>
     @endif
@@ -27,13 +27,13 @@
                         <td>{{$group->admin->firstname." ".$group->admin->name}}</td>
                         <td>
                             @if($group->admin_id == Auth::user()->id)
-                                <a href="{{ action('\App\Http\Controllers\GroupsController@edit', ['id' => $group->id]) }}"><span class="btn btn-dark">Update</span></a>
-                                <a href="{{ action('\App\Http\Controllers\GroupsController@groupUsers', ['id' => $group->id]) }}"><span class="btn btn-dark">Group users</span></a>
+                                <a href="{{ route('group.edit',  ['id' => $group->id]) }}"><span class="btn btn-dark">Update</span></a>
+                                <a href="{{ route('group.user.index',  ['id' => $group->id]) }}"><span class="btn btn-dark">Group users</span></a>
                             @endif
                         </td>
                         <td>
                             @if($group->admin_id == Auth::user()->id && $group->users->count() == 0 && $group->seasonGroup->count() == 0)
-                                <form action="{{ action('\App\Http\Controllers\GroupsController@destroy', ['id' => $group->id]) }}" method="POST">
+                                <form action="{{ route('group.destroy',  ['id' => $group->id]) }}" method="POST">                             
                                     @method('DELETE')
                                     @csrf
                                     <button class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete Group</button>
