@@ -15,7 +15,7 @@ use App\Repositories\Contracts\ITeam;
     |--------------------------------------------------------------------------
     | Generate TwoFieldTwoHourThreeTeams Season
     |--------------------------------------------------------------------------
-    | TwoFieldTwoHour season: A season is created based on 2 courts for 2 hours and there will be 3 teams,
+    | TwoFieldTwoHourThreeTeams season: A season is created based on 2 courts for 2 hours and there will be 3 teams,
     |
     | 1st Field: 2 hours double
     | 2nd Field: 2 hours single
@@ -33,8 +33,11 @@ use App\Repositories\Contracts\ITeam;
     */
 class TwoFieldTwoHourThreeTeams implements IGenerator{
 
+    /** @var App\Repositories\Contracts\ISeason */
     protected $season;
+    /** @var App\Repositories\Contracts\IAbsence */
     protected $absence;
+    /** @var App\Repositories\Contracts\ITeam */
     protected $team;
 
     public function __construct(ISeason $seasonRepo, IAbsence $absenceRepo, ITeam $teamRepo) {
@@ -43,6 +46,12 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
         $this->team = $teamRepo;
     }
    
+    /**
+     * Generates the season
+     *
+     * @param  int  $seasonId
+     * @return json
+     */
     public function generateSeason($seasonId){
         $season = $this->season->getSeason($seasonId);
 
@@ -53,7 +62,6 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
         $personArray = $this->createPersonStats($season);
 
         //get all date for the season
-        //$seasonDates = $this->season->get7DaySeasonDates($seasonId);
         $seasonDates = $this->getPlayDates($season->begin, $season->end);
 
         $gamesArray = array();
@@ -72,7 +80,6 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
             $personArray = $this->addOneNonPlayDay($personArray);
 
             foreach($teamShuffle AS $number){
-
                 //teams will be called team + a number
                 $teamnumber = "team".$number;
 
@@ -88,9 +95,6 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
                 }
 
                 //set the player 1 and 2 id
-                //$player1 = isset($drawTeamArray[$random]['player1']) === true ? $drawTeamArray[$random]['player1'] : "";
-                //$player2 = isset($drawTeamArray[$random]['player2']) === true ? $drawTeamArray[$random]['player2'] : "";
-
                 if(isset($drawTeamArray[$random]['player1']) === true AND isset($drawTeamArray[$random]['player2'])){
                     $player1 = $drawTeamArray[$random]['player1'];
                     $player2 = $drawTeamArray[$random]['player2'];
@@ -140,7 +144,11 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
     }
 
     /**
-     * will return the weekly play date
+     * Returns the weekly play dates
+     *
+     * @param  date  $beginDate
+     * @param  date  $endDate
+     * @return Array
      */
     public function getPlayDates($beginDate, $endDate){
         $startDate = new \DateTime($beginDate);
@@ -195,14 +203,11 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
                 $teamplayerTwo = isset($game[$team]['player2']) === true ? $game[$team]['player2'] : "";
                 $datum =  $game['datum'];
 
-
                 $arrayJson['data'][$x]['seasonId'] = $seasonId;
                 $arrayJson['data'][$x]['date'] = $datum;
                 $arrayJson['data'][$x]['team'] = $team;
                 $arrayJson['data'][$x]['user_id1'] = $teamplayerOne;
                 $arrayJson['data'][$x]['user_id2'] = $teamplayerTwo;
-
-
 
                 $arrayJson['date'][$datum][$team]['player1'] =  $teamplayerOne;
                 $arrayJson['date'][$datum][$team]['player2'] =  $teamplayerTwo;
@@ -253,15 +258,6 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
         }
     }
 
-
-
-    
-
-
-
-
-
-
     /**
      * create all teams that can be created from the group of people that is given
      * @param $group
@@ -303,7 +299,11 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
     }
 
     /**
-     * get all absences of the persons in that season
+     * Return all absences of a user in a season
+     *
+     * @param  int  $userId
+     * @param  int  $seasonId
+     * @return Array
      */
     protected function getUserAbsenceDays($userId, $seasonId){
         $absences = $this->absence->getUserAbsence($seasonId, $userId);
@@ -342,6 +342,14 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
         return array_values($teamArray);
     }
 
+    /**
+     * Return all absences of a user in a season
+     *
+     * @param  Array  $drawTeamArray
+     * @param  Array  $gamesArray
+     * @param  string $teamnumber
+     * @return Array
+     */
     protected function removeAllPlayedGames($drawTeamArray, $gamesArray, $teamnumber){
         //to do after creating the first games
         foreach($gamesArray as $key=>$games){
@@ -361,7 +369,6 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
      /**
      * create a team meeting the requirements of the class
      * @param $teamArray
-     * @param $gamesArray
      * @param $personArray
      * @param $teamNumber
      * @return int
@@ -428,6 +435,4 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
         }
         return array_values($teamArray);
     }
-
-   
 }

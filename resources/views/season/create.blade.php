@@ -109,11 +109,11 @@
             <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }}">
                 <div class="row">
                     <div class="col-0 col-lg-2"></div>
-                    <label for="type" class="col-4 col-lg-1 control-label">Type</label>
+                    <label for="type" class="col-4 col-lg-1 control-label">Generator</label>
                     <div class="col-lg-4 col-8">
                         <select class="form-control" name="type" id="type">
                             <option value=""></option>
-                            <option value="ThursdaySeason">Donderdag seizoen</option>
+                            <option value="TwoFieldTwoHourThreeTeams">3 teams op 2 velden voor 2 uur</option>
                         </select>
                         @if ($errors->has('type'))
                             <span class="help-block">

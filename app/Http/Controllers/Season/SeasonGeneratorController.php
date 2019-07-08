@@ -42,7 +42,7 @@ class SeasonGeneratorController extends Controller
         $this->middleware('admin:Editor', ['only' => ['edit', 'update']]);
     }
     /**
-     * Display a listing of the resource.
+     * Displays all the current season Calendars where you are active
      *
      * @return \Illuminate\Http\Response
      */
@@ -87,9 +87,9 @@ class SeasonGeneratorController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Shows the season that is generated and where you have the options to regenerate or save the displayed season
      *
-     * @param  int  $id
+     * @param  int  $seasonid
      * @return \Illuminate\Http\Response
      */
     public function edit($seasonId)
@@ -100,7 +100,6 @@ class SeasonGeneratorController extends Controller
         $seasonGenerator = \App\Services\SeasonGeneratorService\GeneratorFactory::generate($season->type);
         $seasonJson = $seasonGenerator->generateSeason($seasonId);
 
-        //$days = $this->season->get7DaySeasonDates($seasonId);
         $days = $seasonGenerator->getPlayDates($season->begin, $season->end);
         $seasonAbsences = $this->absence->getSeasonAbsenceArray($seasonId);
         $seasonUsers = $this->user->getUsersFromList($listUsers);
@@ -109,10 +108,10 @@ class SeasonGeneratorController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Save the generated season
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $seasonId
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $seasonId)
