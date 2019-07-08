@@ -34,7 +34,6 @@ class SeasonGeneratorController extends Controller
     public function __construct(ISeason $seasonRepo, SeasonValidation $seasonValidation, IUser $userRepo, IGroup $groupRepo, ITeam $teamRepo, IAbsence $absenceRepo){
         $this->middleware('auth');
         $this->season = $seasonRepo;
-        //$this->seasonValidator = $seasonValidation;
         $this->user = $userRepo;
         $this->team = $teamRepo;
         $this->group = $groupRepo;
@@ -53,6 +52,7 @@ class SeasonGeneratorController extends Controller
         $seasons = $this->season->getSeasonsFromList($this->team->getArrayOfSeasons(Auth::user()->id));
 
         foreach($seasons as $season){
+            //remove if the old generator is removed
             if($season->type == "GenerateThursdaySeason"){
                 continue;
             }
@@ -64,6 +64,7 @@ class SeasonGeneratorController extends Controller
                     $playData['teams'][$season->id] = $this->team->getTeamsOnDate($season->id, $season->begin);;
                 }
             }
+
             if(count($playData['teams'][$season->id]) > 0) {
                 $list = $this->team->getArrayOfSeasonUsers($season->id);
 
@@ -83,7 +84,6 @@ class SeasonGeneratorController extends Controller
             }
         }
         return view('season.nextgame')->with('playData', $playData);
-        
     }
 
     /**
@@ -120,7 +120,6 @@ class SeasonGeneratorController extends Controller
         $season = $this->season->getSeason($seasonId);
         $seasonGenerator = \App\Services\SeasonGeneratorService\GeneratorFactory::generate($season->type);
         
-
         $request->input('jsonSeason') != "" ? $json = $request->input('jsonSeason') : "";
         $seasonGenerator->saveSeason($json);
 

@@ -13,9 +13,9 @@ use App\Repositories\Contracts\ITeam;
 
 /*
     |--------------------------------------------------------------------------
-    | Generate Thursday Season
+    | Generate TwoFieldTwoHourThreeTeams Season
     |--------------------------------------------------------------------------
-    | Thursday season: A season is created based on 2 courts for 2 hours and there will be 3 teams,
+    | TwoFieldTwoHour season: A season is created based on 2 courts for 2 hours and there will be 3 teams,
     |
     | 1st Field: 2 hours double
     | 2nd Field: 2 hours single
@@ -31,7 +31,7 @@ use App\Repositories\Contracts\ITeam;
     | - if the season is really long then it is possible to play more then once in the same team
     | - If there are alot of absence people on the same day it is possible to play more then once in the same team
     */
-class ThursdaySeason implements IGenerator{
+class TwoFieldTwoHourThreeTeams implements IGenerator{
 
     protected $season;
     protected $absence;
@@ -166,7 +166,7 @@ class ThursdaySeason implements IGenerator{
         $nextDate = new \Carbon\Carbon();
         $playHour = \Carbon\Carbon::parse($hour)->addHour();
         
-        //if the date is bigger the the date from the season the next playday should appear
+        //if the date is bigger then the date and hour from the season the next playday should appear
         if($getNow->format('l') == $day AND $getNow->format('H:i') > $playHour->format('H:i')){
             $nextDate->addDay(7);
         }else{

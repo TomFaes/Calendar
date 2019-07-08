@@ -18,12 +18,17 @@ class SeasonRepo extends Repository implements ISeason
         return Season::find($id);
     }
 
-    public function getSeasonsFromList($listSeasonsArray, $admin = "User"){
+    /**
+     * Get all seasons from a list of season id
+     * @param  int  $listSeasons: give a list of seasons seperated by ','
+     * @param string $admin: if the user is an admin he can see all seasons
+     * @return \Illuminate\Http\Response
+     */
+    public function getSeasonsFromList($listSeasons, $admin = "User"){
         if($admin == "User"){
-            return Season::whereIn('id', $listSeasonsArray)->orderBy('begin', 'asc')->where('end', '>', \Carbon\Carbon::now()->format("Y-m-d"))->get();
+            return Season::whereIn('id', $listSeasons)->orderBy('begin', 'asc')->where('end', '>', \Carbon\Carbon::now()->format("Y-m-d"))->get();
         }
-        return Season::whereIn('id', $listSeasonsArray)->orderBy('begin', 'asc')->get();
-        //->where('end', '>', \Carbon\Carbon::now()->format("Y-m-d"))
+        return Season::whereIn('id', $listSeasons)->orderBy('begin', 'asc')->get();
     }
 
     public function getArrayOfAdminSeasons($userId){
