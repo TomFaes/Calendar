@@ -32,9 +32,10 @@
                         </li>
                     @endif
                     <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="{{ route('profile.edit') }}">{{Auth::user()->firstname}}</a>
+                        <a class="nav-link js-scroll-trigger" href="{{ route('profile.edit') }}">
+                            <i class="fa fa-user fa-2x" aria-hidden="true" style="filter: invert(0%);"></i>
+                        </a>
                     </li>
-
                     <li class="nav-item">
                             <a class="nav-link js-scroll-trigger" href="{{ route('logout') }}">Logout</a>
                         </li>
