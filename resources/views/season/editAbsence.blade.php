@@ -3,9 +3,8 @@
 @section('content')
     <div style="width: 100%;">
         <a href="{{ route('season.index') }}"><span class="btn btn-dark">Seizoen overzicht</span></a><br><br>
-        <form method="post" action="{{ route('absence.update', ['id' => $season->id])}}">
+        <form method="post" action="{{ route('absence.store', ['id' => $season->id])}}">
             {{csrf_field()}}
-            {{ method_field('PUT')}}
             
             <div class="form-group{{ $errors->has('date') ? ' has-error' : '' }}">
                 <div class="row">
@@ -55,7 +54,7 @@
                         <tr>
                             <td>{{ \Carbon\Carbon::parse($absence->date)->format('d/m/Y')}}</td>
                             <td>
-                                <form action="{{ route('absence.destroy', ['id' => $absence->id]) }}" method="POST">
+                                <form action="{{ route('absence.destroy', ['seasonId' => $season->id, 'id' => $absence->id]) }}" method="POST">
                                     @method('DELETE')
                                     @csrf
                                     <button class="btn btn-dark">Delete</button>

@@ -42,7 +42,7 @@
                                 <a href="{{ route('season.show',  ['id' => $season->id]) }}"><span class="btn btn-dark">Kalender</span></a>
                             @endif
                             @if(count($season->team) == 0)
-                                <a href="{{ route('absence.show',  ['id' => $season->id]) }}"><span class="btn btn-dark">Afwezigheden</span></a>
+                                <a href="{{ route('absence.index',  ['id' => $season->id]) }}"><span class="btn btn-dark">Afwezigheden</span></a>
                             @endif
                         </td>
                         @if(Auth::user()->role == 'Admin' || Auth::user()->role == 'Editor')

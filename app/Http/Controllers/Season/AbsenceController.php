@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Season;
+
+use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -11,7 +13,7 @@ use App\Repositories\Contracts\IUser;
 
 use App\Validators\AbsenceValidation;
 
-class AbsencesController extends Controller
+class AbsenceController extends Controller
 {
     /** @var App\Repositories\Contracts\IAbsence */
     protected $absence;
@@ -30,30 +32,51 @@ class AbsencesController extends Controller
         $this->season = $seasonRepo;
         $this->user = $userRepo;
     }
-    
-    public function show($seasonId) {
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  int  $seasonId
+     * @return \Illuminate\Http\Response
+     */
+    public function index($seasonId) {
         $days = $this->getArrayAvailableAbsences($seasonId, Auth::user()->id);
         $season = $this->season->getSeason($seasonId);
         $absences = $this->absence->getUserAbsence($seasonId, Auth::user()->id);
-        
         return view('season.editAbsence')->with('days', $days)->with('season', $season)->with('absences' , $absences);
     }
     
-    public function update(Request $request, $seasonId) {
+     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  int  $seasonId
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request, $seasonId) {
         $this->absenceValidator->validateCreateAbsence($request);
         $this->absence->create($request, $seasonId, Auth::user()->id);
-        return redirect()->to('absence/'.$seasonId)->send();
+        return redirect()->to('season/'.$seasonId.'/absence/')->send();
     }
     
-    public function destroy($id) {
+     /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $seasonId
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($seasonId, $id) {
         $seasonId = $this->absence->delete($id);
-        return redirect()->to('absence/'.$seasonId)->send();
+        return redirect()->to('season/'.$seasonId.'/absence/')->send();
     }
     
     private function getArrayAvailableAbsences($seasonId){
-        //array of days in a season
-        $daysSeason = $this->season->get7DaySeasonDates($seasonId);
-        //get absences user
+        $season = $this->season->getSeason($seasonId);
+
+        $seasonGenerator = \App\Services\SeasonGeneratorService\GeneratorFactory::generate($season->type);
+        $daysSeason = $seasonGenerator->getPlayDates($season->begin, $season->end);
+
         $daysAbsence = $this->absence->getUserAbsence($seasonId, Auth::user()->id);
         
         foreach($daysAbsence as $day){
@@ -63,6 +86,4 @@ class AbsencesController extends Controller
         }
         return $daysSeason;
     }
-    
-    
 }
