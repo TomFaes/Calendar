@@ -163,27 +163,47 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
     }
 
     /**
-     * de default next play day will be in 1 week
-     * @param $seasonId
-     * @param $day
-     * @param $hour
-     * @return mixed
+     * Get the next play day, default is 1 week if the season is busy otherwise the first date of the season will be taken
+     * @param object Season $season
+     * @return array
      */
-    public function getNextPlayDay($seasonId, $day, $hour){
+    //public function getNextPlayDay(Season $season, $day, $hour){
+    public function getNextPlayDay(Season $season){
+        $returndata = array();
         $getNow = new \Carbon\Carbon();
         $nextDate = new \Carbon\Carbon();
-        $playHour = \Carbon\Carbon::parse($hour)->addHour();
-        
+        $playHour = \Carbon\Carbon::parse($season->start_hour)->addHour();
+
         //if the date is bigger then the date and hour from the season the next playday should appear
-        if($getNow->format('l') == $day AND $getNow->format('H:i') > $playHour->format('H:i')){
+        if($getNow->format('l') == $season->day AND $getNow->format('H:i') > $playHour->format('H:i')){
             $nextDate->addDay(7);
         }else{
             $getNow->subDay(1);
             $nextDate->addDay(6);
         }
         //get the next play day
-        $nextGameDay = $this->team->getPlayDay($seasonId, $getNow, $nextDate);
-        return $nextGameDay;
+        $nextGameDay = $this->team->getPlayDay($season->id, $getNow, $nextDate);
+
+        //if nextday is 0 then get the startdate if that is bigger then the current date
+        if(count($nextGameDay) == 0) {
+            if($season->begin > \Carbon\Carbon::now()->format("Y-m-d")){
+                $nextGameDay = $this->team->getTeamsOnDate($season->id, $season->begin);
+            }
+        }
+
+        //create the display data
+        if(count($nextGameDay) > 0) {
+            $returndata['date'] = $nextGameDay[0]->date;
+            $returndata['season'] = $season;
+            $returndata['users'] = $season->group->users;
+            foreach($nextGameDay as $teams){
+                $returndata['display'][$teams->player_id]  =  substr($teams->team, -1);
+            }
+            foreach($this->absence->getSeasonAbsence($season->id)->toArray() as $absence){
+                $returndata['absenceDays'][$absence['user_id']][$absence['date']] = $absence['date'];
+            }
+        }
+        return $returndata;
     }
 
     /**

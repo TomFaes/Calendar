@@ -14,6 +14,7 @@ use App\Repositories\Contracts\ITeam;
 use App\Repositories\Contracts\IAbsence;
 
 use App\Validators\SeasonValidation;
+use App\Services\SeasonGeneratorService\GeneratorFactory;
 
 class SeasonGeneratorController extends Controller
 {
@@ -50,40 +51,16 @@ class SeasonGeneratorController extends Controller
     {
         $playData = array();
         $seasons = $this->season->getSeasonsFromList($this->team->getArrayOfSeasons(Auth::user()->id));
-
+       
         foreach($seasons as $season){
-            //remove if the old generator is removed
-            if($season->type == "GenerateThursdaySeason"){
-                continue;
-            }
-            $seasonGenerator = \App\Services\SeasonGeneratorService\GeneratorFactory::generate($season->type);
-            $playData['teams'][$season->id] = $seasonGenerator->getNextPlayDay($season->id, \Carbon\Carbon::parse($season->begin)->format('l'), $season->start_hour);
-            
-            if(count($playData['teams'][$season->id]) == 0) {
-                if($season->begin > \Carbon\Carbon::now()->format("Y-m-d")){
-                    $playData['teams'][$season->id] = $this->team->getTeamsOnDate($season->id, $season->begin);;
-                }
-            }
-
-            if(count($playData['teams'][$season->id]) > 0) {
-                $list = $this->team->getArrayOfSeasonUsers($season->id);
-
-                $playData['date'][$season->id] = $playData['teams'][$season->id][0]['date'];
-                $playData['season'][$season->id] = $this->season->getSeason($season->id)->toArray();
-                $playData['users'][$season->id] = $this->user->getUsersFromList($list)->toArray();
-
-                foreach($playData['teams'][$season->id] as $teams){
-                    $playData['dayplayers'][$season->id][$teams->player_id] = substr($teams->team, -1);
-                }
-
-                foreach($this->absence->getSeasonAbsence($season->id)->toArray() as $absence){
-                    $playData['dayabsence'][$season->id][$absence['user_id']][$absence['date']] = $absence['date'];
-                }
-            }else{
-                unset($playData['teams'][$season->id]);
+            $seasonGenerator = GeneratorFactory::generate($season->type);
+            //Get all data: it should contain date, season, users, display, absenceDays
+            $playData[$season->id] = $seasonGenerator->getNextPlayDay($season);
+            if(isset($playData[$season->id]['date']) === false){
+                unset($playData[$season->id]);
             }
         }
-        return view('season.nextgame')->with('playData', $playData);
+        return view('season.nextgame')->with('seasonsdata', $playData);
     }
 
     /**
@@ -97,7 +74,7 @@ class SeasonGeneratorController extends Controller
         $season = $this->season->getSeason($seasonId);
         $listUsers = $this->group->getArrayOfGroupUsers($season->group_id);
 
-        $seasonGenerator = \App\Services\SeasonGeneratorService\GeneratorFactory::generate($season->type);
+        $seasonGenerator = GeneratorFactory::generate($season->type);
         $seasonJson = $seasonGenerator->generateSeason($seasonId);
 
         $days = $seasonGenerator->getPlayDates($season->begin, $season->end);
@@ -117,7 +94,7 @@ class SeasonGeneratorController extends Controller
     public function update(Request $request, $seasonId)
     {
         $season = $this->season->getSeason($seasonId);
-        $seasonGenerator = \App\Services\SeasonGeneratorService\GeneratorFactory::generate($season->type);
+        $seasonGenerator = GeneratorFactory::generate($season->type);
         
         $request->input('jsonSeason') != "" ? $json = $request->input('jsonSeason') : "";
         $seasonGenerator->saveSeason($json);
