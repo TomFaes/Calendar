@@ -13,6 +13,8 @@ use App\Repositories\Contracts\IUser;
 
 use App\Validators\AbsenceValidation;
 
+use App\Services\SeasonGeneratorService\GeneratorFactory;
+
 class AbsenceController extends Controller
 {
     /** @var App\Repositories\Contracts\IAbsence */
@@ -40,9 +42,9 @@ class AbsenceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index($seasonId) {
-        $days = $this->getArrayAvailableAbsences($seasonId, Auth::user()->id);
-        $season = $this->season->getSeason($seasonId);
         $absences = $this->absence->getUserAbsence($seasonId, Auth::user()->id);
+        $season = $this->season->getSeason($seasonId);
+        $days = $this->getAvailablePlayDays($absences, $season);
         return view('season.editAbsence')->with('days', $days)->with('season', $season)->with('absences' , $absences);
     }
     
@@ -71,15 +73,17 @@ class AbsenceController extends Controller
         return redirect()->to('season/'.$seasonId.'/absence/')->send();
     }
     
-    private function getArrayAvailableAbsences($seasonId){
-        $season = $this->season->getSeason($seasonId);
-
-        $seasonGenerator = \App\Services\SeasonGeneratorService\GeneratorFactory::generate($season->type);
+    /**
+     * Return an array of days that the user can play and is not absence
+     *
+     * @param  Absence  $absence
+     * @param  Season  $season
+     * @return Array
+     */
+    protected function getAvailablePlayDays($absence, $season){
+        $seasonGenerator = GeneratorFactory::generate($season->type);
         $daysSeason = $seasonGenerator->getPlayDates($season->begin, $season->end);
-
-        $daysAbsence = $this->absence->getUserAbsence($seasonId, Auth::user()->id);
-        
-        foreach($daysAbsence as $day){
+        foreach($absence as $day){
             if(isset($daysSeason[$day->date]) === true){
                 unset($daysSeason[$day->date]);
             }
