@@ -123,8 +123,7 @@
                     <div class="col-lg-4 col-8">
                         <select class="form-control" name="type" id="type">
                             <option value=""></option>
-
-                            <option value="ThursdaySeason" <?php echo $season->type == "ThursdaySeason" ? "selected=true" : "" ?> >Donderdag seizoen</option>
+                            <option value="TwoFieldTwoHourThreeTeams" <?php echo $season->type == "TwoFieldTwoHourThreeTeams" ? "selected=true" : "" ?> >3 teams op 2 velden voor 2 uur</option>
                         </select>
                         @if ($errors->has('type'))
                             <span class="help-block">

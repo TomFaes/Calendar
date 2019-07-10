@@ -11,7 +11,6 @@ interface ISeason
     public function getSeasonsFromList($listSeasonsArray);
     public function getArrayOfAdminSeasons($userId);
     public function getArrayOfGroupSeasons($listGroups);
-    public function get7DaySeasonDates($seasonId);
     
     public function create(Request $request);
     public function update(Request $request, $seasonId);

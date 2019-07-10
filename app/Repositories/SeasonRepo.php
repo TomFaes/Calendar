@@ -19,18 +19,19 @@ class SeasonRepo extends Repository implements ISeason
     }
 
     /**
-     * Get all seasons from a list of season id
-     * @param  int  $listSeasons: give a list of seasons seperated by ','
-     * @param string $admin: if the user is an admin he can see all seasons
-     * @return \Illuminate\Http\Response
+     * Get all seasons from a list of seasonids
+     * @param  array  $listSeasons: give a list of seasons seperated by ','
+     * @return object Seasons
      */
-    public function getSeasonsFromList($listSeasons, $admin = "User"){
-        if($admin == "User"){
-            return Season::whereIn('id', $listSeasons)->orderBy('begin', 'asc')->where('end', '>', \Carbon\Carbon::now()->format("Y-m-d"))->get();
-        }
-        return Season::whereIn('id', $listSeasons)->orderBy('begin', 'asc')->get();
+    public function getSeasonsFromList($listSeasons){
+        return Season::whereIn('id', $listSeasons)->orderBy('begin', 'desc')->get();
     }
 
+    /**
+     * Get all the seasons ids where the user is a season admin
+     * @param  int  $userId: 
+     * @return array of seasons
+     */
     public function getArrayOfAdminSeasons($userId){
         $arraySeasons = array();
         $seasons = Season::select('id')->where('admin_id', $userId)->groupby('id')->get();
@@ -40,6 +41,11 @@ class SeasonRepo extends Repository implements ISeason
         return $arraySeasons;
     }
     
+    /**
+     * Get all the seasonids where the group is from a grouplist
+     * @param  array  $listGroups: 
+     * @return array $arraySeasons
+     */
     public function getArrayOfGroupSeasons($listGroups){
         $arraySeasons = array();
         $seasons = Season::wherein('group_id', $listGroups)->get();
@@ -74,6 +80,11 @@ class SeasonRepo extends Repository implements ISeason
         return $season;
     }
 
+    /**
+     * Create a new season
+     * @param  \Illuminate\Http\Request  $request
+     * @return object $season
+     */
     public function create(Request $request){
         $season = new Season();
         $season = $this->setSeason($season, $request);
@@ -81,6 +92,12 @@ class SeasonRepo extends Repository implements ISeason
         return $season;
     }
 
+    /**
+     * update a season
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int $seasonId
+     * @return object $season
+     */
     public function update(Request $request, $seasonId){
         $season = $this->getSeason($seasonId);
         $season = $this->setSeason($season, $request);
@@ -88,29 +105,15 @@ class SeasonRepo extends Repository implements ISeason
         return $season;
     }
 
+    /**
+     *  Delete a season
+     * 
+     * @param  int $seasonId
+     * @return string
+     */
     public function delete($seasonId){
         $season = $this->getSeason($seasonId);
         $season->delete();
-    }
-
-    /**
-     * Haal de dagen op met een week verschil(begin en einddatum inclusief als deze aan de voorwaarde voldoet)
-     * @param $seasonId
-     * @return array
-     * @throws \Exception
-     */
-    /** this methode may be removed after the new generator system is active */
-    public function get7DaySeasonDates($seasonId){
-        $season = $this->getSeason($seasonId);
-
-        $startDate = new \DateTime($season->begin);
-        $endDate = new \DateTime($season->end);
-        $arrayDates = array();
-
-        while ($startDate <= $endDate) {
-            $arrayDates[$startDate->format("Y-m-d")] = $startDate->format("Y-m-d");
-            $startDate->add(new \DateInterval('P7D'));
-        }
-        return $arrayDates;
+        return "Season is deleted";
     }
 }
