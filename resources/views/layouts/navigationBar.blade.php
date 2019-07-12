@@ -12,7 +12,7 @@
                 </ul>
             </div>
         @else
-            <a class="navbar-brand js-scroll-trigger" href="{{ route('generate-season.index') }}">Kalender</a>
+            <a class="navbar-brand js-scroll-trigger" href="{{ route('home') }}">Kalender</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
