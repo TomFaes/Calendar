@@ -32,7 +32,8 @@ class TeamController extends Controller
 
     protected function checkUser($seasonId){
         $season = $this->season->getSeason($seasonId);
-        if(Auth::user()->id == $season->admin->id){
+        $adminId = isset($season->admin->id) === true ? $season->admin->id : 0;
+        if(Auth::user()->id == $adminId){
             return true;
         }
         return false;
@@ -44,14 +45,8 @@ class TeamController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $seasonId)
     {
-        if(isset($request->seasonId) === true){
-            $seasonId = $request->seasonId;
-        }else{
-            return redirect('season')->with('error', 'Unknown season id');
-        }
-
         if($this->checkUser($seasonId) === true){
             $this->teamValidator->validateCreateTeam($request);
             $this->team->create($request, $seasonId);

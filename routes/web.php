@@ -13,6 +13,9 @@
 Route::get('/home', 'HomeController@index');
 Route::get('/', '\App\Http\Controllers\Season\SeasonGeneratorController@index')->name('home');
 
+//old login route, still default with some people
+Route::get('/season/next-game', '\App\Http\Controllers\Season\SeasonGeneratorController@index');
+
 /** 
  * All Auth routes 
  * */

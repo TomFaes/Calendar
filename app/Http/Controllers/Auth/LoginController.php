@@ -39,7 +39,8 @@ class LoginController extends Controller
     
     public function authenticated()
     {
-        return redirect('/season/next-game');
+        return redirect('/');
+        //return redirect('/season/next-game');
     }
     
 }
