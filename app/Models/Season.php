@@ -22,9 +22,16 @@ class Season extends Model
         return $this->belongsTo('App\Models\Absence', 'id', 'season_id');
     }
 
+    //find usage and replace with teams
     public function team(){
         return $this->hasMany('App\Models\Team', 'season_id', 'id')->orderBy('date', 'asc')->orderBy('team', 'asc');
     }
+
+    public function teams(){
+        return $this->hasMany('App\Models\Team', 'season_id', 'id')->orderBy('date', 'asc')->orderBy('team', 'asc');
+    }
+
+
 
 
 }

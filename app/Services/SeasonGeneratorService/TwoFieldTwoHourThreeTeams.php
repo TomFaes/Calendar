@@ -207,49 +207,29 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
     }
 
     /**
-     * this function will create a json of the season. This will be sent to the screen so when the season is ok it can be saved in an easy way.
-     * The json should always have the same structure so it can be saved in the same way if there are more generators
-     * @param $gamesArray
-     * @param $seasonId
-     * @return string
+     * returns the season Calendar
+     *
+     * @param  object Season
+     * @return json
      */
-    public function createJsonSeason($gamesArray, $seasonId){
-        $arrayJson = array();
-        $x=0;
-        foreach($gamesArray as $game){
-            for($z=1;$z<=3;$z++){
-                $team = 'team'.$z;
-                $teamplayerOne = isset($game[$team]['player1']) === true ? $game[$team]['player1'] : "";
-                $teamplayerTwo = isset($game[$team]['player2']) === true ? $game[$team]['player2'] : "";
-                $datum =  $game['datum'];
+    public function getSeasonCalendar(Season $season)
+    {
+        $gamesArray = array();
 
-                $arrayJson['data'][$x]['seasonId'] = $seasonId;
-                $arrayJson['data'][$x]['date'] = $datum;
-                $arrayJson['data'][$x]['team'] = $team;
-                $arrayJson['data'][$x]['user_id1'] = $teamplayerOne;
-                $arrayJson['data'][$x]['user_id2'] = $teamplayerTwo;
-
-                $arrayJson['date'][$datum][$team]['player1'] =  $teamplayerOne;
-                $arrayJson['date'][$datum][$team]['player2'] =  $teamplayerTwo;
-
-                if($team != "team3"){
-                    $arrayJson['stats'][$teamplayerOne]['against'][$teamplayerTwo] = $teamplayerTwo;
-                    $arrayJson['stats'][$teamplayerTwo]['against'][$teamplayerOne] = $teamplayerOne;
-                }
-
-                isset($arrayJson['stats'][$teamplayerOne][$team]) === true ? $arrayJson['stats'][$teamplayerOne][$team]++ : $arrayJson['stats'][$teamplayerOne][$team] = 1;
-                isset($arrayJson['stats'][$teamplayerTwo][$team]) === true ? $arrayJson['stats'][$teamplayerTwo][$team]++ : $arrayJson['stats'][$teamplayerTwo][$team] = 1;
-                isset($arrayJson['stats'][$teamplayerOne]['total']) === true ? $arrayJson['stats'][$teamplayerOne]['total']++ : $arrayJson['stats'][$teamplayerOne]['total'] = 1;
-                isset($arrayJson['stats'][$teamplayerTwo]['total']) === true ? $arrayJson['stats'][$teamplayerTwo]['total']++ : $arrayJson['stats'][$teamplayerTwo]['total'] = 1;
-
-                $arrayJson['date'][$datum][$teamplayerOne] = $team;
-                $arrayJson['date'][$datum][$teamplayerTwo] = $team;
-                $arrayJson['date'][$datum]['seasonId'] = $seasonId;
-                $arrayJson['date'][$datum]['date'] = $datum;
-                $x++;
-            }
+        foreach($season->teams as $key=>$team){
+            $date = $team->date;
+            $teamnumber = $team->team;
+            $playerId = $team->player_id;
+            
+            //Gameday
+            $gamesArray[$date]['datum'] = $date;
+            if(isset($gamesArray[$date][$teamnumber]['player1'] ) === false){
+                $gamesArray[$date][$teamnumber]['player1'] = $playerId;
+            }else{
+                $gamesArray[$date][$teamnumber]['player2'] = $playerId;
+            }           
         }
-        return json_encode($arrayJson);
+        return $this->createJsonSeason($gamesArray, $season->id);
     }
 
      /**
@@ -454,5 +434,51 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
             }
         }
         return array_values($teamArray);
+    }
+
+    /**
+     * this function will create a json of the season. This will be sent to the screen so when the season is ok it can be saved in an easy way.
+     * The json should always have the same structure so it can be saved in the same way if there are more generators
+     * @param $gamesArray
+     * @param $seasonId
+     * @return string
+     */
+    protected function createJsonSeason($gamesArray, $seasonId){
+        $arrayJson = array();
+        $x=0;
+        foreach($gamesArray as $game){
+            for($z=1;$z<=3;$z++){
+                $team = 'team'.$z;
+                $teamplayerOne = isset($game[$team]['player1']) === true ? $game[$team]['player1'] : "";
+                $teamplayerTwo = isset($game[$team]['player2']) === true ? $game[$team]['player2'] : "";
+                $datum =  $game['datum'];
+
+                $arrayJson['data'][$x]['seasonId'] = $seasonId;
+                $arrayJson['data'][$x]['date'] = $datum;
+                $arrayJson['data'][$x]['team'] = $team;
+                $arrayJson['data'][$x]['user_id1'] = $teamplayerOne;
+                $arrayJson['data'][$x]['user_id2'] = $teamplayerTwo;
+
+                $arrayJson['date'][$datum][$team]['player1'] =  $teamplayerOne;
+                $arrayJson['date'][$datum][$team]['player2'] =  $teamplayerTwo;
+
+                if($team != "team3"){
+                    $arrayJson['stats'][$teamplayerOne]['against'][$teamplayerTwo] = $teamplayerTwo;
+                    $arrayJson['stats'][$teamplayerTwo]['against'][$teamplayerOne] = $teamplayerOne;
+                }
+
+                isset($arrayJson['stats'][$teamplayerOne][$team]) === true ? $arrayJson['stats'][$teamplayerOne][$team]++ : $arrayJson['stats'][$teamplayerOne][$team] = 1;
+                isset($arrayJson['stats'][$teamplayerTwo][$team]) === true ? $arrayJson['stats'][$teamplayerTwo][$team]++ : $arrayJson['stats'][$teamplayerTwo][$team] = 1;
+                isset($arrayJson['stats'][$teamplayerOne]['total']) === true ? $arrayJson['stats'][$teamplayerOne]['total']++ : $arrayJson['stats'][$teamplayerOne]['total'] = 1;
+                isset($arrayJson['stats'][$teamplayerTwo]['total']) === true ? $arrayJson['stats'][$teamplayerTwo]['total']++ : $arrayJson['stats'][$teamplayerTwo]['total'] = 1;
+
+                $arrayJson['date'][$datum][$teamplayerOne] = $team;
+                $arrayJson['date'][$datum][$teamplayerTwo] = $team;
+                $arrayJson['date'][$datum]['seasonId'] = $seasonId;
+                $arrayJson['date'][$datum]['date'] = $datum;
+                $x++;
+            }
+        }
+        return json_encode($arrayJson);
     }
 }

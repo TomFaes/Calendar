@@ -30,6 +30,11 @@ class TeamController extends Controller
         $this->teamValidator = $teamValidation;
     }
 
+    /**
+     * check if the user is an admin of the season
+     * 
+     * @return bool
+     */
     protected function checkUser($seasonId){
         $season = $this->season->getSeason($seasonId);
         $adminId = isset($season->admin->id) === true ? $season->admin->id : 0;
@@ -63,7 +68,6 @@ class TeamController extends Controller
      */
     public function destroy($seasonId, $teamId)
     {
-
         if($this->checkUser($seasonId) === true){
             $seasonId = $this->team->deleteTeam($teamId);
             return redirect()->to('season/'.$seasonId)->send();

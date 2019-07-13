@@ -102,7 +102,8 @@ class SeasonController extends Controller
 
         $seasonGenerator = GeneratorFactory::generate($season->type);
         $days = $seasonGenerator->getPlayDates($season->begin, $season->end);
-        $seasonJson = $seasonGenerator->generateSeason($id);
+
+        $seasonJson = $seasonGenerator->getSeasonCalendar($season);
 
         $seasonUsers = $this->user->getUsersFromList($list);
 
