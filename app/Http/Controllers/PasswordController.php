@@ -26,17 +26,30 @@ class PasswordController extends Controller
         $this->user = $user;
     }
    
+    /**
+     * Update the the authenticated user password in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function updateProfilePassword(Request $request)
     {
         $this->userValidation->validatProfilePassword($request);
         $this->user->updatePassword($request, Auth::user()->id);
-        return redirect()->to('season/next-game/')->send();
+        return redirect()->to('/')->send();
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function updatePassword(Request $request, $id)
     {
         $this->userValidation->validatUserPassword($request);
         $this->user->updatePassword($request, $id);
-        return redirect()->to('season/next-game/')->send();
+        return redirect()->to('/user')->send();
     }
 }
