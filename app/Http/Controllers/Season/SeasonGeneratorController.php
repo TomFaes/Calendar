@@ -75,7 +75,7 @@ class SeasonGeneratorController extends Controller
         $listUsers = $this->group->getArrayOfGroupUsers($season->group_id);
 
         $seasonGenerator = GeneratorFactory::generate($season->type);
-        $seasonJson = $seasonGenerator->generateSeason($seasonId);
+        $seasonJson = $seasonGenerator->generateSeason($season);
 
         $days = $seasonGenerator->getPlayDates($season->begin, $season->end);
         $seasonAbsences = $this->absence->getSeasonAbsenceArray($seasonId);

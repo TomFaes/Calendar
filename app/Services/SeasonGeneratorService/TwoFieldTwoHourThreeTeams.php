@@ -52,9 +52,7 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
      * @param  int  $seasonId
      * @return json
      */
-    public function generateSeason($seasonId){
-        $season = $this->season->getSeason($seasonId);
-
+    public function generateSeason(Season $season){
         //create all possible teams
         $allPossibleTeamArray = $this->createAllPossibleTeams($season->group);
 
@@ -140,7 +138,7 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
                 }
             }
         }
-        return $this->createJsonSeason($gamesArray,$seasonId, 3);
+        return $this->createJsonSeason($gamesArray,$season, 3);
     }
 
     /**
@@ -167,7 +165,6 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
      * @param object Season $season
      * @return array
      */
-    //public function getNextPlayDay(Season $season, $day, $hour){
     public function getNextPlayDay(Season $season){
         $returndata = array();
         $getNow = new \Carbon\Carbon();
@@ -229,7 +226,7 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
                 $gamesArray[$date][$teamnumber]['player2'] = $playerId;
             }           
         }
-        return $this->createJsonSeason($gamesArray, $season->id);
+        return $this->createJsonSeason($gamesArray, $season);
     }
 
      /**
@@ -443,7 +440,7 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
      * @param $seasonId
      * @return string
      */
-    protected function createJsonSeason($gamesArray, $seasonId){
+    protected function createJsonSeason($gamesArray, Season $season){
         $arrayJson = array();
         $x=0;
         foreach($gamesArray as $game){
@@ -453,7 +450,7 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
                 $teamplayerTwo = isset($game[$team]['player2']) === true ? $game[$team]['player2'] : "";
                 $datum =  $game['datum'];
 
-                $arrayJson['data'][$x]['seasonId'] = $seasonId;
+                $arrayJson['data'][$x]['seasonId'] = $season->id;
                 $arrayJson['data'][$x]['date'] = $datum;
                 $arrayJson['data'][$x]['team'] = $team;
                 $arrayJson['data'][$x]['user_id1'] = $teamplayerOne;
@@ -474,7 +471,7 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
 
                 $arrayJson['date'][$datum][$teamplayerOne] = $team;
                 $arrayJson['date'][$datum][$teamplayerTwo] = $team;
-                $arrayJson['date'][$datum]['seasonId'] = $seasonId;
+                $arrayJson['date'][$datum]['seasonId'] = $season->id;
                 $arrayJson['date'][$datum]['date'] = $datum;
                 $x++;
             }
