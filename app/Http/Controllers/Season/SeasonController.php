@@ -42,8 +42,8 @@ class SeasonController extends Controller
         $this->absence = $absenceRepo;
         
         $this->middleware('season:delete', ['only' => ['destroy']]);
-        $this->middleware('season:', ['only' => ['edit', 'update', 'generateSeason', 'saveSeason']]);
-        $this->middleware('admin:Editor', ['only' => ['create', 'store', 'edit', 'update', 'generateSeason', 'saveSeason']]);
+        $this->middleware('season:', ['only' => ['edit', 'update']]);
+        $this->middleware('admin:Editor', ['only' => ['create', 'store', 'edit', 'update']]);
     }
     
     /**
