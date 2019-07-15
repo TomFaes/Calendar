@@ -38,16 +38,16 @@
                             <td>{{$season->group->name}}</td>
                         @endif
                         <td>
-                            @if($season->team->count() > 0)
+                            @if($season->teams->count() > 0)
                                 <a href="{{ route('season.show',  ['id' => $season->id]) }}"><span class="btn btn-dark">Kalender</span></a>
                             @endif
-                            @if(count($season->team) == 0)
+                            @if($season->teams->count() == 0)
                                 <a href="{{ route('absence.index',  ['id' => $season->id]) }}"><span class="btn btn-dark">Afwezigheden</span></a>
                             @endif
                         </td>
                         @if(Auth::user()->role == 'Admin' || Auth::user()->role == 'Editor')
                             <td>
-                                @if($season->admin_id == Auth::user()->id && count($season->team) == 0)
+                                @if($season->admin_id == Auth::user()->id && $season->teams->count() == 0)
                                     <a href="{{ route('season.edit',  ['id' => $season->id]) }}"><span class="btn btn-dark">Update</span></a>
                                     <a href="{{ route('season.show',  ['id' => $season->id]) }}"><span class="btn btn-dark">Team toevoegen</span></a>
                                     <a href="{{ route('generate-season.edit',  ['id' => $season->id]) }}"><span class="btn btn-dark">Genereer seizoen</span></a>

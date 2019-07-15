@@ -9,7 +9,7 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($season->team as $team)
+            @foreach($season->teams as $team)
             <tr>
                 <td>{{ \Carbon\Carbon::parse($team->date)->format('d/m/Y')}}</td>
                 <td>{{$team->team}}</td>
