@@ -27,40 +27,81 @@ class GroupController extends Controller
         $this->user = $user;
         
         $this->middleware('group:delete', ['only' => ['destroy']]);
-        $this->middleware('group:', ['only' => ['edit', 'update', 'groupUsers', 'addUsers', 'deleteGroupUser']]);
+        $this->middleware('group:', ['only' => ['edit', 'update']]);
         $this->middleware('admin:Editor', ['only' => ['index', 'create', 'store']]);
     }
     
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(){
         return view('group.index')->with('groups', $this->group->getAllGroups());
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create(){
         return view('group.create')->with('users', $this->user->getAllUsers());
     }
     
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request){
         $this->groupValidation->validateCreateGroup($request);
         $this->group->create($request);
         return redirect()->to('group/')->send();
     }
     
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function show($id){
         //
     }
     
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function edit($id){
         $group = $this->group->getGroup($id);
         $users = $this->user->getAllUsers();
         return view('group.edit')->with('group', $group)->with('users', $users);
     }
     
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id){
         $this->groupValidation->validateCreateGroup($request);
         $this->group->update($request, $id);
         return redirect()->to('group/')->send();
     }
     
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function destroy($id){
         $this->group->delete($id);
         return redirect()->to('group/')->send();
