@@ -20,11 +20,11 @@ class GroupUserController extends Controller
     /** @var App\Repositories\Contracts\IUser */
     protected $user;
     
-    public function __construct(IGroup $group, IUser $user){
+    public function __construct(IGroup $group, IUser $user, GroupValidation $groupValidation){
         $this->middleware('auth');
         $this->group = $group;
         $this->user = $user;
-        
+        $this->groupValidation = $groupValidation;
         
         $this->middleware('group:', ['only' => ['edit', 'update']]);
         $this->middleware('admin:Editor', ['only' => ['show', 'create', 'store']]);
@@ -67,13 +67,8 @@ class GroupUserController extends Controller
      */
     public function store(Request $request, $groupId)
     {
-        //echo $groupId;
-        //dd($request);
-
-
-        //$this->groupValidation->validateAddUser($request);
+        $this->groupValidation->validateAddUser($request);
         $this->group->addUsers($request, $groupId);
-        
         return redirect()->to('group/'.$groupId.'/user/');
     }
 
