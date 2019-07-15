@@ -2,7 +2,7 @@
 
 @section('content')
 <div style="width: 100%;">
-    @if(request()->is('user/updatingProfile'))
+    @if(request()->is('profile/edit'))
         <form method="post" action="{{ action('\App\Http\Controllers\User\ProfileController@update')}}">
     @else
         <a href="{{ action('\App\Http\Controllers\User\UserController@index') }}"><span class="btn btn-dark">Gebruiker overzicht</span></a><br><br>
@@ -68,7 +68,7 @@
     
     <br><hr><br>
     
-    @if(request()->is('user/updatingProfile'))
+    @if(request()->is('profile/edit'))
         <form method="post" action="{{ action('\App\Http\Controllers\PasswordController@updateProfilePassword')}}">
     @else
         <form method="post" action="{{ action('\App\Http\Controllers\PasswordController@updatePassword', ['id' => $user->id])}}">
