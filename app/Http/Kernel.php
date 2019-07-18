@@ -64,5 +64,6 @@ class Kernel extends HttpKernel
         'season' => \App\Http\Middleware\Edit\Season::class,
         'group' => \App\Http\Middleware\Edit\Group::class,
         'user' => \App\Http\Middleware\Edit\User::class,
+        'absence' => \App\Http\Middleware\Edit\Absence::class,
     ];
 }
