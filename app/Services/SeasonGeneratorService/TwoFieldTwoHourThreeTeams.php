@@ -192,7 +192,7 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
         if(count($nextGameDay) > 0) {
             $returndata['date'] = $nextGameDay[0]->date;
             $returndata['season'] = $season;
-            $returndata['users'] = $season->group->users;
+            $returndata['users']  = $this->team->getSeasonUsers($season->id);
             foreach($nextGameDay as $teams){
                 $returndata['display'][$teams->player_id]  =  substr($teams->team, -1);
             }
