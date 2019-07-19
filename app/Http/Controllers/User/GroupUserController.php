@@ -26,7 +26,7 @@ class GroupUserController extends Controller
         $this->user = $user;
         $this->groupValidation = $groupValidation;
         
-        $this->middleware('group:', ['only' => ['edit', 'update']]);
+        $this->middleware('group:', ['only' => ['edit', 'update', 'index']]);
         $this->middleware('admin:Editor', ['only' => ['show', 'create', 'store']]);
     }
     /**

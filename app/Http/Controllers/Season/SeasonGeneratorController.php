@@ -40,7 +40,8 @@ class SeasonGeneratorController extends Controller
         $this->group = $groupRepo;
         $this->absence = $absenceRepo;
         
-        $this->middleware('admin:Editor', ['only' => ['edit', 'update']]);
+        //$this->middleware('admin:Editor', ['only' => ['edit', 'update']]);
+        $this->middleware('season:Generate', ['only' => ['create', 'store']]);
     }
     /**
      * Displays all the current season Calendars where you are active
@@ -64,12 +65,12 @@ class SeasonGeneratorController extends Controller
     }
 
     /**
-     * Shows the season that is generated and where you have the options to regenerate or save the displayed season
+     * create the season that is generated and where you have the options to regenerate or save the displayed season
      *
      * @param  int  $seasonid
      * @return \Illuminate\Http\Response
      */
-    public function edit($seasonId)
+    public function create($seasonId)
     {
         $season = $this->season->getSeason($seasonId);
         $listUsers = $this->group->getArrayOfGroupUsers($season->group_id);
@@ -91,7 +92,7 @@ class SeasonGeneratorController extends Controller
      * @param  int  $seasonId
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $seasonId)
+    public function store(Request $request, $seasonId)
     {
         $season = $this->season->getSeason($seasonId);
         $seasonGenerator = GeneratorFactory::generate($season->type);

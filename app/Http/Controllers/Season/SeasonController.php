@@ -43,7 +43,7 @@ class SeasonController extends Controller
         
         $this->middleware('season:delete', ['only' => ['destroy']]);
         $this->middleware('season:', ['only' => ['edit', 'update']]);
-        $this->middleware('admin:Editor', ['only' => ['create', 'store', 'edit', 'update']]);
+        $this->middleware('admin:Editor', ['only' => ['create', 'store' ]]);
     }
     
     /**

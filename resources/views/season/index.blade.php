@@ -45,12 +45,14 @@
                                 <a href="{{ route('absence.index',  ['id' => $season->id]) }}"><span class="btn btn-dark">Afwezigheden</span></a>
                             @endif
                         </td>
-                        @if(Auth::user()->role == 'Admin' || Auth::user()->role == 'Editor')
+
+                        {{-- @if(Auth::user()->role == 'Admin' || Auth::user()->role == 'Editor') --}}
+
                             <td>
                                 @if($season->admin_id == Auth::user()->id && $season->teams->count() == 0)
                                     <a href="{{ route('season.edit',  ['id' => $season->id]) }}"><span class="btn btn-dark">Update</span></a>
                                     <a href="{{ route('season.show',  ['id' => $season->id]) }}"><span class="btn btn-dark">Team toevoegen</span></a>
-                                    <a href="{{ route('generate-season.edit',  ['id' => $season->id]) }}"><span class="btn btn-dark">Genereer seizoen</span></a>
+                                    <a href="{{ route('generate-season.create',  ['id' => $season->id]) }}"><span class="btn btn-dark">Genereer seizoen</span></a>
                                     <form action="{{ route('season.destroy',  ['id' => $season->id]) }}" method="POST">
                                         @method('DELETE')
                                         @csrf
@@ -58,7 +60,7 @@
                                     </form>
                                 @endif
                             </td>
-                        @endif
+                        {{-- @endif --}}
                     </tr>
                 @endforeach
             </tbody>

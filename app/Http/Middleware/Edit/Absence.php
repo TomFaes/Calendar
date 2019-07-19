@@ -30,5 +30,6 @@ class Absence
         if($season->teams->count() > 0){
             return redirect('season')->with('error', 'Afwezigheden toevoegen is niet meer mogelij voor seizoen '.$season->name);
         }
+        return $next($request);
     }
 }

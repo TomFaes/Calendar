@@ -55,18 +55,18 @@ Route::resource('group.user', '\App\Http\Controllers\User\GroupUserController')-
  */
 
 /** All generate Season routes(must be before season) */
-Route::resource('season/generate-season', '\App\Http\Controllers\Season\SeasonGeneratorController')->except([
-    'create', 'store', 'show', 'destroy'
+Route::resource('season/{season}/generate-season', '\App\Http\Controllers\Season\SeasonGeneratorController')->except([
+    'show', 'edit', 'update', 'destroy'
 ]);
 /** All season routes */
 Route::resource('season', '\App\Http\Controllers\Season\SeasonController');
 
 /**All Team Routes*/
-Route::resource('/season/{seasonId}/team', '\App\Http\Controllers\Season\TeamController')->except([
+Route::resource('/season/{season}/team', '\App\Http\Controllers\Season\TeamController')->except([
     'index', 'create', 'edit', 'show', 'update'
 ]);
 
 /**All Absence Routes*/
-Route::resource('/season/{seasonId}/absence', '\App\Http\Controllers\Season\AbsenceController')->except([
+Route::resource('/season/{season}/absence', '\App\Http\Controllers\Season\AbsenceController')->except([
     'show', 'edit', 'create', 'update'
 ]);
