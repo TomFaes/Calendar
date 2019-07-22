@@ -29,5 +29,5 @@ All generators will need the following methods
 
 To add a new Generator you need to do 3 things. Create a new generator with the above methods, create a view and add the options to the dropdowns of a season. 
 
-#Future
+# Future
 Convert the backend to a RESTful API and rewrite the front to make use of the vue.js
