@@ -25,7 +25,7 @@ class Absence
     public function handle($request, Closure $next)
     {
         $season = app('App\Repositories\Contracts\ISeason');
-        $season = $season->getSeason($request->route('seasonId'));
+        $season = $season->getSeason($request->route('season'));
 
         if($season->teams->count() > 0){
             return redirect('season')->with('error', 'Afwezigheden toevoegen is niet meer mogelij voor seizoen '.$season->name);
