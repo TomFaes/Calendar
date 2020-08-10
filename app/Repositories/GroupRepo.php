@@ -1,0 +1,115 @@
+<?php
+
+namespace App\Repositories;
+
+use Illuminate\Http\Request;
+
+use App\Models\Group;
+
+class GroupRepo extends Repository implements Contracts\IGroup 
+{
+    public function getGroups($itemsPerPage = 0)
+    {
+        if ($itemsPerPage > 0) {
+            return Group::with(['groupUsers', 'admin'])->OrderBy('name', 'asc')->paginate($itemsPerPage);
+        }
+        return Group::with(['groupUsers', 'admin'])->OrderBy('name', 'asc')->get();
+    }
+    
+    public function getGroup($id)
+    {
+        return Group::find($id);
+    }
+
+    /**
+     * Get all groups of a user where he is either admin or member
+     * @return Object
+     */
+    public function getUserGroups($userId, $itemsPerPage = 0)
+    {        
+        if ($itemsPerPage > 0) {
+            return Group::whereHas('groupUsers', function ($query) use ($userId) {
+                $query->where('user_id', '=', $userId)->where('verified', 1);
+            })->orWhere('admin_id', $userId)->with(['groupUsers','admin'])->paginate($itemsPerPage);
+        }
+        return Group::whereHas('groupUsers', function ($query) use ($userId) {
+            $query->where('user_id', '=', $userId)->where('verified', 1);
+        })->orWhere('admin_id', $userId)->with(['groupUsers','admin'])->get();
+        
+    }
+
+    public function getArrayOfGroupUsers($groupId)
+    {
+        $groupUserArray = array();
+        $group = Group::find($groupId);
+        foreach($group->Users as $groupUser){
+            $groupUserArray[$groupUser->id] = $groupUser->id;
+        }
+        return $groupUserArray;
+    }
+    
+    public function getArrayOfUserGroups($userId)
+    {
+        $arrayGroups = array();
+        $groups = $this->getAllGroups();
+        
+        foreach ($groups as $group) {
+            foreach ($group->Users as $groupUser) {
+                if ($groupUser->id == $userId) {
+                    $arrayGroups[$group->id] = $group->id;
+                }
+            }
+        }
+        return $arrayGroups;
+    }
+    
+    /***************************************************************************
+     Next function will create or update the group object in de database
+     **************************************************************************/
+    
+    protected function setGroup(Group $group, $data)
+    {
+        isset($data['name']) === true ? $group->name = $data['name'] : "";
+        isset($data['admin_id']) === true ? $group->admin_id = $data['admin_id'] : "";
+        return $group;
+    }
+    
+    public function create(Array $data, $userId = "")
+    {
+        $group = new Group();
+        $group = $this->setGroup($group, $data);
+        $group->admin_id = $userId;
+        $group->save();
+        return $group;
+    }
+    
+    public function update(Array $data, $groupId)
+    {
+        $group = $this->getGroup($groupId);
+        $group = $this->setGroup($group, $data);
+        $group->save();
+        return $group;
+    }
+    
+    public function addUsers(Request $request, $groupId)
+    {
+        $group = $this->getGroup($groupId);
+        foreach($request['groupUsers'] AS $userId){
+            $group->users()->attach($userId);
+        }
+        return $group;
+    }
+    
+    public function deleteGroupUser($userId, $groupId)
+    {
+        $group = $this->getGroup($groupId);
+        $group->users()->detach($userId);
+        return $group;
+    }
+
+    public function delete($groupId)
+    {
+        $group = $this->getGroup($groupId);
+        $group->delete();
+    }
+}

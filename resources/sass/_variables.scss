@@ -1,0 +1,73 @@
+
+// Body
+$body-bg: #f5f8fa;
+
+// Typography
+$font-family-sans-serif: "Raleway", sans-serif;
+$font-size-base: 0.8rem;
+$line-height-base: 1.6;
+
+
+.item-link{
+    cursor: pointer;
+}
+
+
+
+h1, h2, h3{
+    width: 100%;
+    text-align: center;
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+}
+
+.item-link{
+    cursor: pointer;
+}
+
+.options-column{
+    width: 1%;
+    white-space: nowrap;
+}
+
+
+/*Tiles*/
+.tile {
+    width: 100%;
+    text-align: center;
+    height: 130px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    color: #fff;
+}
+
+.tile > div{
+    font-size: 15px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
+@media screen and (max-width: 600px) {
+    .tile {
+        height: 65px;
+        /*padding: 40px;*/
+    }
+}
+
+.tile:hover{
+    filter: brightness(120%);
+}
+
+.small-tile:hover{
+    filter: brightness(120%);
+}
+
+.orange{
+    background: orange;
+}
+
+.blue {
+    background: #0275d8;
+}
