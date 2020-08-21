@@ -6,12 +6,15 @@ import axios from 'axios';
 Vue.use(VueRouter);
 
 //All components that will be used in the router
+import Home from '../pages/nextPlayDayPage/index.vue';
 import Login from '../pages/IndexPage/login.vue';
 import Profile from '../pages/ProfilePage/index.vue';
 import User from '../pages/UserPage/index.vue';
 import Group from '../pages/GroupPage/index.vue';
 import Season from '../pages/SeasonPage/index.vue';
 import Calendar from '../pages/CalendarPage/index.vue';
+import Generate from '../pages/CalendarPage/generate.vue';
+
 
 //create a variable local path, in production there will be antohter path
 var localPath = "";
@@ -29,7 +32,8 @@ const router = new VueRouter({
     routes:[
         {
             path: localPath + '/',
-            name: 'home'
+            name: 'home',
+            component: Home,
         },
         {
             path: localPath + '/login',
@@ -70,11 +74,20 @@ const router = new VueRouter({
             }
         },
         
-
         {
             path: localPath + '/calendar/:id',
             name: 'calendar',
             component: Calendar,
+            props: true,
+            meta: { 
+                requiresAuth: true
+            }
+        },
+
+        {
+            path: localPath + '/generate/:id',
+            name: 'generate',
+            component: Generate,
             props: true,
             meta: { 
                 requiresAuth: true
@@ -120,6 +133,9 @@ router.beforeEach((to, from, next) => {
         }, 250) ;
        
         getUser.then((user) =>{
+            if(user == undefined){
+                next({ name: 'home'});
+            }
             if(to.meta.requiresRole != undefined && to.meta.requiresRole != ""){
                 if(to.meta.requiresRole == "Admin" && to.meta.requiresRole  == user.role){
                     next();

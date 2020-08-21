@@ -38,6 +38,9 @@ This version isn't completly finished. Next things are still in development:
 - tweaking a season calendar
 - generating a season.
 
+# Version 2.01: 
+- added generator
+- added main page calendars
 
 # Future
 finish version 2

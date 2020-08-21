@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 
 use App\Models\Season;
+use Carbon\Carbon;
 
 class SeasonRepo extends Repository implements ISeason
 {
@@ -17,7 +18,7 @@ class SeasonRepo extends Repository implements ISeason
 
     public function getSeason($id)
     {
-        return Season::find($id);
+        return Season::with(['group'])->find($id);
     }
 
     /**
@@ -29,19 +30,29 @@ class SeasonRepo extends Repository implements ISeason
     {
         return Season::whereIn('id', $listSeasons)->orderBy('begin', 'desc')->get();
     }
-    
+
+    public function getActiveSeasons($userId)
+    {
+        $today = $mytime = Carbon::now();
+
+        return Season::whereDate('end' , '>=', $today->format('Y-m-d'))
+        ->whereDate('begin' , '<=', $today->addDays(14)->format('Y-m-d'))
+        ->whereHas('teams', function ($query) use ($userId) {
+            $query->where('player_id', '=', $userId);
+        })->get();
+    }
+
     public function getGroupOfSeason($groupId)
     {
         return Season::where('group_id', $groupId)->get();
     }
 
-
     public function getSeasonsOfUser($userId)
     {
-        return Season::whereHas('teams', function ($query) use ($userId){
+        return Season::whereHas('teams', function ($query) use ($userId) {
             $query->where('player_id', '=', $userId);
         })
-        ->orwhereHas('group.groupUsers', function ($query) use ($userId){
+        ->orwhereHas('group.groupUsers', function ($query) use ($userId) {
             $query->where('user_id', '=', $userId);
         })
         ->orWhere('admin_id', $userId)->with(['group', 'admin', 'group.groupUsers'])->get();

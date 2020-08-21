@@ -13,9 +13,7 @@
             <unverified-user></unverified-user>
         </div>
 
-        <div class="container">
-            <router-view :key="$route.path"></router-view>
-        </div>
+        <router-view :key="$route.path"></router-view>
 
         <!-- view of  the login options-->
         <div class="container"  v-if="auth == false" >
@@ -23,7 +21,6 @@
         </div> 
         <!-- All options for authenticated users-->
         <div class="container" v-if="auth == true">
-
         </div>
     </div>
 </template>

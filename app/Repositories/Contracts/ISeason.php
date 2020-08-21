@@ -10,6 +10,7 @@ interface ISeason
     public function getSeason($seasonId);
     public function getSeasonsFromList($listSeasonsArray);
 
+    public function getActiveSeasons($userId);
     public function getSeasonsOfUser($userId);
     public function getGroupOfSeason($groupId);
     

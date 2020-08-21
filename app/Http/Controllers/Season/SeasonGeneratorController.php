@@ -51,16 +51,17 @@ class SeasonGeneratorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $seasonId)
     {
-        return response()->json("to be made store", 200);
+        $season = $this->season->getSeason($seasonId);
+        $seasonGenerator = GeneratorFactory::generate($season->type);
 
-        /*
-        $this->seasonValidator->validateCreateSeason($request);
-        $userId = auth()->user()->id;
-        $season = $this->season->create($request->all(), $userId);
-        return response()->json($season, 200);
-        */
+        if ($request->input('jsonSeason') != "") {
+            $json = $request->input('jsonSeason');
+            $seasonGenerator->saveSeason($json);
+            return response()->json("season is made", 200);
+        }
+        return response()->json("season couldn't be generated", 200);
     }
     
     /**
@@ -112,6 +113,15 @@ class SeasonGeneratorController extends Controller
     public function seasonAbsences($seasonId)
     {
         return response()->json($this->absence->getSeasonAbsenceArray($seasonId), 200);
+    }
+
+    public function generateSeason($seasonId)
+    {
+        //public function generateSeason(Season $season)
+        $season = $this->season->getseason($seasonId);
+        $seasonGenerator = GeneratorFactory::generate($season->type);
+        $calendar = $seasonGenerator->generateSeason($season);
+        return response()->json($calendar, 200);
     }
 
 

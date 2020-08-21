@@ -65,6 +65,7 @@ Route::resource('season', '\App\Http\Controllers\Season\SeasonController',  ['pa
 ]])->except([
     'create', 'edit'
 ]);
+Route::get('active_seasons', '\App\Http\Controllers\Season\ActiveSeasonController@index');
 
 Route::post('season/{id}/generator', '\App\Http\Controllers\Season\SeasonGeneratorController@update');
 Route::resource('season/{id}/generator', '\App\Http\Controllers\Season\SeasonGeneratorController',  ['parameters' => [
@@ -75,7 +76,7 @@ Route::resource('season/{id}/generator', '\App\Http\Controllers\Season\SeasonGen
 Route::get('season/{id}/generator/play_dates', '\App\Http\Controllers\Season\SeasonGeneratorController@playDates');
 Route::get('season/{id}/generator/users', '\App\Http\Controllers\Season\SeasonGeneratorController@seasonUsers');
 Route::get('season/{id}/generator/absences', '\App\Http\Controllers\Season\SeasonGeneratorController@seasonAbsences');
-
+Route::get('season/{id}/generator/new', '\App\Http\Controllers\Season\SeasonGeneratorController@generateSeason');
 
 Route::post('season/{season_id}/absence/{id}', '\App\Http\Controllers\Season\AbsenceController@update');
 Route::resource('season/{season_id}/absence', '\App\Http\Controllers\Season\AbsenceController',  ['parameters' => [

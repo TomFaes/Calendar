@@ -52,10 +52,6 @@
          },
 
         methods: {
-            logout(){
-                this.$router.push('logout');
-            },
-
             displayIndex(){
                 this.$bus.$emit('displayNav', '');
             },

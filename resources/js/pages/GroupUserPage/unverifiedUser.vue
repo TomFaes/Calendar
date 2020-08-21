@@ -39,7 +39,7 @@
                     this.dataList = response;
                     this.updateField = '';
                 }).catch(() => {
-                    console.log('handle server error from here');
+                    console.log('loadList: handle server error from here');
                 });
             },
 
@@ -49,7 +49,7 @@
                     this.loadList();
                     this.$bus.$emit('reloadGroups');
                 }).catch(() => {
-                    console.log('handle server error from here');
+                    console.log('approveVerifyUser: handle server error from here');
                 });
             },
 
@@ -58,7 +58,7 @@
                 .then(response =>{
                     this.loadList();
                 }).catch(() => {
-                    console.log('handle server error from here');
+                    console.log('disapproveVerifyUser: handle server error from here');
                 });
             }
         },

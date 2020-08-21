@@ -25,7 +25,9 @@
                             <button v-if="user.id == data.admin_id" class="btn btn-primary" @click.prevent="editSeason(data.id)"><i class="fa fa-edit" style="heigth:14px; width:14px"></i></button>
                             <button v-if="user.id == data.admin_id" class="btn btn-danger" @click.prevent="deleteSeason(data)"><i class="fa fa-trash" style="heigth:14px; width:14px"></i></button>
                             <button v-if="data.seasonDraw == 0"  class="btn btn-secondary" @click.prevent="absences(data.id)">Afwezigheden</button>
+                            <router-link v-if="data.seasonDraw == 0 && user.id == data.admin_id" :to="{ name: 'generate', params: { id: data.id }}" class="btn btn-secondary">Generate</router-link>
                             <router-link v-if="data.seasonDraw > 0" :to="{ name: 'calendar', params: { id: data.id }}" class="btn btn-secondary"><i class="far fa-calendar-alt"></i></router-link>
+
                         </td>
                     </tr>
                     <tr v-if="updateField == data.id">
