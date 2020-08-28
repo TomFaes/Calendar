@@ -47,6 +47,18 @@ class TeamRepo extends Repository implements ITeam
     {
         $arrayUsers = array();
 
+        $teamUsers = team::select('group_user_id')->where('season_id', $seasonId)->groupby('group_user_id')->get();
+
+        foreach ($teamUsers as $team) {
+            $arrayUsers[$team->group_user->id] = $team->group_user;
+        }
+        return $arrayUsers;
+    }
+    /*
+    public function getSeasonUsers($seasonId)
+    {
+        $arrayUsers = array();
+
         $teamUsers = team::select('player_id')->where('season_id', $seasonId)->groupby('player_id')->get();
 
         foreach ($teamUsers as $team) {
@@ -54,9 +66,13 @@ class TeamRepo extends Repository implements ITeam
         }
         return $arrayUsers;
     }
+    */
+
+    
 
     public function getArrayOfSeasons($userId)
     {
+
         $arraySeasons = array();
         $seasons = team::select('season_id')->where('player_id', $userId)->groupby('season_id')->get();
         foreach ($seasons as $season) {

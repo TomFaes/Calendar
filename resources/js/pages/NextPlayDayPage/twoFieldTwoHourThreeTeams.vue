@@ -2,11 +2,11 @@
     <div>
         <h3>
             <button class="btn-info" @click.prevent="previousDay()"><i class="fas fa-angle-double-left"></i></button> 
-        {{ calendarData['seasonName'] }}
+        {{ calendarData['seasonData']['name'] }}
             <button class="btn-info" @click.prevent="nextDay()"><i class="fas fa-angle-double-right"></i></button>
         </h3>
             
-        <div class="container" v-if="calendarData['date'] != undefined">
+        <div class="container" v-if="calendarData['data'] != undefined">
             <div class="row">
                 <div class="col-lg-3 col-1"></div>
                 <div class="col-lg-6 col-10">
@@ -16,17 +16,21 @@
                                 <tr>
                                     <th scope="col" style="position:absolute; left:0;">Player</th>
                                     <th scope="col" style="text-align: center;">
-                                        {{convertDate(calendarData['day'][calendarData['currentPlayDay']]['day']) }}
+                                        {{convertDate(calendarData['data'][calendarData['currentPlayDay']]['day']) }}
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="user in userData" :key="user.id">
+                                <tr v-for="user in userData" :key="user.id"> 
                                     <td style="position:absolute; left:0;">{{ user.firstname }}</td>
-                                    <td v-if="calendarData['day'][calendarData['currentPlayDay']][user.id] == 'team1'" ><center>1</center></td>
-                                    <td v-else-if="calendarData['day'][calendarData['currentPlayDay']][user.id] == 'team2'" ><center>2</center></td>
-                                    <td v-else-if="calendarData['day'][calendarData['currentPlayDay']][user.id] == 'team3'" ><center>3</center></td>
-                                    <td v-else :class="getBackground(user.id, calendarData['day'][calendarData['currentPlayDay']]['day'])" ></td>
+                                     <td v-if="calendarData['data'][calendarData['currentPlayDay']]['teams'][user.id] != undefined">
+                                        <center>
+                                                <span v-if="calendarData['data'][calendarData['currentPlayDay']]['teams'][user.id]['team'] == 'team1'">1</span>
+                                                <span v-if="calendarData['data'][calendarData['currentPlayDay']]['teams'][user.id]['team'] == 'team2'">2</span>
+                                                <span v-if="calendarData['data'][calendarData['currentPlayDay']]['teams'][user.id]['team'] == 'team3'">3</span>
+                                        </center>
+                                     </td>
+                                     <td v-else :class="getBackground(user.id, calendarData['data'][calendarData['currentPlayDay']]['day'])"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -55,12 +59,11 @@
         props: {
                 calendarData: {},
                 userData: {},
-                absenceData: {},
          },
 
         methods: {
             nextDay(){
-                if((this.calendarData['currentPlayDay']  + 1) <  this.calendarData['day'].length ){
+                if((this.calendarData['currentPlayDay']  + 1) <  this.calendarData['data'].length ){
                     this.calendarData['currentPlayDay']++;
                 }
             },
@@ -77,10 +80,10 @@
 
             getBackground(userId, date){
                 var colorClass = "free";
-                if(this.absenceData != undefined){
-                    if(this.absenceData[userId] != undefined){
-                        for(var i = 0; i < this.absenceData[userId]['date'].length; i++){
-                            if(date ==  this.absenceData[userId]['date'][i]){
+                if(this.calendarData['absenceData'] != undefined){
+                    if(this.calendarData['absenceData'][userId] != undefined){
+                        for(var i = 0; i < this.calendarData['absenceData'][userId]['date'].length; i++){
+                            if(date ==  this.calendarData['absenceData'][userId]['date'][i]){
                                 colorClass = "absence";
                             }
                         }   

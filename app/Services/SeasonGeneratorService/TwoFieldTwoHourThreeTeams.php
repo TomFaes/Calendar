@@ -66,9 +66,12 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
 
         $gamesArray = array();
 
-        foreach ($seasonDates as $key=>$seasonDate) {
+        foreach ($seasonDates as $seasonDate) {
+            $key = $seasonDate['date'];
+            
+
             //Gameday
-            $gamesArray[$key]['datum'] = $seasonDate;
+            $gamesArray[$key]['datum'] = $seasonDate['date'];
 
             //Every gameday there is a new random draw for teams
             //This is done to avoid the same players will always be in the first match if the backup needs to be used
@@ -84,10 +87,10 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
                 $teamnumber = "team".$number;
 
                 //prepare the draw error to see which teams will be available for the draw
-                $drawTeamArray = $this->removeAbsenceTeams($seasonDate, $personArray, $teamArray);
+                $drawTeamArray = $this->removeAbsenceTeams($seasonDate['date'], $personArray, $teamArray);
                 $drawTeamArray = $this->removeAllPlayedGames($drawTeamArray, $gamesArray, $teamnumber);
                  //prepare the backup array that allows players to be with previous played persons
-                 $backupTeamArray = $this->removeAbsenceTeams($seasonDate, $personArray, $teamArray);
+                 $backupTeamArray = $this->removeAbsenceTeams($seasonDate['date'], $personArray, $teamArray);
 
                  //choose a random team from the drawArray
                 if (count($drawTeamArray) > 0) {
@@ -157,67 +160,10 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
         $arrayDates = array();
 
         while ($startDate <= $endDate) {
-            $arrayDates[$startDate->format("Y-m-d")] = $startDate->format("Y-m-d");
-            $startDate->add(new \DateInterval('P7D'));
-        }
-        return $arrayDates;
-    }
-    
-    public function getVuePlayDates($beginDate, $endDate)
-    {
-        $startDate = new \DateTime($beginDate);
-        $endDate = new \DateTime($endDate);
-        $arrayDates = array();
-
-        while ($startDate <= $endDate) {
             $arrayDates[]['date'] = $startDate->format("Y-m-d");
             $startDate->add(new \DateInterval('P7D'));
         }
         return $arrayDates;
-    }
-
-    /**
-     * Get the next play day, default is 1 week if the season is busy otherwise the first date of the season will be taken
-     * @param object Season $season
-     * @return array
-     */
-    public function getNextPlayDay(Season $season)
-    {
-        $returndata = array();
-        $getNow = new \Carbon\Carbon();
-        $nextDate = new \Carbon\Carbon();
-        $playHour = \Carbon\Carbon::parse($season->start_hour)->addHour();
-
-        //if the date is bigger then the date and hour from the season the next playday should appear
-        if ($getNow->format('l') == $season->day AND $getNow->format('H:i') > $playHour->format('H:i')) {
-            $nextDate->addDay(7);
-        } else {
-            $getNow->subDay(1);
-            $nextDate->addDay(6);
-        }
-        //get the next play day
-        $nextGameDay = $this->team->getPlayDay($season->id, $getNow, $nextDate);
-
-        //if nextday is 0 then get the startdate if that is bigger then the current date
-        if (count($nextGameDay) == 0) {
-            if ($season->begin > \Carbon\Carbon::now()->format("Y-m-d")) {
-                $nextGameDay = $this->team->getTeamsOnDate($season->id, $season->begin);
-            }
-        }
-
-        //create the display data
-        if (count($nextGameDay) > 0) {
-            $returndata['date'] = $nextGameDay[0]->date;
-            $returndata['season'] = $season;
-            $returndata['users']  = $this->team->getSeasonUsers($season->id);
-            foreach ($nextGameDay as $teams) {
-                $returndata['display'][$teams->player_id]  =  substr($teams->team, -1);
-            }
-            foreach ($this->absence->getSeasonAbsence($season->id)->toArray() as $absence) {
-                $returndata['absenceDays'][$absence['user_id']][$absence['date']] = $absence['date'];
-            }
-        }
-        return $returndata;
     }
 
     /**
@@ -233,7 +179,7 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
         foreach ($season->teams as $key=>$team) {
             $date = $team->date;
             $teamnumber = $team->team;
-            $playerId = $team->player_id;
+            $playerId = $team->group_user_id;
             
             //Gameday
             $gamesArray[$date]['datum'] = $date;
@@ -255,21 +201,14 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
     public function saveSeason($jsonSeason)
     {
         $jsonArray = json_decode($jsonSeason);
-        foreach ($jsonArray->data As $teams) {
-            if ($teams->user_id1 > 0 AND $teams->user_id2 > 0) {
+        foreach ($jsonArray->data As $day) {
+            foreach ($day->teams As $users) {
                 $team = new Team();
-                $team->season_id = $teams->seasonId;
-                $team->date = $teams->date;
-                $team->team = $teams->team;
-                $team->player_id = $teams->user_id1;
+                $team->season_id = $jsonArray->seasonData->id;
+                $team->date = $day->day;
+                $team->team = $users->team;
+                $team->group_user_id = $users->groupUserId;
                 $this->team->saveTeam($team);
-
-                $team1 = new Team();
-                $team1->season_id = $teams->seasonId;
-                $team1->date = $teams->date;
-                $team1->team = $teams->team;
-                $team1->player_id = $teams->user_id2;
-                $this->team->saveTeam($team1);
             }
         }
     }
@@ -468,45 +407,42 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
      */
     protected function createJsonSeason($gamesArray, Season $season)
     {
-
         $getNow = new \Carbon\Carbon();
+        $getNow->addDay(-1);
         $nextDate = new \Carbon\Carbon();
-        $nextDate->addDay(7);
-        //$playHour = \Carbon\Carbon::parse($season->start_hour)->addHour();
+        $nextDate->addDay(14);
 
         $arrayJson = array();
+        $arrayJson['seasonData']  = $season;
+        $arrayJson['absenceData'] = $this->absence->getSeasonAbsenceArray($season->id);
+        $arrayJson['groupUserData'] = $this->team->getSeasonUsers($season->id);
+        $arrayJson['generateGroupUserData'] =  $season->group->groupUsers;
+
         $x=0;
         $y=0;
         foreach ($gamesArray as $game) {
             $datum =  $game['datum'];
             //see for current day
             $playDay = \Carbon\Carbon::parse($datum)->format("Y-m-d");
-            $arrayJson['seasonName'] = $season->name;
-            $arrayJson['seasonType'] = $season->type;
-            $arrayJson['seasonId'] = $season->id;
-            if ($getNow <= \Carbon\Carbon::parse($datum) && $nextDate >= \Carbon\Carbon::parse($datum)){
+
+            if ($getNow <= \Carbon\Carbon::parse($datum) && $nextDate >= \Carbon\Carbon::parse($datum)) {
                 $arrayJson['currentPlayDay'] = $y;
+                $nextDate->addDay(-14);
             }
 
-            $arrayJson['day'][$y]['day'] = $datum;
+            $arrayJson['data'][$y]['day'] = $datum;
             
             for ($z=1;$z<=3;$z++) {
                 $team = 'team'.$z;
                 $teamplayerOne = isset($game[$team]['player1']) === true ? $game[$team]['player1'] : "";
                 $teamplayerTwo = isset($game[$team]['player2']) === true ? $game[$team]['player2'] : "";
-                //$datum =  $game['datum'];
 
-                $arrayJson['data'][$x]['seasonId'] = $season->id;
-                $arrayJson['data'][$x]['date'] = $datum;
-                $arrayJson['data'][$x]['team'] = $team;
-                $arrayJson['data'][$x]['user_id1'] = $teamplayerOne;
-                $arrayJson['data'][$x]['user_id2'] = $teamplayerTwo;
 
-                $arrayJson['date'][$datum][$team]['player1'] =  $teamplayerOne;
-                $arrayJson['date'][$datum][$team]['player2'] =  $teamplayerTwo;
+                $arrayJson['data'][$y]['teams'][$teamplayerOne]['team'] =  $team;
+                $arrayJson['data'][$y]['teams'][$teamplayerOne]['groupUserId'] =  $teamplayerOne;
 
-                $arrayJson['day'][$y][$teamplayerOne] =  $team;
-                $arrayJson['day'][$y][$teamplayerTwo] =  $team;
+                $arrayJson['data'][$y]['teams'][$teamplayerTwo]['team']  =  $team;
+                $arrayJson['data'][$y]['teams'][$teamplayerTwo]['groupUserId'] =  $teamplayerTwo;
 
                 if ($team != "team3") {
                     if(isset($arrayJson['stats'][$teamplayerOne]['against'][$teamplayerTwo]) === false){
@@ -515,7 +451,6 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
                     if(isset($arrayJson['stats'][$teamplayerTwo]['against'][$teamplayerOne]) === false){
                         isset($arrayJson['stats'][$teamplayerTwo]['countAgainst']) === true ? $arrayJson['stats'][$teamplayerTwo]['countAgainst']++ : $arrayJson['stats'][$teamplayerTwo]['countAgainst'] = 1;
                     }
-
 
                     $arrayJson['stats'][$teamplayerOne]['against'][$teamplayerTwo] = $teamplayerTwo;
                     $arrayJson['stats'][$teamplayerTwo]['against'][$teamplayerOne] = $teamplayerOne;
@@ -526,10 +461,6 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
                 isset($arrayJson['stats'][$teamplayerOne]['total']) === true ? $arrayJson['stats'][$teamplayerOne]['total']++ : $arrayJson['stats'][$teamplayerOne]['total'] = 1;
                 isset($arrayJson['stats'][$teamplayerTwo]['total']) === true ? $arrayJson['stats'][$teamplayerTwo]['total']++ : $arrayJson['stats'][$teamplayerTwo]['total'] = 1;
 
-                $arrayJson['date'][$datum][$teamplayerOne] = $team;
-                $arrayJson['date'][$datum][$teamplayerTwo] = $team;
-                $arrayJson['date'][$datum]['seasonId'] = $season->id;
-                $arrayJson['date'][$datum]['date'] = $datum;
                 $x++;
             }
             $y++;

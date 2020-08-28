@@ -1,8 +1,8 @@
 <template>
-    <div>
-        <div v-if="seasonData.type == 'TwoFieldTwoHourThreeTeams'">
-            <h1>{{  seasonData.name }}</h1>
-                <two-field-two-hour-three-teams-page :seasonData=seasonData :calendarData=calendarData :userData=userData :absenceData=absenceData></two-field-two-hour-three-teams-page>   
+    <div v-if="calendarData['seasonData'] != undefined">
+        <div v-if="calendarData['seasonData']['type'] == 'TwoFieldTwoHourThreeTeams'">
+            <h1>{{  calendarData['seasonData']['name'] }}</h1>
+                <two-field-two-hour-three-teams-page :calendarData="calendarData" :userData="calendarData['groupUserData']"></two-field-two-hour-three-teams-page>   
         </div>
         <div v-else>
             onbekende calendar view
@@ -12,7 +12,6 @@
 
 <script>
     import apiCall from '../../services/ApiCall.js';
-
     import TwoFieldTwoHourThreeTeamsPage from '../CalendarPage/twoFieldTwoHourThreeTeams.vue';
 
     export default {
@@ -22,10 +21,7 @@
 
         data () {
             return {
-                'seasonData': {},
                 'calendarData': {},
-                'userData': {},
-                'absenceData': {},
             }
         },
         
@@ -34,18 +30,6 @@
          },
 
         methods: {
-            loadSeason(){
-                apiCall.getData('season/' +  this.id)
-                .then(response =>{
-                    this.seasonData = response;
-                    if(this.generate === true){
-                        this.loadGroupUsers(this.seasonData.group_id);
-                    }
-                }).catch(() => {
-                    console.log('handle server error from here');
-                });
-            }, 
-
             loadSeasonCalendar(){
                 apiCall.getData('season/' +  this.id + '/generator')
                 .then(response =>{
@@ -54,40 +38,10 @@
                     console.log('handle server error from here');
                 });
             },
-
-            loadGroupUsers(groupId){
-                apiCall.getData( 'group/' + groupId + '/user')
-                .then(response =>{
-                    this.userData = response;
-                }).catch(() => {
-                    console.log('handle server error from here');
-                });
-            },
-
-            loadUsers(){
-                apiCall.getData('season/' +  this.id + '/generator/users')
-                .then(response =>{
-                    this.userData = response;
-                }).catch(() => {
-                    console.log('handle server error from here');
-                });
-            },
-
-            loadAbsences(){
-                apiCall.getData('season/' +  this.id + '/generator/absences')
-                .then(response =>{
-                    this.absenceData = response;
-                }).catch(() => {
-                    console.log('handle server error from here');
-                });
-            }
         },
 
         mounted(){
             this.loadSeasonCalendar();
-            this.loadUsers();
-            this.loadSeason();
-            this.loadAbsences();
         }
     }
 </script>

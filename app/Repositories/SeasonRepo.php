@@ -37,8 +37,8 @@ class SeasonRepo extends Repository implements ISeason
 
         return Season::whereDate('end' , '>=', $today->format('Y-m-d'))
         ->whereDate('begin' , '<=', $today->addDays(14)->format('Y-m-d'))
-        ->whereHas('teams', function ($query) use ($userId) {
-            $query->where('player_id', '=', $userId);
+        ->whereHas('teams.group_user', function ($query) use ($userId) {
+            $query->where('user_id', '=', $userId);
         })->get();
     }
 
@@ -49,8 +49,9 @@ class SeasonRepo extends Repository implements ISeason
 
     public function getSeasonsOfUser($userId)
     {
-        return Season::whereHas('teams', function ($query) use ($userId) {
-            $query->where('player_id', '=', $userId);
+
+        return Season::whereHas('teams.group_user', function ($query) use ($userId) {
+            $query->where('user_id', '=', $userId);
         })
         ->orwhereHas('group.groupUsers', function ($query) use ($userId) {
             $query->where('user_id', '=', $userId);

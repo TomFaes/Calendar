@@ -1,10 +1,11 @@
 <template>
     <div>
-        <div v-if="countSeasons == usersLoaded && countSeasons == absencesLoaded">
+        <div v-if=" calendarData['season'] != undefined">
              <h2>Current seasons</h2>
-            <div v-for="(calendar , index) in calendarData['season']" :key="calendar.id">
-                <div v-if="calendar['seasonType'] == 'TwoFieldTwoHourThreeTeams'">
-                    <two-field-two-hour-three-teams :calendarData="calendar" :absenceData="absenceData[index] " :userData="userData[index]"></two-field-two-hour-three-teams>    
+            <div v-for="(calendar) in calendarData['season']" :key="calendar.id">
+
+                <div v-if="calendar['seasonData']['type'] == 'TwoFieldTwoHourThreeTeams'">
+                    <two-field-two-hour-three-teams :calendarData="calendar" :userData="calendar['groupUserData']"></two-field-two-hour-three-teams>    
                 </div>
                 <div v-else>
                     onbekende calendar view
@@ -29,11 +30,6 @@
         data () {
             return {
                 calendarData: {},
-                userData: {},
-                absenceData: {},
-                usersLoaded: 0,
-                absencesLoaded: 0,
-                countSeasons: 100, 
             }
         },
 
@@ -42,48 +38,16 @@
                 apiCall.getData('active_seasons')
                 .then(response =>{
                     this.calendarData = response;
-                    this.countSeasons = this.calendarData['season'].length
-                    if(response['season'] != undefined){
-                        this.countSeasons = this.calendarData['season'].length
-                        for(let keySeason in response['season'] ){
-                            this.loadUsers(response['season'][keySeason]['seasonId'], keySeason);
-                            this.loadAbsences(response['season'][keySeason]['seasonId'], keySeason);
-                        }
-                    }
                 }).catch((error) => {
                     console.log('loadSeasonCalendars:' + error);
-                });
-            },
-
-            loadUsers(seasonId, keySeason){               
-                apiCall.getData('season/' +  seasonId + '/generator/users')
-                .then(response =>{
-                    this.userData[keySeason] = response;
-                    this.usersLoaded++;
-                }).catch((error) => {
-                    console.log('loadUsers: ' + error);
-                });
-            },
-
-            loadAbsences(seasonId, keySeason){
-                apiCall.getData('season/' +  seasonId + '/generator/absences')
-                .then(response =>{
-                    if(response.length != 0){
-                        this.absenceData[keySeason] = response;
-                    }
-                    this.absencesLoaded++;
-                }).catch((error) => {
-                    console.log('loadAbsences: ' + error);
                 });
             },
         },
 
         mounted(){
-            
-
-
-            this.loadSeasonCalendars();
-
+            if(this.$store.state.LoggedInUser != ""){
+                this.loadSeasonCalendars();
+            }
         }
     }
 </script>

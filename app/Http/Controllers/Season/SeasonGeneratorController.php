@@ -101,30 +101,16 @@ class SeasonGeneratorController extends Controller
     {
         $season = $this->season->getseason($seasonId);
         $seasonGenerator = GeneratorFactory::generate($season->type);
-        $daysSeason = $seasonGenerator->getVuePlayDates($season->begin, $season->end);
+        $daysSeason = $seasonGenerator->getPlayDates($season->begin, $season->end);
         return response()->json($daysSeason, 200);
-    }
-
-    public function seasonUsers($seasonId)
-    {
-        return response()->json($this->team->getSeasonUsers($seasonId), 200);
-    }
-
-    public function seasonAbsences($seasonId)
-    {
-        return response()->json($this->absence->getSeasonAbsenceArray($seasonId), 200);
     }
 
     public function generateSeason($seasonId)
     {
         //public function generateSeason(Season $season)
-        $season = $this->season->getseason($seasonId);
+        $season = $this->season->getSeason($seasonId);
         $seasonGenerator = GeneratorFactory::generate($season->type);
         $calendar = $seasonGenerator->generateSeason($season);
         return response()->json($calendar, 200);
     }
-
-
-
-
 }

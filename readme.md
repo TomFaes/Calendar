@@ -39,10 +39,18 @@ This version isn't completly finished. Next things are still in development:
 - generating a season.
 
 # Version 2.01: 
-- added generator
+- reworked generator
 - added main page calendars
 
+# Version 2.02: 
+- rework the generator to get less calls(data is gatered in the generator)
+- update the calendar view + nex play day view
+- team is now connected to the group user instead of a user. This way a user doesn't need an account to be part of the group. 
+- change the delete group user option. user is removed from group but group user record isn't soft deleted. This was needed to keep past calendars active
+
 # Future
-finish version 2
-Add more generators
-- singe field generator
+- add the option to swipe the calendar instead of pressing a button(mobile)
+- create an option to make the calendar public(no account needed to see the calendar). Default will be only for logged in users. 
+- Add more generators
+    - singe field one hour double generator
+- update a calendar after a season is generated

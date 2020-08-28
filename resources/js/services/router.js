@@ -34,7 +34,16 @@ const router = new VueRouter({
             path: localPath + '/',
             name: 'home',
             component: Home,
+            meta: { 
+                requiresAuth: true,
+            }
         },
+        {
+            path: localPath + '/guest',
+            name: 'guest',
+            component: Home,
+        },
+
         {
             path: localPath + '/login',
             name: 'login',
@@ -134,7 +143,7 @@ router.beforeEach((to, from, next) => {
        
         getUser.then((user) =>{
             if(user == undefined){
-                next({ name: 'home'});
+                next({ name: 'guest'});
             }
             if(to.meta.requiresRole != undefined && to.meta.requiresRole != ""){
                 if(to.meta.requiresRole == "Admin" && to.meta.requiresRole  == user.role){
@@ -143,7 +152,7 @@ router.beforeEach((to, from, next) => {
                     next();
                 }else{
                     store.commit("setErrorMessage", "Je hebt geen toegang tot deze pagina");
-                    next({ name: 'home'});
+                    next({ name: 'guest'});
                 }
             } else {
                 next();

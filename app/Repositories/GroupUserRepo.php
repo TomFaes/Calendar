@@ -80,7 +80,10 @@ class GroupUserRepo extends Repository implements IGroupUser
     public function delete($id)
     {
         $groupUser = $this->getGroupUser($id);
-        return $groupUser->delete();
+        $groupUser->group_id = Null;
+        $groupUser->save();
+        return "User is removed from group";
+        //return $groupUser->delete();
     }
 
     public function verifyUser($id)

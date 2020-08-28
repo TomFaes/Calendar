@@ -15,6 +15,11 @@ class Team extends Model
         return $this->belongsTo('App\Models\User', 'player_id', 'id')->select(['id', 'firstname', 'name']);
     }
 
+    public function group_user() 
+    {
+        return $this->belongsTo('App\Models\GroupUser', 'group_user_id', 'id')->select(['id', 'firstname', 'name']);
+    }
+
     public function season()
     {
         return $this->belongsTo('App\Models\Season', 'season_id', 'id');

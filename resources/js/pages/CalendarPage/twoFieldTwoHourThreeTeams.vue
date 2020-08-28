@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="container" v-if="calendarData['date'] != undefined">
+        <div class="container" v-if="calendarData['data'] != undefined">
             <div class="row">
                 <div class="col-12">
                     <div style="overflow-x:auto; margin-left:4em;">
@@ -8,19 +8,23 @@
                             <thead >
                                 <tr>
                                     <th scope="col" style="position:absolute; width:3em; left:0;">Player</th>
-                                    <th v-for="data in calendarData['date']"  :key="data.id" scope="col" style="text-align: center;">
-                                        {{convertDate(data.date)}}
+                                    <th v-for="data in calendarData['data']"  :key="data.id" scope="col" style="text-align: center;">
+                                        {{convertDate(data.day)}}
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="user in userData" :key="user.id">
                                     <td style="position:absolute; width:3em; left:0;">{{ user.firstname }}</td>
-                                    <template v-for="data in calendarData['date']">
-                                            <td v-if="data[user.id] == 'team1'" :key="data.id"><center>1</center></td>
-                                            <td v-else-if="data[user.id] == 'team2'" :key="data.id"><center>2</center></td>
-                                            <td v-else-if="data[user.id] == 'team3'" :key="data.id"><center>3</center></td>
-                                            <td v-else :class="getBackground(user.id, data.date)" :key="data.id" ></td>
+                                    <template v-for="data in calendarData['data']">
+                                         <td v-if="data['teams'][user.id] != undefined" :key="data.id">
+                                             <center>
+                                                 <span v-if="data['teams'][user.id]['team'] == 'team1'">1</span>
+                                                 <span v-if="data['teams'][user.id]['team'] == 'team2'">2</span>
+                                                 <span v-if="data['teams'][user.id]['team'] == 'team3'">3</span>
+                                            </center>
+                                        </td>
+                                        <td v-else :class="getBackground(user.id, data.day)" :key="data.id" ></td>
                                     </template>
                                 </tr>
                             </tbody>
@@ -89,10 +93,8 @@
         },
 
         props: {
-            'seasonData': {},
             'calendarData': {},
             'userData': {},
-            'absenceData': {},
          },
 
         methods: {
@@ -106,12 +108,14 @@
 
             getBackground(userId, date){
                 var colorClass = "free";
-                if(this.absenceData[userId] != undefined){
-                    for(var i = 0; i < this.absenceData[userId]['date'].length; i++){
-                        if(date ==  this.absenceData[userId]['date'][i]){
-                            colorClass = "absence";
-                        }
-                    }                   
+                if(this.calendarData['absenceData'] != undefined){
+                    if(this.calendarData['absenceData'][userId] != undefined){
+                        for(var i = 0; i < this.calendarData['absenceData'][userId]['date'].length; i++){
+                            if(date ==  this.calendarData['absenceData'][userId]['date'][i]){
+                                colorClass = "absence";
+                            }
+                        }   
+                    }
                 }
                  return colorClass;
              },

@@ -74,8 +74,6 @@ Route::resource('season/{id}/generator', '\App\Http\Controllers\Season\SeasonGen
     'create', 'edit', 'show'
 ]);
 Route::get('season/{id}/generator/play_dates', '\App\Http\Controllers\Season\SeasonGeneratorController@playDates');
-Route::get('season/{id}/generator/users', '\App\Http\Controllers\Season\SeasonGeneratorController@seasonUsers');
-Route::get('season/{id}/generator/absences', '\App\Http\Controllers\Season\SeasonGeneratorController@seasonAbsences');
 Route::get('season/{id}/generator/new', '\App\Http\Controllers\Season\SeasonGeneratorController@generateSeason');
 
 Route::post('season/{season_id}/absence/{id}', '\App\Http\Controllers\Season\AbsenceController@update');

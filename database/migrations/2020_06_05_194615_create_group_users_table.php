@@ -18,7 +18,7 @@ class CreateGroupUsersTable extends Migration
             $table->string('firstname');
             $table->string('name');
             $table->string('email')->nullable();
-            $table->integer('group_id')->unsigned();
+            $table->integer('group_id')->nullable()->unsigned();
             $table->integer('user_id')->nullable()->unsigned();
 
             $table->integer('verified')->nullable()->default(0);
