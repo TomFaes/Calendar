@@ -34,7 +34,14 @@ class GroupUserRepo extends Repository implements IGroupUser
 
     public function getUnverifiedGroupUsers($userId)
     {
-        return GroupUser::with(['group', 'user'])->where('user_id', $userId)->where('verified',0)->OrderBy('firstname', 'asc', 'name', 'asc')->get();
+        return GroupUser::with(['group', 'user'])
+        ->whereHas('group', function ($query)  {
+            $query->where('deleted_at', '=', null);
+        })
+        ->where('user_id', $userId)
+        ->where('verified',0)
+        ->OrderBy('firstname', 'asc', 'name', 'asc')
+        ->get();
     }
 
     public function getGroupsBasedOnEmail($email)

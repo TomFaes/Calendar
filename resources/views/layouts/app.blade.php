@@ -21,15 +21,7 @@
 <body>
     <div id="app">
         <div class ="container-fluid">
-        <main class="py-4">
-            <div class="row">
-                <div class="col-sm-0 col-md-0 col-lg-1"></div>
-                <div class="col-sm-12 col-md-12 col-lg-10">
-                    @yield('content')
-                </div>
-                <div class="col-sm-0 col-md-0 col-lg-1"></div>
-            </div>
-        </main>
+            @yield('content')
         </div>
     </div>
 </body>

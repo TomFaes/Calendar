@@ -42,25 +42,10 @@ class GroupRepo extends Repository implements Contracts\IGroup
     {
         $groupUserArray = array();
         $group = Group::find($groupId);
-        foreach($group->Users as $groupUser){
+        foreach ($group->Users as $groupUser) {
             $groupUserArray[$groupUser->id] = $groupUser->id;
         }
         return $groupUserArray;
-    }
-    
-    public function getArrayOfUserGroups($userId)
-    {
-        $arrayGroups = array();
-        $groups = $this->getAllGroups();
-        
-        foreach ($groups as $group) {
-            foreach ($group->Users as $groupUser) {
-                if ($groupUser->id == $userId) {
-                    $arrayGroups[$group->id] = $group->id;
-                }
-            }
-        }
-        return $arrayGroups;
     }
     
     /***************************************************************************
@@ -94,7 +79,7 @@ class GroupRepo extends Repository implements Contracts\IGroup
     public function addUsers(Request $request, $groupId)
     {
         $group = $this->getGroup($groupId);
-        foreach($request['groupUsers'] AS $userId){
+        foreach ($request['groupUsers'] AS $userId) {
             $group->users()->attach($userId);
         }
         return $group;

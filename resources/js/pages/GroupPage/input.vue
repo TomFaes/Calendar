@@ -2,7 +2,7 @@
     <div class="container">
         <form @submit.prevent="submit" method="POST" enctype="multipart/form-data">
             <!-- the form items -->
-            <text-input inputName="name" inputId="name" tekstLabel="Name: " v-model="fields.name" :errors="errors.name" :value='fields.name'></text-input>
+            <global-input type='text' inputName="name" inputId="name" tekstLabel="Naam: " v-model="fields.name" :errors="errors.name" :value='fields.name'></global-input>
             <!-- Admin multiselect -->
             <!--
             <div class="row" v-if="submitOption != 'Create'">
@@ -25,28 +25,12 @@
             </div>
             -->
             <br>
-            <div class="row">
-                <div class="col-lg-2 col-md-2 col-sm-0"></div>
-                <div class="col-lg-8 col-md-8 col-sm-12">
-                    <center>
-                        <button class="btn btn-primary">{{buttonText}}</button>
-                    </center>
-                    <br>
-                </div>
-                <div class="col-lg-2 col-md-2 col-sm-0"></div>
-            </div>
-
-            <div class="row" v-if="submitOption != 'Create'">
-                <div class="col-lg-2 col-md-2 col-sm-0"></div>
-                <div class="col-lg-8 col-md-8 col-sm-12">
-                    <center>
-                        <!--
-                        <delete-group :group="group" v-if="submitOption != 'Create'"></delete-group>
-                    -->
-                    </center>
-                </div>
-                <div class="col-lg-2 col-md-2 col-sm-0"></div>
-            </div>
+            <global-layout>
+                 <center>
+                    <button class="btn btn-primary">{{buttonText}}</button>
+                </center>
+                <br>
+            </global-layout>
         </form>
     </div>
 </template>

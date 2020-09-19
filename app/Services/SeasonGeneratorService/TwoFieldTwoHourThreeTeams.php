@@ -2,16 +2,17 @@
 
 namespace App\Services\SeasonGeneratorService;
 
-use App\Models\Season;
 use App\Models\Team;
-use Illuminate\Http\Request;
+use App\Models\Group;
+use App\Models\Season;
 
+use Illuminate\Http\Request;
+use App\Repositories\Contracts\ITeam;
 use App\Repositories\Contracts\ISeason;
 use App\Repositories\Contracts\IAbsence;
-use App\Repositories\Contracts\ITeam;
 
 
-/*
+/**
     |--------------------------------------------------------------------------
     | Generate TwoFieldTwoHourThreeTeams Season
     |--------------------------------------------------------------------------
@@ -31,7 +32,8 @@ use App\Repositories\Contracts\ITeam;
     | - if the season is really long then it is possible to play more then once in the same team
     | - If there are alot of absence people on the same day it is possible to play more then once in the same team
     */
-class TwoFieldTwoHourThreeTeams implements IGenerator{
+class TwoFieldTwoHourThreeTeams implements IGenerator
+{
 
     /** @var App\Repositories\Contracts\ISeason */
     protected $season;
@@ -58,92 +60,26 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
         //create all possible teams
         $allPossibleTeamArray = $this->createAllPossibleTeams($season->group);
 
+        $gamesArray = array();
+
         //create the personArray to store data for the season
-        $personArray = $this->createPersonStats($season);
+        $gamesArray['person'] = $this->createPersonStats($season);
 
         //get all date for the season
         $seasonDates = $this->getPlayDates($season->begin, $season->end);
 
-        $gamesArray = array();
-
         foreach ($seasonDates as $seasonDate) {
             $key = $seasonDate['date'];
-            
-
             //Gameday
-            $gamesArray[$key]['datum'] = $seasonDate['date'];
-
-            //Every gameday there is a new random draw for teams
-            //This is done to avoid the same players will always be in the first match if the backup needs to be used
-            $teamShuffle = [1,2,3];
-            shuffle($teamShuffle);
+            $gamesArray['season'][$key]['datum'] = $seasonDate['date'];
 
             //this team array will be used to remove played teams and absence teams
-            $teamArray = $allPossibleTeamArray;
-            $personArray = $this->addOneNonPlayDay($personArray);
+            $gamesArray['allTeams'] = $allPossibleTeamArray;
+            $gamesArray['person'] = $this->addOneNonPlayDay($gamesArray['person']);
 
-            foreach ($teamShuffle AS $number) {
-                //teams will be called team + a number
-                $teamnumber = "team".$number;
-
-                //prepare the draw error to see which teams will be available for the draw
-                $drawTeamArray = $this->removeAbsenceTeams($seasonDate['date'], $personArray, $teamArray);
-                $drawTeamArray = $this->removeAllPlayedGames($drawTeamArray, $gamesArray, $teamnumber);
-                 //prepare the backup array that allows players to be with previous played persons
-                 $backupTeamArray = $this->removeAbsenceTeams($seasonDate['date'], $personArray, $teamArray);
-
-                 //choose a random team from the drawArray
-                if (count($drawTeamArray) > 0) {
-                    $random = $this->createRandomTeam($drawTeamArray, $personArray, $teamnumber);
-                }
-
-                //set the player 1 and 2 id
-                if (isset($drawTeamArray[$random]['player1']) === true AND isset($drawTeamArray[$random]['player2'])) {
-                    $player1 = $drawTeamArray[$random]['player1'];
-                    $player2 = $drawTeamArray[$random]['player2'];
-                } else {
-                    if (count($backupTeamArray) > 0) {
-                        $random = $this->createRandomTeam($backupTeamArray, $gamesArray, $personArray, $teamnumber);
-                    }
-                    //set the player 1 and 2 id
-                    $player1 = isset($drawTeamArray[$random]['player1']) === true ? $drawTeamArray[$random]['player1'] : "";
-                    $player2 = isset($drawTeamArray[$random]['player2']) === true ? $drawTeamArray[$random]['player2'] : "";
-                }
-
-                //If there are 2 players then add the player to the gameday
-                if ($player1 != "" AND $player2 != "") {
-                    //remove the team to exclude it from the next draw for the other teams
-                    $teamArray = $this->RemoveTeam($player1, $teamArray);
-                    $teamArray = $this->RemoveTeam($player2, $teamArray);
-
-                    //add one to the team the players that has played
-                    $personArray[$player1][$teamnumber]++;
-                    $personArray[$player2][$teamnumber]++;
-
-                    //add games to the player stats
-                    $personArray[$player1]["totalGames"]++;
-                    $personArray[$player2]["totalGames"]++;
-
-                    if ($teamnumber != "team3") {
-                        $personArray[$player1]['against'][$player1]['name'] = $personArray[$player1]['name'];
-                        $personArray[$player1]['against'][$player2]['name'] = $personArray[$player2]['name'];
-                        $personArray[$player2]['against'][$player1]['name'] = $personArray[$player1]['name'];
-                        $personArray[$player2]['against'][$player2]['name'] = $personArray[$player2]['name'];
-                    }
-                    //set the counter to 0 for non played weeks
-                    $personArray[$player1]['nonPlayedWeeks'] = 0;
-                    $personArray[$player2]['nonPlayedWeeks'] = 0;
-
-                     //Add team to playday
-                     $gamesArray[$key][$teamnumber]['player1'] = $player1;
-                     $gamesArray[$key][$teamnumber]['player2'] = $player2;
-
-                     //controle number to see if there are 6 players each week
-                    isset($gamesArray[$key]['gameCounter']) === true ? $gamesArray[$key]['gameCounter'] +=2 : $gamesArray[$key]['gameCounter'] = 2;
-                }
-            }
+            $gamesArray = $this->createDayTeams($seasonDate, $gamesArray);
         }
-        return $this->createJsonSeason($gamesArray, $season, 3);
+        return $this->createJsonSeason($gamesArray['season'], $season, 3);
     }
 
     /**
@@ -183,7 +119,7 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
             
             //Gameday
             $gamesArray[$date]['datum'] = $date;
-            if (isset($gamesArray[$date][$teamnumber]['player1'] ) === false) {
+            if (isset($gamesArray[$date][$teamnumber]['player1']) === false) {
                 $gamesArray[$date][$teamnumber]['player1'] = $playerId;
             } else {
                 $gamesArray[$date][$teamnumber]['player2'] = $playerId;
@@ -214,11 +150,89 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
     }
 
     /**
+     * create the season day
+     * @param $seasonDate
+     * @param array $gamesArray;
+     * @return array
+     */
+    protected function createDayTeams($seasonDate, Array $gamesArray)
+    {
+         //Every gameday there is a new random draw for teams
+        //This is done to avoid the same players will always be in the first match if the backup needs to be used
+        $teamShuffle = [1,2,3];
+        shuffle($teamShuffle);
+        foreach ($teamShuffle AS $number) {
+            //teams will be called team + a number
+            $teamnumber = "team".$number;
+            $date = $seasonDate['date'];
+
+            //prepare the draw error to see which teams will be available for the draw
+            $drawTeamArray = $this->removeAbsenceTeams($date, $gamesArray['person'], $gamesArray['allTeams']);
+            $drawTeamArray = $this->removeAllPlayedGames($drawTeamArray, $gamesArray['season'], $teamnumber);
+            //prepare the backup array that allows players to be with previous played persons
+            $backupTeamArray = $this->removeAbsenceTeams($date, $gamesArray['person'], $gamesArray['allTeams']);
+
+            //choose a random team from the drawArray
+            if (count($drawTeamArray) > 0) {
+                $random = $this->createRandomTeam($drawTeamArray, $gamesArray['person'], $teamnumber);
+                $player1 = isset($drawTeamArray[$random]['player1']) === true ? $drawTeamArray[$random]['player1'] : "";
+                $player2 = isset($drawTeamArray[$random]['player2']) === true ? $drawTeamArray[$random]['player2'] : "";
+            }
+
+            //choose a random team from the backup
+            if (($player1 == "" OR $player2 == "") AND count($backupTeamArray) > 0) {
+                $random = $this->createRandomTeam($backupTeamArray, $gamesArray['season'], $gamesArray['person'], $teamnumber);
+                $player1 = isset($drawTeamArray[$random]['player1']) === true ? $drawTeamArray[$random]['player1'] : "";
+                $player2 = isset($drawTeamArray[$random]['player2']) === true ? $drawTeamArray[$random]['player2'] : "";
+            }
+
+            //if there are no 2 players then go to next team shuffle
+            if ($player1 == "" OR $player2 == "") {
+                continue;
+            }
+
+            //remove the team to exclude it from the next draw for the other teams
+            $gamesArray['allTeams'] = $this->RemoveTeam($player1, $gamesArray['allTeams']);
+            $gamesArray['allTeams'] = $this->RemoveTeam($player2, $gamesArray['allTeams']);
+
+            //add one to the team the players that has played
+            $gamesArray['person'][$player1][$teamnumber]++;
+            $gamesArray['person'][$player2][$teamnumber]++;
+
+            //add games to the player stats
+            $gamesArray['person'][$player1]["totalGames"]++;
+            $gamesArray['person'][$player2]["totalGames"]++;
+
+            if ($teamnumber != "team3") {
+                $gamesArray['person'][$player1]['against'][$player1]['name'] = $gamesArray['person'][$player1]['name'];
+                $gamesArray['person'][$player1]['against'][$player2]['name'] = $gamesArray['person'][$player2]['name'];
+                $gamesArray['person'][$player2]['against'][$player1]['name'] = $gamesArray['person'][$player1]['name'];
+                $gamesArray['person'][$player2]['against'][$player2]['name'] = $gamesArray['person'][$player2]['name'];
+            }
+
+            //set the counter to 0 for non played weeks
+            $gamesArray['person'][$player1]['nonPlayedWeeks'] = 0;
+            $gamesArray['person'][$player2]['nonPlayedWeeks'] = 0;
+
+            //Add team to playday
+            $gamesArray['season'][$date][$teamnumber]['player1'] = $player1;
+            $gamesArray['season'][$date][$teamnumber]['player2'] = $player2;
+
+            //controle number to see if there are 6 players each week
+            if (isset($gamesArray['season'][$date]['gameCounter'])  === false) {
+                $gamesArray['season'][$date]['gameCounter'] = 0;
+            }
+            $gamesArray['season'][$date]['gameCounter'] +=2;
+        }
+        return $gamesArray;
+    }
+
+    /**
      * create all teams that can be created from the group of people that is given
      * @param $group
      * @return array
      */
-    protected function createAllPossibleTeams($group)
+    protected function createAllPossibleTeams(Group $group)
     {
         $teamArray = array();
         $z = 0;
@@ -295,15 +309,16 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
     protected function removeAbsenceTeams($date, $personArray, $teamArray)
     {
         foreach ($personArray as $person) {
-            if (isset($person['datumAbsent'][$date]) === true) {
-                $teamArray = $this->RemoveTeam($person['id'], $teamArray);
+            if (isset($person['datumAbsent'][$date]) === false) {
+                continue;
             }
+            $teamArray = $this->RemoveTeam($person['id'], $teamArray);
         }
         return array_values($teamArray);
     }
 
     /**
-     * Return all absences of a user in a season
+     * Return all teams that haven't played
      *
      * @param  Array  $drawTeamArray
      * @param  Array  $gamesArray
@@ -314,13 +329,15 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
     {
         //to do after creating the first games
         foreach ($gamesArray as $key=>$games) {
-            if (isset($games[$teamnumber]['player1']) === true AND isset($games[$teamnumber]['player2']) === true) {
-                foreach ($drawTeamArray AS $key2=>$drawTeam) {
-                    $player1 = isset($drawTeam['player1']) === true ? $drawTeam['player1'] : "";
-                    $player2 = isset($drawTeam['player2']) === true ? $drawTeam['player2'] : "";
-                    if ($games[$teamnumber]['player1'] == $player1 AND $games[$teamnumber]['player2'] == $player2) {
-                        unset($drawTeamArray[$key2]);
-                    }
+            if (isset($games[$teamnumber]['player1']) === false OR isset($games[$teamnumber]['player2']) === false) {
+                continue;
+            }
+
+            foreach ($drawTeamArray AS $key2=>$drawTeam) {
+                $player1 = isset($drawTeam['player1']) === true ? $drawTeam['player1'] : "";
+                $player2 = isset($drawTeam['player2']) === true ? $drawTeam['player2'] : "";
+                if ($games[$teamnumber]['player1'] == $player1 AND $games[$teamnumber]['player2'] == $player2) {
+                    unset($drawTeamArray[$key2]);
                 }
             }
         }
@@ -362,10 +379,13 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
                     $teamPlayer1 = isset($teamArray[$random]['player1']) === true ? $teamArray[$random]['player1'] : 9999999;
                     $teamPlayer2 = isset($teamArray[$random]['player2']) === true ? $teamArray[$random]['player2'] : 9999999;
 
-                    if ($teamPlayer1 != 9999999 AND $teamPlayer2 != 9999999) {
-                        if($personArray[$teamPlayer1]['nonPlayedWeeks'] > 1 OR $personArray[$teamPlayer2]['nonPlayedWeeks'] > 1){
-                            break;
-                        }
+                    if($teamPlayer1 === 9999999 OR $teamPlayer2 === 9999999){
+                        continue;
+                    }
+
+                    //if players haven't played for more then 1 week then break the loop
+                    if($personArray[$teamPlayer1]['nonPlayedWeeks'] > 1 OR $personArray[$teamPlayer2]['nonPlayedWeeks'] > 1){
+                        break;
                     }
                 }
                 //if player1 or player2 hasn't played for more then 2 weeks the loop will break and go on to the next controle
@@ -374,10 +394,12 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
                 }
             }
             //check if the meet the required highest games and highest team plays
-            if ($teamPlayer1 != 9999999 AND $teamPlayer2 != 9999999) {
-                if ($personArray[$teamPlayer1]['totalGames'] < $highestGames AND $personArray[$teamPlayer2]['totalGames'] < $highestGames AND $personArray[$teamPlayer1][$teamNumber] < $highestTeamPlays AND $personArray[$teamPlayer2][$teamNumber] < $highestTeamPlays) {
-                    break;
-                }
+            if($teamPlayer1 === 9999999 OR $teamPlayer2 === 9999999){
+                continue;
+            }
+
+            if ($personArray[$teamPlayer1]['totalGames'] < $highestGames AND $personArray[$teamPlayer2]['totalGames'] < $highestGames AND $personArray[$teamPlayer1][$teamNumber] < $highestTeamPlays AND $personArray[$teamPlayer2][$teamNumber] < $highestTeamPlays) {
+                break;
             }
         }
         return $random;
@@ -389,7 +411,8 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
      * @param $teamArray
      * @return array
      */
-    protected function removeTeam($userId, $teamArray){
+    protected function removeTeam($userId, $teamArray)
+    {
         foreach ($teamArray as $key=>$team) {
             if ($userId == $team['player1'] OR $userId == $team['player2']) {
                 unset($teamArray[$key]);
@@ -422,8 +445,6 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
         $y=0;
         foreach ($gamesArray as $game) {
             $datum =  $game['datum'];
-            //see for current day
-            $playDay = \Carbon\Carbon::parse($datum)->format("Y-m-d");
 
             if ($getNow <= \Carbon\Carbon::parse($datum) && $nextDate >= \Carbon\Carbon::parse($datum)) {
                 $arrayJson['currentPlayDay'] = $y;
@@ -437,7 +458,6 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
                 $teamplayerOne = isset($game[$team]['player1']) === true ? $game[$team]['player1'] : "";
                 $teamplayerTwo = isset($game[$team]['player2']) === true ? $game[$team]['player2'] : "";
 
-
                 $arrayJson['data'][$y]['teams'][$teamplayerOne]['team'] =  $team;
                 $arrayJson['data'][$y]['teams'][$teamplayerOne]['groupUserId'] =  $teamplayerOne;
 
@@ -445,10 +465,10 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
                 $arrayJson['data'][$y]['teams'][$teamplayerTwo]['groupUserId'] =  $teamplayerTwo;
 
                 if ($team != "team3") {
-                    if(isset($arrayJson['stats'][$teamplayerOne]['against'][$teamplayerTwo]) === false){
+                    if (isset($arrayJson['stats'][$teamplayerOne]['against'][$teamplayerTwo]) === false) {
                         isset($arrayJson['stats'][$teamplayerOne]['countAgainst']) === true ? $arrayJson['stats'][$teamplayerOne]['countAgainst']++ : $arrayJson['stats'][$teamplayerOne]['countAgainst'] = 1;
                     }
-                    if(isset($arrayJson['stats'][$teamplayerTwo]['against'][$teamplayerOne]) === false){
+                    if (isset($arrayJson['stats'][$teamplayerTwo]['against'][$teamplayerOne]) === false) {
                         isset($arrayJson['stats'][$teamplayerTwo]['countAgainst']) === true ? $arrayJson['stats'][$teamplayerTwo]['countAgainst']++ : $arrayJson['stats'][$teamplayerTwo]['countAgainst'] = 1;
                     }
 
@@ -466,6 +486,5 @@ class TwoFieldTwoHourThreeTeams implements IGenerator{
             $y++;
         }
         return $arrayJson;
-        //return json_encode($arrayJson);
     }
 }

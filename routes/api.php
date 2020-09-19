@@ -2,94 +2,64 @@
 
 use Illuminate\Http\Request;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
+use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Group\GroupController;
+use App\Http\Controllers\Group\UserGroupsController;
+use App\Http\Controllers\Group\GroupUsersController;
+use App\Http\Controllers\Group\UnverifiedGroupUsersController;
+use App\Http\Controllers\Season\SeasonController;
+use App\Http\Controllers\Season\ActiveSeasonController;
+use App\Http\Controllers\Season\SeasonGeneratorController;
+use App\Http\Controllers\Season\AbsenceController;
 
+//All routes for profiles
+Route::get('/profile', [ProfileController::class, 'index']);
+Route::post('/profile', [ProfileController::class, 'update']);
 
+//All routes for users
+Route::get('/user', [UserController::class, 'index']);
+Route::post('/user', [UserController::class, 'store']);
+Route::post('/user/{id}', [UserController::class, 'update']);
 
+//All routes for groups
+Route::get('/group', [GroupController::class, 'index']);
+Route::post('/group', [GroupController::class, 'store']);
+Route::post('/group/{id}', [GroupController::class, 'update']);
 
-Route::get('profile', '\App\Http\Controllers\User\ProfileController@index');
-Route::post('profile', '\App\Http\Controllers\User\ProfileController@update');
-Route::delete('profile', '\App\Http\Controllers\User\ProfileController@destroy');
+Route::get('/user-group', [UserGroupsController::class, 'index']);
 
-/**
- * All routes for a user
- */
-/*
-Route::post('user/{id}', '\App\Http\Controllers\User\UserController@update');
-Route::resource('user', '\App\Http\Controllers\User\UserController')->except([
-    'create', 'edit'
-]);
-*/
-Route::post('user/{id}', '\App\Http\Controllers\User\UserController@update');
-Route::resource('user', '\App\Http\Controllers\User\UserController',  ['parameters' => [
-    'user' => 'id'
-]])->except([
-    'create', 'edit'
-]);
+Route::get('group/{group_id}/user', [GroupUsersController::class, 'index']);
+Route::post('/group/{group_id}/user', [GroupUsersController::class, 'store']);
+Route::post('/group/{group_id}/user/{id}', [GroupUsersController::class, 'update']);
 
-Route::post('group/{id}', '\App\Http\Controllers\Group\GroupController@update');
-Route::resource('group', '\App\Http\Controllers\Group\GroupController',  ['parameters' => [
-    'group' => 'id'
-]])->except([
-    'create', 'edit'
-]);
-Route::get('user-group', '\App\Http\Controllers\Group\UserGroupsController@index');
+//All routes for unverified users
+Route::get('/unverified-group-user', [UnverifiedGroupUsersController::class, 'index']);
+Route::post('/unverified-group-user', [UnverifiedGroupUsersController::class, 'store']);
+Route::post('/unverified-group-user/{id}', [UnverifiedGroupUsersController::class, 'update']);
 
+//All routes for Seasons
+Route::get('/season', [SeasonController::class, 'index']);
+Route::post('/season', [SeasonController::class, 'store']);
+Route::post('/season/{id}', [SeasonController::class, 'update']);
 
-Route::post('group/{group_id}/user/{id}', '\App\Http\Controllers\Group\GroupUsersController@update');
-Route::resource('group/{group_id}/user', '\App\Http\Controllers\Group\GroupUsersController', ['parameters' => [
-    'user' => 'id'
-]]) ->except([
-    'create', 'edit'
-]);
+Route::get('/active_seasons', [ActiveSeasonController::class, 'index']);
 
-//UnverifiedGroupUsersController
-Route::post('unverified-group-user/{id}', '\App\Http\Controllers\Group\UnverifiedGroupUsersController@update');
-Route::resource('unverified-group-user', '\App\Http\Controllers\Group\UnverifiedGroupUsersController')->except([
-    'create', 'edit', 'store'
-]);
+Route::get('/season/{id}/generator', [SeasonGeneratorController::class, 'index']);
+Route::post('/season/{id}/generator', [SeasonGeneratorController::class, 'store']);
+Route::post('/season/{id}/generator/{generator_id}', [SeasonGeneratorController::class, 'update']);
+Route::get('/season/{id}/generator/play_dates', [SeasonGeneratorController::class, 'playDates']);
+Route::get('/season/{id}/generator/new', [SeasonGeneratorController::class, 'generateSeason']);
 
-
-Route::post('season/{id}', '\App\Http\Controllers\Season\SeasonController@update');
-Route::resource('season', '\App\Http\Controllers\Season\SeasonController',  ['parameters' => [
-    'season' => 'id'
-]])->except([
-    'create', 'edit'
-]);
-Route::get('active_seasons', '\App\Http\Controllers\Season\ActiveSeasonController@index');
-
-Route::post('season/{id}/generator', '\App\Http\Controllers\Season\SeasonGeneratorController@update');
-Route::resource('season/{id}/generator', '\App\Http\Controllers\Season\SeasonGeneratorController',  ['parameters' => [
-   'season' => 'id'
-]])->except([
-    'create', 'edit', 'show'
-]);
-Route::get('season/{id}/generator/play_dates', '\App\Http\Controllers\Season\SeasonGeneratorController@playDates');
-Route::get('season/{id}/generator/new', '\App\Http\Controllers\Season\SeasonGeneratorController@generateSeason');
-
-Route::post('season/{season_id}/absence/{id}', '\App\Http\Controllers\Season\AbsenceController@update');
-Route::resource('season/{season_id}/absence', '\App\Http\Controllers\Season\AbsenceController',  ['parameters' => [
-    'absence' => 'id'
-]])->except([
-    'create', 'edit', 'show'
-]);
-
+Route::get('season/{season_id}/absence/', [AbsenceController::class, 'index']);
+Route::post('season/{season_id}/absence', [AbsenceController::class, 'store']);
 
 //delete method doesn't work on 000webhost
-
-Route::post('profile/delete', '\App\Http\Controllers\User\ProfileController@destroy');
-Route::post('user/{id}/delete', '\App\Http\Controllers\User\UserController@destroy');
-Route::post('group/{id}/delete', '\App\Http\Controllers\Group\GroupController@destroy');
-Route::post('group/{group_id}/user/{id}/delete', '\App\Http\Controllers\Group\GroupUsersController@destroy');
-Route::post('season/{id}/delete', '\App\Http\Controllers\Season\SeasonController@destroy');
-Route::post('season/{id}/generator/delete', '\App\Http\Controllers\Season\SeasonGeneratorController@destroy');
-Route::post('absence/{id}/delete', '\App\Http\Controllers\Season\AbsenceController@destroy');
+Route::post('/profile/delete', [ProfileController::class, 'destroy']);
+Route::post('/user/{id}/delete', [UserController::class, 'destroy']);
+Route::post('/group/{id}/delete', [GroupController::class, 'destroy']);
+Route::post('group/{group_id}/user/{id}/delete', [GroupUsersController::class, 'destroy']);
+Route::post('/unverified-group-user/{id}/delete', [UnverifiedGroupUsersController::class, 'destroy']);
+Route::post('/season/{id}/delete', [SeasonController::class, 'destroy']);
+Route::post('/season/{id}/generator/delete', [SeasonGeneratorController::class, 'destroy']);
+Route::post('/absence/{id}/delete', [AbsenceController::class, 'destroy']);

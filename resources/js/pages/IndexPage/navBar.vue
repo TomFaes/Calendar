@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div >
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark fixed-top" id="mainNav">
             <router-link :to="{ name: 'home'}" class=".nav-link js-scroll-trigger">Kalender</i></router-link>    
 
