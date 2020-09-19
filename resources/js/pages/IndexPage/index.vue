@@ -1,26 +1,13 @@
 <template>
     <div style="width: 100%">
-        <div class="container">
-            <nav-bar :user=user></nav-bar>
-        </div>
-        
-         <!-- Message box -->
-        <div class="container">
-            <message-box></message-box>
-        </div>
-
-        <div class="container" v-if="auth == true && displayNav == ''">
-            <unverified-user></unverified-user>
-        </div>
-
-        <router-view :key="$route.path"></router-view>
-
-        <!-- view of  the login options-->
-        <div class="container"  v-if="auth == false" >
-            <login v-if="displayNav == 'login' "></login>
-        </div> 
-        <!-- All options for authenticated users-->
-        <div class="container" v-if="auth == true">
+        <div class="container-fluid">
+            <global-layout>
+                <nav-bar :user=user></nav-bar><br>
+                <message-box></message-box>
+                <unverified-user v-if="auth == true && displayNav == ''"></unverified-user>
+                <router-view :key="$route.path"></router-view>
+                <login   login v-if="displayNav == 'login' && auth == false "></login>
+            </global-layout>
         </div>
     </div>
 </template>
@@ -99,6 +86,7 @@
             this.$bus.$on('displayNav', value => {
                 this.setDisplayNav(value);
             });   
+           //this.$bus.$emit('showMessage', "Test bericht moet verwijderd worden na testen",  'red', '20000' );
         }
     }
 </script>

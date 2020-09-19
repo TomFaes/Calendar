@@ -1,7 +1,6 @@
 <template>
-    <div class="row" v-if="dataList.length > 0">
-        <div class="col-lg-2 col-md-2 col-sm-0"></div>
-        <div class="col-lg-8 col-md-8 col-sm-12">
+    <div v-if="dataList.length > 0">
+        <global-layout>
             <center>
                 Your account has been added to {{ dataList.length }} group(s)<br>
                     <ul v-for="data in dataList"  :key="data.id" style="display: inline-block; text-align: left;">
@@ -12,8 +11,7 @@
                         </li>
                     </ul>
             </center>
-        </div>
-        <div class="col-lg-2 col-md-2 col-sm-0"></div>
+        </global-layout>
     </div>
 </template>
 

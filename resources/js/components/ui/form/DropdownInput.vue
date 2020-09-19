@@ -1,17 +1,13 @@
 <template>
     <div class="form-group">
-        <div class="row">
-            <div class="col-lg-2 col-md-2"></div>
-            <div class="col-lg-8 col-md-8">
-                    <label :for=inputName>{{ tekstLabel }}</label>
-                    <select :disabled=disabled v-model="selectedOption" class="form-control" :name=inputName :id=inputId  @input="$emit('input', $event.target.value)" >
-                        <option :value=0></option>
-                        <option v-for="(option) in options" :value="option.id" :key="option.id">{{ option.display }}</option>
-                </select>
-                <div class="text-danger" v-if="errors">{{ errors[0] }}</div>
-            </div>
-            <div class="col-lg-2 col-md-2"></div>
-        </div>
+       <global-layout :sizeForm="sizeForm">
+            <label :for=inputName>{{ tekstLabel }}</label>
+            <select :disabled=disabled v-model="selectedOption" class="form-control" :name=inputName :id=inputId  @input="$emit('input', $event.target.value)" >
+                <option :value=0></option>
+                <option v-for="(option) in options" :value="option.id" :key="option.id">{{ option.display }}</option>
+            </select>
+            <div class="text-danger" v-if="errors">{{ errors[0] }}</div>
+       </global-layout>
     </div>
 </template>
 
@@ -27,7 +23,8 @@
             options: {
                 type: Array,
             },
-            'disabled': Boolean
+            'disabled': Boolean,
+            'sizeForm': String,
          },
 
         data () {

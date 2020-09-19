@@ -2,98 +2,75 @@
     <div class="container">
         <form @submit.prevent="submit" method="POST" enctype="multipart/form-data">
             <!-- the form items -->
-            <text-input inputName="name" inputId="name" tekstLabel="Naam: " v-model="fields.name" :errors="errors.name" :value='fields.name'></text-input>
-            <date-input inputName="begin" inputId="begin" tekstLabel="Begin: " v-model="fields.begin" :errors="errors.begin" :value='fields.begin'></date-input>
-            <date-input inputName="end" inputId="end" tekstLabel="End: " v-model="fields.end" :errors="errors.end" :value='fields.end'></date-input>
-            <time-input inputName="hour" inputId="hour" tekstLabel="Start uur: " v-model="fields.hour" :errors="errors.hour" :value='fields.hour'></time-input>
+            <global-input type='text' inputName="name" inputId="name" tekstLabel="Naam: " v-model="fields.name" :errors="errors.name" :value='fields.name'></global-input>
+            <global-input type='date' inputName="begin" inputId="begin" tekstLabel="Begin: " v-model="fields.begin" :errors="errors.begin" :value='fields.begin'></global-input>
+            <global-input type='date' inputName="end" inputId="end" tekstLabel="End: " v-model="fields.end" :errors="errors.end" :value='fields.end'></global-input>
+            <global-input type='time' inputName="hour" inputId="hour" tekstLabel="Start uur: " v-model="fields.hour" :errors="errors.hour" :value='fields.hour'></global-input>
 
             <!-- Admin multiselect -->
-            <div class="row" v-if="submitOption != 'Create'">
-                <div class="col-lg-2 col-md-2 col-sm-0"></div>
-                <div class="col-lg-8 col-md-8 col-sm-12">
-                    <label>Admin: </label>
-                    <multiselect
-                        v-model="selectedUser"
-                        :multiple="false"
-                        :options="multigroupUsers"
-                        :close-on-select="true"
-                        :clear-on-select="true"
-                        placeholder="Select admin"
-                        label="fullName"
-                        track-by="fullName"
-                    >
-                    </multiselect>
-                </div>
-                <div class="col-lg-2 col-md-2 col-sm-0"></div>
-            </div>
+            <global-layout v-if="submitOption != 'Create'">
+                <label>Admin: </label>
+                <multiselect
+                    v-model="selectedUser"
+                    :multiple="false"
+                    :options="multigroupUsers"
+                    :close-on-select="true"
+                    :clear-on-select="true"
+                    placeholder="Select admin"
+                    label="fullName"
+                    track-by="fullName"
+                >
+                </multiselect>
+            </global-layout>
 
             <!-- Type multiselect -->
-            <div class="row">
-                <div class="col-lg-2 col-md-2 col-sm-0"></div>
-                <div class="col-lg-8 col-md-8 col-sm-12">
-                    <label>type: </label>
-                    <multiselect
-                        v-model="selectedType"
-                        :multiple="false"
-                        :options="multiType"
-                        :close-on-select="true"
-                        :clear-on-select="true"
-                        placeholder="Selecteer een seizoens generator"
-                    >
-                    </multiselect>
-                </div>
-                <div class="col-lg-2 col-md-2 col-sm-0"></div>
-            </div>
+            <global-layout>
+                <label>type: </label>
+                <multiselect
+                    v-model="selectedType"
+                    :multiple="false"
+                    :options="multiType"
+                    :close-on-select="true"
+                    :clear-on-select="true"
+                    placeholder="Selecteer een seizoens generator"
+                >
+                </multiselect>
+            </global-layout>
 
             <!-- Group multiselect -->
-            <div class="row" v-if="submitOption == 'Create'">
-                <div class="col-lg-2 col-md-2 col-sm-0"></div>
-                <div class="col-lg-8 col-md-8 col-sm-12">
-                    <label>Group: </label>
-                    <multiselect
-                        v-model="selectedGroup"
-                        :multiple="false"
-                        :options="multiGroups"
-                        :close-on-select="true"
-                        :clear-on-select="true"
-                        placeholder="Selecteer een groep"
-                        label="name"
-                        track-by="fullName"
-                    >
-                    </multiselect>
-                </div>
-                <div class="col-lg-2 col-md-2 col-sm-0"></div>
-            </div>
+           <global-layout v-if="submitOption == 'Create'">
+                <label>Group: </label>
+                <multiselect
+                    v-model="selectedGroup"
+                    :multiple="false"
+                    :options="multiGroups"
+                    :close-on-select="true"
+                    :clear-on-select="true"
+                    placeholder="Selecteer een groep"
+                    label="name"
+                    track-by="fullName"
+                >
+                </multiselect>
+           </global-layout>
 
             <br>
-            <div class="row">
-                <div class="col-lg-2 col-md-2 col-sm-0"></div>
-                <div class="col-lg-8 col-md-8 col-sm-12">
-                    <center>
-                        <button class="btn btn-primary">Save</button>
-                    </center>
-                    <br>
-                </div>
-                <div class="col-lg-2 col-md-2 col-sm-0"></div>
-            </div>
+            <global-layout>
+                <center>
+                    <button class="btn btn-primary">Save</button>
+                </center>
+                <br>
+            </global-layout>
         </form>
     </div>
 </template>
 
 <script>
     import apiCall from '../../services/ApiCall.js';
-
-    import TextInput from '../../components/ui/form/TextInput.vue';
-    import DateInput from '../../components/ui/form/DateInput.vue';
-    import TimeInput from '../../components/ui/form/TimeInput.vue';
     import Multiselect from 'vue-multiselect';
     import Moment from 'moment';
 
     export default {
         components: {
-            TextInput,
-            DateInput,
-            TimeInput,
             Multiselect,
             Moment, 
         },

@@ -42,14 +42,22 @@ This version isn't completly finished. Next things are still in development:
 - reworked generator
 - added main page calendars
 
-# Version 2.02: 
+# Version 2.02: Current live version
 - rework the generator to get less calls(data is gatered in the generator)
 - update the calendar view + nex play day view
 - team is now connected to the group user instead of a user. This way a user doesn't need an account to be part of the group. 
 - change the delete group user option. user is removed from group but group user record isn't soft deleted. This was needed to keep past calendars active
 
+# Version 2.03: 
+- add swipe to the next play day view
+- creation of 2 global layout components(input & layout)
+- convert route files to tulpe methods
+- improve code readability(generator, ...)
+- bugfixes
+    - unverified user of deleted group was shown on index page.
+    - bug with create random string for password
+
 # Future
-- add the option to swipe the calendar instead of pressing a button(mobile)
 - create an option to make the calendar public(no account needed to see the calendar). Default will be only for logged in users. 
 - Add more generators
     - singe field one hour double generator

@@ -9,7 +9,6 @@ interface IGroup {
     public function getGroup($id);
     
     public function getArrayOfGroupUsers($groupId);
-    public function getArrayOfUserGroups($userId);
     
     public function create(Array $data, $userId = "");
     public function update(Array $data, $groupId);

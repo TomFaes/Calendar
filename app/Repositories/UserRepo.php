@@ -22,11 +22,7 @@ class UserRepo extends Repository implements Contracts\IUser {
     {
         return User::find($id);
     }
-/*
-    public function getUsersFromList($listUsers){
-        return User::whereIn('id', $listUsers)->get();
-    }
-*/
+
     /**
      * check if a user exist when he logs in with a socialite account
      */
@@ -82,7 +78,7 @@ class UserRepo extends Repository implements Contracts\IUser {
         $newUser->firstname = $socialUser['given_name'];
         $newUser->name = $socialUser['family_name'];
         $newUser->email = $socialUser['email'];
-        $newUser->password = Hash::make(str_random(16));
+        $newUser->password = Hash::make(Str::random(16));
         $newUser->role = 'User';
         $newUser->save();
         return $newUser;

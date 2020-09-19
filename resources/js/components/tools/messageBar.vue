@@ -1,5 +1,5 @@
 <template>
-    <div :style="messageBarStyle" v-show="messageBarVisible" v-if="displayMessage" class="position-fixed col-8">
+    <div :style="messageBarStyle" v-show="messageBarVisible" v-if="displayMessage" class="">
         {{ displayMessage }}
     </div>
 </template>
