@@ -21,6 +21,20 @@ export default {
         });
     },
 
+    //return all the data with response codes
+    getDataAdv(action) {
+        return axios({
+            method: 'get',
+            url : localPath +  '/api/' + action
+        })
+        .then(function (response) {
+            return response;
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    },
+
     postData(action, fields){
         return axios({
             method: 'POST',

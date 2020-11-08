@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Season;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Auth;
 
 use App\Repositories\Contracts\ISeason;
 use App\Repositories\Contracts\IAbsence;
@@ -26,7 +26,7 @@ class SeasonGeneratorController extends Controller
     
     public function __construct(ISeason $seasonRepo, IAbsence $absenceRepo, Iteam $teamRepo)
     {
-        $this->middleware('auth:api');
+        $this->middleware('auth:api')->except('index');
         $this->middleware('season')->except('index', 'playDates', 'seasonUsers', 'seasonAbsences');
         $this->season = $seasonRepo;
         $this->absence = $absenceRepo;
@@ -34,13 +34,16 @@ class SeasonGeneratorController extends Controller
     }
     
     /**
-     * Displays all seasons where the authenticated user is season admin or is a member of the group of users connected to the season
+     * Get the season
      *
      * @return \Illuminate\Http\Response
      */
     public function index($seasonId)
     {
         $season = $this->season->getSeason($seasonId);
+        if($season->public !== 1 && Auth::guard('api')->check() === false){
+             return response()->json("This is not a public season", 203);
+        }
         $seasonGenerator = GeneratorFactory::generate($season->type);
         return response()->json($seasonGenerator->getSeasonCalendar($season), 200);
     }

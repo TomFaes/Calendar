@@ -50,7 +50,9 @@ class TeamRepo extends Repository implements ITeam
         $teamUsers = team::select('group_user_id')->where('season_id', $seasonId)->groupby('group_user_id')->get();
 
         foreach ($teamUsers as $team) {
-            $arrayUsers[$team->group_user->id] = $team->group_user;
+            if(isset($team->group_user->id ) === true){
+                $arrayUsers[$team->group_user->id] = $team->group_user;
+            }
         }
         return $arrayUsers;
     }
@@ -93,15 +95,6 @@ class TeamRepo extends Repository implements ITeam
         $request->input('playerOneId') != "" ? $team->player_id = $request->input('playerOneId') : "";
         return $team;
     }
-    
-    public function create(Request $request, $seasonId)
-    {
-        $team = new Team();
-        $team->season_id = $seasonId;
-        $team = $this->setTeam($team, $request);
-        $team->save();
-        return $team;
-    }
 
     public function deleteTeam($teamId)
     {
@@ -112,7 +105,7 @@ class TeamRepo extends Repository implements ITeam
     }
 
     /**
-     * this will save a team create by the generators to the season
+     * this will save/update a team
      * @param Team $team
      */
     public function saveTeam(Team $team)

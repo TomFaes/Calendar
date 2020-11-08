@@ -85,6 +85,7 @@ class SeasonRepo extends Repository implements ISeason
 
         isset($data['type']) === true ? $season->type = $data['type'] : "";
         isset($data['hour']) === true ? $season->start_hour = $data['hour'] : "";
+        isset($data['public']) === true ? $season->public = $data['public'] : "";
         return $season;
     }
 

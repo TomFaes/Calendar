@@ -1956,6 +1956,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -1964,23 +1975,49 @@ __webpack_require__.r(__webpack_exports__);
     'inputName': String,
     'inputId': String,
     'errors': Array,
-    'value': String,
+    'value': [String, Boolean],
+    'boolValue': Boolean,
     'disabled': Boolean,
-    'sizeForm': String
+    'sizeForm': String,
+    'switchType': String
   },
   data: function data() {
-    return {};
+    return {
+      switchState: "false",
+      checked: ''
+    };
   },
   watch: {
     value: function value(newValue) {
-      if (this.type != "date") {
+      if (this.type != "date" && this.type != 'switchButton') {
         return "";
       }
 
-      if (this.value == undefined || this.value == "") {
-        this.date = moment__WEBPACK_IMPORTED_MODULE_0___default()().format('YYYY-MM-DD');
+      if (this.type == "date") {
+        if (this.value == undefined || this.value == "") {
+          this.date = moment__WEBPACK_IMPORTED_MODULE_0___default()().format('YYYY-MM-DD');
+        } else {
+          this.date = this.value;
+        }
+      }
+
+      if (this.type == "switchButton") {
+        if (this.value == true) {
+          this.switchState = true;
+          this.checked = 'checked';
+        }
+      }
+    }
+  },
+  methods: {
+    //switchButton
+    changeSwitch: function changeSwitch() {
+      if (this.switchState == true) {
+        this.switchState = false;
+        this.checked = '';
       } else {
-        this.date = this.value;
+        this.switchState = true;
+        this.checked = 'checked';
       }
     }
   },
@@ -2528,6 +2565,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2536,7 +2582,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      'calendarData': {}
+      'calendarData': {},
+      'statusCode': 0
     };
   },
   props: {
@@ -2546,15 +2593,21 @@ __webpack_require__.r(__webpack_exports__);
     loadSeasonCalendar: function loadSeasonCalendar() {
       var _this = this;
 
-      _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__["default"].getData('season/' + this.id + '/generator').then(function (response) {
-        _this.calendarData = response;
+      _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__["default"].getDataAdv('season/' + this.id + '/generator').then(function (response) {
+        _this.statusCode = response.status;
+        _this.calendarData = response.data;
       })["catch"](function () {
         console.log('handle server error from here');
       });
     }
   },
   mounted: function mounted() {
+    var _this2 = this;
+
     this.loadSeasonCalendar();
+    this.$bus.$on('reloadCalendar', function (groupId) {
+      _this2.loadSeasonCalendar(groupId);
+    });
   }
 });
 
@@ -2647,6 +2700,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2655,37 +2718,172 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      display: ""
+      edit: false,
+      display: "",
+      editIndex: "",
+      editUserId: "",
+      editCalendarData: {},
+      updateButtons: {},
+      updateData: {},
+      'formData': new FormData()
     };
   },
   props: {
     'calendarData': {},
-    'userData': {}
+    'userData': {},
+    'loggedInUser': {},
+    'generate': Boolean
+  },
+  watch: {
+    calendarData: function calendarData() {
+      this.editCalendarData = this.calendarData;
+    }
   },
   methods: {
+    editCalendar: function editCalendar() {
+      if (this.edit === false) {
+        this.edit = true;
+        return;
+      }
+
+      this.edit = false;
+      return;
+    },
     convertDate: function convertDate(value) {
       return moment__WEBPACK_IMPORTED_MODULE_1___default()(value, "YYYY-MM-DD").format('DD/MMM');
     },
     convertToDatabaseDate: function convertToDatabaseDate(value) {
       return moment__WEBPACK_IMPORTED_MODULE_1___default()(value, "YYYY-MM-DD").format('YYYYMMDD');
     },
-    getBackground: function getBackground(userId, date) {
-      var colorClass = "free";
+    getBackground: function getBackground(userId, date, team) {
+      var colorClass = "";
 
-      if (this.calendarData['absenceData'] != undefined) {
-        if (this.calendarData['absenceData'][userId] != undefined) {
-          for (var i = 0; i < this.calendarData['absenceData'][userId]['date'].length; i++) {
-            if (date == this.calendarData['absenceData'][userId]['date'][i]) {
-              colorClass = "absence";
-            }
-          }
+      if (team == "") {
+        colorClass = "free";
+      }
+
+      if (this.calendarData['absenceData'] == undefined) {
+        return colorClass;
+      }
+
+      if (this.calendarData['absenceData'][userId] == undefined) {
+        return colorClass;
+      }
+
+      for (var i = 0; i < this.calendarData['absenceData'][userId]['date'].length; i++) {
+        if (date == this.calendarData['absenceData'][userId]['date'][i]) {
+          colorClass = "absence";
         }
       }
 
       return colorClass;
+    },
+    editTeam: function editTeam(index, userId) {
+      if (index == this.editIndex && userId == this.editUserId) {
+        this.editIndex = "";
+        this.editUserId = "";
+      } else {
+        this.editIndex = index;
+        this.editUserId = userId;
+      }
+
+      this.updateButtons = {};
+      this.updateButtons[0] = 'Free';
+      this.updateButtons[1] = "Absence";
+      var x = 2;
+
+      for (var calendar in this.editCalendarData['data'][index]['teams']) {
+        if (this.calendarData.data[index].user[userId].team == this.editCalendarData['data'][index]['teams'][calendar]['team']) {
+          continue;
+        }
+
+        if (this.editCalendarData['data'][index]['teams'][calendar]['groupUserId'] !== null) {
+          continue;
+        }
+
+        var doubleCheck = false;
+
+        for (var check in this.updateButtons) {
+          if (this.updateButtons[check] == this.editCalendarData['data'][index]['teams'][calendar]['team']) {
+            doubleCheck = true;
+          }
+        }
+
+        if (doubleCheck == true) {
+          continue;
+        }
+
+        this.updateButtons[x] = this.editCalendarData['data'][index]['teams'][calendar]['team'];
+        x++;
+      }
+    },
+    updateTeam: function updateTeam(index, userId, buttonChoice) {
+      var currentTeamId = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+
+      if (currentTeamId > 0) {
+        this.updateData[currentTeamId] = "";
+      }
+
+      if (buttonChoice == "Free" || buttonChoice == 'Absence') {
+        if (currentTeamId == 0) {
+          this.editIndex = "";
+          this.editUserId = "";
+          return;
+        }
+
+        this.editCalendarData['data'][index]['user'][userId]['team'] = "";
+        this.editCalendarData['data'][index]['user'][userId]['teamId'] = "";
+        this.editCalendarData['data'][index]['teams'][currentTeamId]['groupUserId'] = null;
+        this.editCalendarData['data'][index]['user'][userId]['team'] = "";
+        this.editCalendarData['data'][index]['user'][userId]['teamId'] = "";
+        this.editIndex = "";
+        this.editUserId = "";
+        return;
+      }
+
+      for (var teamId in this.editCalendarData['data'][index]['teams']) {
+        if (this.editCalendarData['data'][index]['teams'][teamId]['team'] === buttonChoice && this.editCalendarData['data'][index]['teams'][teamId]['groupUserId'] === null) {
+          this.editCalendarData['data'][index]['teams'][teamId]['groupUserId'] = userId;
+          this.editCalendarData['data'][index]['user'][userId]['team'] = buttonChoice;
+          this.editCalendarData['data'][index]['user'][userId]['teamId'] = teamId;
+          this.updateData[teamId] = userId;
+
+          if (currentTeamId > 0) {
+            this.editCalendarData['data'][index]['teams'][currentTeamId]['groupUserId'] = null;
+
+            if (buttonChoice == "Free" || buttonChoice == 'Absence') {
+              this.editCalendarData['data'][index]['user'][userId]['team'] = "";
+              this.editCalendarData['data'][index]['user'][userId]['teamId'] = "";
+            }
+          }
+
+          break;
+        }
+      }
+
+      this.editIndex = "";
+      this.editUserId = "";
+    },
+    saveTeams: function saveTeams() {
+      var _this = this;
+
+      this.formData.append('teamRange', JSON.stringify(this.updateData));
+      _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__["default"].postData('team/range', this.formData).then(function (response) {
+        _this.message = "Teams are updated";
+
+        _this.$bus.$emit('showMessage', _this.message, 'green', '2000');
+
+        _this.$bus.$emit('reloadCalendar');
+
+        _this.edit = false;
+      })["catch"](function (error) {
+        _this.errors = error;
+      });
     }
   },
-  mounted: function mounted() {}
+  mounted: function mounted() {
+    this.editCalendarData = this.calendarData;
+  }
 });
 
 /***/ }),
@@ -3871,7 +4069,8 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.setFormData();
-      this.action = 'profile', _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__["default"].postData(this.action, this.formData).then(function (response) {
+      this.action = 'profile';
+      _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__["default"].postData(this.action, this.formData).then(function (response) {
         _this2.message = "You've updated your profile ";
 
         _this2.$bus.$emit('showMessage', _this2.message, 'green', '2000');
@@ -4166,6 +4365,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -4183,7 +4383,8 @@ __webpack_require__.r(__webpack_exports__);
         'end': moment__WEBPACK_IMPORTED_MODULE_2___default()().format('YYYY-MM-DD'),
         'day': "",
         'hour': '',
-        'type': ''
+        'type': '',
+        'public': false
       },
       'errors': {},
       'action': '',
@@ -4230,6 +4431,10 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.selectedGroup.id > 0) {
         this.formData.set('groupId', this.selectedGroup.id);
+      }
+
+      if (this.fields["public"] != undefined) {
+        this.formData.set('public', this.fields["public"] ? 1 : 0);
       }
 
       if (this.selectedType != '') {
@@ -4307,6 +4512,7 @@ __webpack_require__.r(__webpack_exports__);
       this.multigroupUsers = this.season.group.group_users;
       this.selectedType = this.season.type;
       this.fields.hour = this.season.start_hour;
+      this.fields["public"] = this.season["public"] ? true : false;
     }
   },
   mounted: function mounted() {
@@ -4335,6 +4541,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_ui_form_ButtonInput_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/ui/form/ButtonInput.vue */ "./resources/js/components/ui/form/ButtonInput.vue");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_4__);
+//
 //
 //
 //
@@ -9272,7 +9479,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.absence[data-v-a289623e]{\r\n    background-color: red;\n}\n.free[data-v-a289623e]{\r\n    background-color: #343a40;\n}\r\n", ""]);
+exports.push([module.i, "\n.absence[data-v-a289623e]{\r\n    background-color: red;\n}\n.free[data-v-a289623e]{\r\n    background-color: #343a40;\n}\ntd[data-v-a289623e]:hover {\r\n    background-color: lightgray;\n}\r\n", ""]);
 
 // exports
 
@@ -62574,6 +62781,46 @@ var render = function() {
               )
             ])
           ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.type == "switchButton"
+        ? _c("global-layout", { attrs: { sizeForm: _vm.sizeForm } }, [
+            _c("label", { attrs: { for: _vm.inputName } }, [
+              _vm._v(_vm._s(_vm.tekstLabel))
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "custom-control custom-switch" }, [
+              _c("input", {
+                staticClass: "custom-control-input",
+                attrs: {
+                  disabled: _vm.disabled,
+                  type: "checkbox",
+                  name: _vm.inputName,
+                  id: _vm.inputId
+                },
+                domProps: { value: _vm.value, checked: _vm.checked },
+                on: {
+                  input: function($event) {
+                    return _vm.$emit("input", _vm.switchState)
+                  },
+                  click: function($event) {
+                    return _vm.changeSwitch()
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("label", {
+                staticClass: "custom-control-label",
+                attrs: { for: _vm.inputName }
+              })
+            ]),
+            _vm._v(" "),
+            _vm.errors
+              ? _c("div", { staticClass: "text-danger" }, [
+                  _vm._v(_vm._s(_vm.errors[0]))
+                ])
+              : _vm._e()
+          ])
         : _c("global-layout", { attrs: { sizeForm: _vm.sizeForm } }, [
             _c("label", { attrs: { for: _vm.inputName } }, [
               _vm._v(_vm._s(_vm.tekstLabel))
@@ -63219,7 +63466,9 @@ var render = function() {
                 _c("two-field-two-hour-three-teams-page", {
                   attrs: {
                     calendarData: _vm.calendarData,
-                    userData: _vm.calendarData["generateGroupUserData"]
+                    userData: _vm.calendarData["generateGroupUserData"],
+                    loggedInUser: _vm.$attrs.user,
+                    generate: true
                   }
                 })
               ],
@@ -63251,28 +63500,38 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.calendarData["seasonData"] != undefined
-    ? _c("div", [
-        _vm.calendarData["seasonData"]["type"] == "TwoFieldTwoHourThreeTeams"
-          ? _c(
-              "div",
-              [
-                _c("h1", [
-                  _vm._v(_vm._s(_vm.calendarData["seasonData"]["name"]))
-                ]),
-                _vm._v(" "),
-                _c("two-field-two-hour-three-teams-page", {
-                  attrs: {
-                    calendarData: _vm.calendarData,
-                    userData: _vm.calendarData["groupUserData"]
-                  }
-                })
-              ],
-              1
-            )
-          : _c("div", [_vm._v("\n        onbekende calendar view\n    ")])
-      ])
-    : _vm._e()
+  return _c("div", [
+    _vm.statusCode == 200
+      ? _c("div", [
+          _vm.calendarData["seasonData"] != undefined
+            ? _c("div", [
+                _vm.calendarData["seasonData"]["type"] ==
+                "TwoFieldTwoHourThreeTeams"
+                  ? _c(
+                      "div",
+                      [
+                        _c("two-field-two-hour-three-teams-page", {
+                          attrs: {
+                            calendarData: _vm.calendarData,
+                            userData: _vm.calendarData["groupUserData"],
+                            loggedInUser: _vm.$attrs.user
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  : _c("div", [
+                      _vm._v(
+                        "\n                onbekende calendar view\n            "
+                      )
+                    ])
+              ])
+            : _vm._e()
+        ])
+      : _vm.statusCode == 0
+      ? _c("div")
+      : _c("div", [_c("h1", [_vm._v("THIS IS NOT A PUBLIC SEASON")])])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -63297,10 +63556,41 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm.calendarData["data"] != undefined
+    _vm.editCalendarData["data"] != undefined
       ? _c(
           "div",
           [
+            _vm.generate == false
+              ? _c("h1", [
+                  _vm._v(
+                    "\n            " +
+                      _vm._s(_vm.calendarData["seasonData"]["name"]) +
+                      "\n            "
+                  ),
+                  _vm.loggedInUser.id ==
+                  _vm.editCalendarData["seasonData"]["admin_id"]
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.editCalendar($event)
+                            }
+                          }
+                        },
+                        [
+                          _c("i", {
+                            staticClass: "fa fa-edit",
+                            staticStyle: { heigth: "14px", width: "14px" }
+                          })
+                        ]
+                      )
+                    : _vm._e()
+                ])
+              : _vm._e(),
+            _vm._v(" "),
             _c("global-layout", { attrs: { sizeForm: "xlarge" } }, [
               _c(
                 "div",
@@ -63324,18 +63614,18 @@ var render = function() {
                             [_vm._v("Player")]
                           ),
                           _vm._v(" "),
-                          _vm._l(_vm.calendarData["data"], function(data) {
+                          _vm._l(_vm.editCalendarData["data"], function(date) {
                             return _c(
                               "th",
                               {
-                                key: data.id,
+                                key: date.id,
                                 staticStyle: { "text-align": "center" },
                                 attrs: { scope: "col" }
                               },
                               [
                                 _vm._v(
                                   "\n                                " +
-                                    _vm._s(_vm.convertDate(data.day)) +
+                                    _vm._s(_vm.convertDate(date.day)) +
                                     "\n                            "
                                 )
                               ]
@@ -63365,39 +63655,116 @@ var render = function() {
                               [_vm._v(_vm._s(user.firstname))]
                             ),
                             _vm._v(" "),
-                            _vm._l(_vm.calendarData["data"], function(data) {
+                            _vm._l(_vm.editCalendarData["data"], function(
+                              data,
+                              index
+                            ) {
                               return [
-                                data["teams"][user.id] != undefined
+                                _vm.edit == true
                                   ? _c(
                                       "td",
-                                      { key: data.id },
+                                      {
+                                        key: data.id,
+                                        class: _vm.getBackground(
+                                          user.id,
+                                          data.day,
+                                          data["user"][user.id]["team"]
+                                        ),
+                                        on: {
+                                          click: function($event) {
+                                            $event.preventDefault()
+                                            return _vm.editTeam(index, user.id)
+                                          }
+                                        }
+                                      },
                                       [
-                                        _c("center", [
-                                          data["teams"][user.id]["team"] ==
-                                          "team1"
-                                            ? _c("span", [_vm._v("1")])
-                                            : _vm._e(),
-                                          _vm._v(" "),
-                                          data["teams"][user.id]["team"] ==
-                                          "team2"
-                                            ? _c("span", [_vm._v("2")])
-                                            : _vm._e(),
-                                          _vm._v(" "),
-                                          data["teams"][user.id]["team"] ==
-                                          "team3"
-                                            ? _c("span", [_vm._v("3")])
-                                            : _vm._e()
-                                        ])
+                                        data["user"][user.id]["team"] == "team1"
+                                          ? _c("center", [_vm._v("1")])
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        data["user"][user.id]["team"] == "team2"
+                                          ? _c("center", [_vm._v("2")])
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        data["user"][user.id]["team"] == "team3"
+                                          ? _c("center", [_vm._v("3")])
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        _vm.editIndex == index &&
+                                        _vm.editUserId == user.id &&
+                                        _vm.loggedInUser.id ==
+                                          _vm.editCalendarData["seasonData"][
+                                            "admin_id"
+                                          ]
+                                          ? _c(
+                                              "span",
+                                              _vm._l(
+                                                _vm.updateButtons,
+                                                function(button) {
+                                                  return _c(
+                                                    "button",
+                                                    {
+                                                      key: button,
+                                                      staticClass:
+                                                        "btn btn-secondary",
+                                                      staticStyle: {
+                                                        width: "100%"
+                                                      },
+                                                      on: {
+                                                        click: function(
+                                                          $event
+                                                        ) {
+                                                          $event.stopPropagation()
+                                                          return _vm.updateTeam(
+                                                            index,
+                                                            user.id,
+                                                            button,
+                                                            data["user"][
+                                                              user.id
+                                                            ]["teamId"]
+                                                          )
+                                                        }
+                                                      }
+                                                    },
+                                                    [_vm._v(_vm._s(button))]
+                                                  )
+                                                }
+                                              ),
+                                              0
+                                            )
+                                          : _vm._e()
                                       ],
                                       1
                                     )
-                                  : _c("td", {
-                                      key: data.id,
-                                      class: _vm.getBackground(
-                                        user.id,
-                                        data.day
-                                      )
-                                    })
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _vm.edit == false
+                                  ? _c(
+                                      "td",
+                                      {
+                                        key: data.id,
+                                        class: _vm.getBackground(
+                                          user.id,
+                                          data.day,
+                                          data["user"][user.id]["team"]
+                                        )
+                                      },
+                                      [
+                                        data["user"][user.id]["team"] == "team1"
+                                          ? _c("center", [_vm._v("1")])
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        data["user"][user.id]["team"] == "team2"
+                                          ? _c("center", [_vm._v("2")])
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        data["user"][user.id]["team"] == "team3"
+                                          ? _c("center", [_vm._v("3")])
+                                          : _vm._e()
+                                      ],
+                                      1
+                                    )
+                                  : _vm._e()
                               ]
                             })
                           ],
@@ -63408,7 +63775,25 @@ var render = function() {
                     )
                   ])
                 ]
-              )
+              ),
+              _vm._v(" "),
+              _vm.edit == true
+                ? _c("div", [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.saveTeams()
+                          }
+                        }
+                      },
+                      [_vm._v(" Save")]
+                    )
+                  ])
+                : _vm._e()
             ])
           ],
           1
@@ -64376,7 +64761,10 @@ var render = function() {
               ? _c("unverified-user")
               : _vm._e(),
             _vm._v(" "),
-            _c("router-view", { key: _vm.$route.path }),
+            _c("router-view", {
+              key: _vm.$route.path,
+              attrs: { user: _vm.user }
+            }),
             _vm._v(" "),
             _vm.displayNav == "login" && _vm.auth == false
               ? _c("login", { attrs: { login: "" } })
@@ -64914,26 +65302,26 @@ var render = function() {
                           _vm._v(" "),
                           _vm.calendarData["data"][
                             _vm.calendarData["currentPlayDay"]
-                          ]["teams"][user.id] != undefined
+                          ]["user"][user.id]["team"] != ""
                             ? _c(
                                 "td",
                                 [
                                   _c("center", [
                                     _vm.calendarData["data"][
                                       _vm.calendarData["currentPlayDay"]
-                                    ]["teams"][user.id]["team"] == "team1"
+                                    ]["user"][user.id]["team"] == "team1"
                                       ? _c("span", [_vm._v("1")])
                                       : _vm._e(),
                                     _vm._v(" "),
                                     _vm.calendarData["data"][
                                       _vm.calendarData["currentPlayDay"]
-                                    ]["teams"][user.id]["team"] == "team2"
+                                    ]["user"][user.id]["team"] == "team2"
                                       ? _c("span", [_vm._v("2")])
                                       : _vm._e(),
                                     _vm._v(" "),
                                     _vm.calendarData["data"][
                                       _vm.calendarData["currentPlayDay"]
-                                    ]["teams"][user.id]["team"] == "team3"
+                                    ]["user"][user.id]["team"] == "team3"
                                       ? _c("span", [_vm._v("3")])
                                       : _vm._e()
                                   ])
@@ -65358,6 +65746,24 @@ var render = function() {
           }
         }),
         _vm._v(" "),
+        _c("global-input", {
+          attrs: {
+            type: "switchButton",
+            inputName: "public",
+            inputId: "public",
+            tekstLabel: "Public: ",
+            errors: _vm.errors.public,
+            value: _vm.fields.public
+          },
+          model: {
+            value: _vm.fields.public,
+            callback: function($$v) {
+              _vm.$set(_vm.fields, "public", $$v)
+            },
+            expression: "fields.public"
+          }
+        }),
+        _vm._v(" "),
         _vm.submitOption != "Create"
           ? _c(
               "global-layout",
@@ -65390,7 +65796,7 @@ var render = function() {
         _c(
           "global-layout",
           [
-            _c("label", [_vm._v("type: ")]),
+            _c("label", [_vm._v("Type: ")]),
             _vm._v(" "),
             _c("multiselect", {
               attrs: {
@@ -65514,6 +65920,10 @@ var render = function() {
                         " " +
                         _vm._s(_vm.convertTime(data.start_hour))
                     )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "d-none d-sm-table-cell" }, [
+                    _vm._v(_vm._s(data.public ? "Yes" : "No"))
                   ]),
                   _vm._v(" "),
                   _c("td", { staticClass: "d-none d-sm-table-cell" }, [
@@ -65674,6 +66084,8 @@ var staticRenderFns = [
         _c("th", [_vm._v("Periode")]),
         _vm._v(" "),
         _c("th", [_vm._v("Wanneer")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "d-none d-sm-table-cell" }, [_vm._v("Public")]),
         _vm._v(" "),
         _c("th", { staticClass: "d-none d-sm-table-cell" }, [_vm._v("Admin")]),
         _vm._v(" "),
@@ -66231,7 +66643,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /*!
-  * vue-router v3.4.3
+  * vue-router v3.4.5
   * (c) 2020 Evan You
   * @license MIT
   */
@@ -68138,6 +68550,7 @@ function runQueue (queue, fn, cb) {
   step(0);
 }
 
+// When changing thing, also edit router.d.ts
 var NavigationFailureType = {
   redirected: 2,
   aborted: 4,
@@ -68381,10 +68794,10 @@ History.prototype.transitionTo = function transitionTo (
     // Exception should still be thrown
     throw e
   }
+  var prev = this.current;
   this.confirmTransition(
     route,
     function () {
-      var prev = this$1.current;
       this$1.updateRoute(route);
       onComplete && onComplete(route);
       this$1.ensureURL();
@@ -68405,16 +68818,14 @@ History.prototype.transitionTo = function transitionTo (
         onAbort(err);
       }
       if (err && !this$1.ready) {
-        this$1.ready = true;
-        // Initial redirection should still trigger the onReady onSuccess
+        // Initial redirection should not mark the history as ready yet
+        // because it's triggered by the redirection instead
         // https://github.com/vuejs/vue-router/issues/3225
-        if (!isNavigationFailure(err, NavigationFailureType.redirected)) {
+        // https://github.com/vuejs/vue-router/issues/3331
+        if (!isNavigationFailure(err, NavigationFailureType.redirected) || prev !== START) {
+          this$1.ready = true;
           this$1.readyErrorCbs.forEach(function (cb) {
             cb(err);
-          });
-        } else {
-          this$1.readyCbs.forEach(function (cb) {
-            cb(route);
           });
         }
       }
@@ -68426,6 +68837,7 @@ History.prototype.confirmTransition = function confirmTransition (route, onCompl
     var this$1 = this;
 
   var current = this.current;
+  this.pending = route;
   var abort = function (err) {
     // changed after adding errors with
     // https://github.com/vuejs/vue-router/pull/3047 before that change,
@@ -68475,7 +68887,6 @@ History.prototype.confirmTransition = function confirmTransition (route, onCompl
     resolveAsyncComponents(activated)
   );
 
-  this.pending = route;
   var iterator = function (hook, next) {
     if (this$1.pending !== route) {
       return abort(createNavigationCancelledError(current, route))
@@ -68544,11 +68955,18 @@ History.prototype.setupListeners = function setupListeners () {
   // Default implementation is empty
 };
 
-History.prototype.teardownListeners = function teardownListeners () {
+History.prototype.teardown = function teardown () {
+  // clean up event listeners
+  // https://github.com/vuejs/vue-router/issues/2341
   this.listeners.forEach(function (cleanupListener) {
     cleanupListener();
   });
   this.listeners = [];
+
+  // reset current history route
+  // https://github.com/vuejs/vue-router/issues/3294
+  this.current = START;
+  this.pending = null;
 };
 
 function normalizeBase (base) {
@@ -69012,8 +69430,12 @@ var AbstractHistory = /*@__PURE__*/(function (History) {
     this.confirmTransition(
       route,
       function () {
+        var prev = this$1.current;
         this$1.index = targetIndex;
         this$1.updateRoute(route);
+        this$1.router.afterHooks.forEach(function (hook) {
+          hook && hook(route, prev);
+        });
       },
       function (err) {
         if (isNavigationFailure(err, NavigationFailureType.duplicated)) {
@@ -69108,11 +69530,7 @@ VueRouter.prototype.init = function init (app /* Vue component instance */) {
     // we do not release the router so it can be reused
     if (this$1.app === app) { this$1.app = this$1.apps[0] || null; }
 
-    if (!this$1.app) {
-      // clean up event listeners
-      // https://github.com/vuejs/vue-router/issues/2341
-      this$1.history.teardownListeners();
-    }
+    if (!this$1.app) { this$1.history.teardown(); }
   });
 
   // main app previously initialized
@@ -69274,7 +69692,7 @@ function createHref (base, fullPath, mode) {
 }
 
 VueRouter.install = install;
-VueRouter.version = '3.4.3';
+VueRouter.version = '3.4.5';
 VueRouter.isNavigationFailure = isNavigationFailure;
 VueRouter.NavigationFailureType = NavigationFailureType;
 
@@ -85048,6 +85466,17 @@ if (true) {
       console.log(error);
     });
   },
+  //return all the data with response codes
+  getDataAdv: function getDataAdv(action) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default()({
+      method: 'get',
+      url: localPath + '/api/' + action
+    }).then(function (response) {
+      return response;
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  },
   postData: function postData(action, fields) {
     return axios__WEBPACK_IMPORTED_MODULE_0___default()({
       method: 'POST',
@@ -85205,8 +85634,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     name: 'calendar',
     component: _pages_CalendarPage_index_vue__WEBPACK_IMPORTED_MODULE_10__["default"],
     props: true,
-    meta: {
-      requiresAuth: true
+    meta: {//requiresAuth: true
     }
   }, {
     path: localPath + '/generate/:id',

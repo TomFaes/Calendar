@@ -10,7 +10,7 @@ class Season extends Model
     use SoftDeletes;
     
     protected $fillable = [
-        'name','admin_id', 'groep_id', 'begin', 'end',
+        'name','admin_id', 'groep_id', 'begin', 'end', 'public'
     ];
 
     public function admin()

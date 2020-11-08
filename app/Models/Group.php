@@ -21,7 +21,7 @@ class Group extends Model
     
     public function groupUsers()
     {
-        return $this->hasMany('App\Models\GroupUser', 'group_id', 'id')->with('user')->orderBy('firstname', 'asc', 'name', 'asc');
+        return $this->hasMany('App\Models\GroupUser', 'group_id', 'id')->with('user');
     }
 
     public function groupSeasons()

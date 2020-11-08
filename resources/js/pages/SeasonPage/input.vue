@@ -6,7 +6,8 @@
             <global-input type='date' inputName="begin" inputId="begin" tekstLabel="Begin: " v-model="fields.begin" :errors="errors.begin" :value='fields.begin'></global-input>
             <global-input type='date' inputName="end" inputId="end" tekstLabel="End: " v-model="fields.end" :errors="errors.end" :value='fields.end'></global-input>
             <global-input type='time' inputName="hour" inputId="hour" tekstLabel="Start uur: " v-model="fields.hour" :errors="errors.hour" :value='fields.hour'></global-input>
-
+             <global-input type='switchButton' inputName="public" inputId="public" tekstLabel="Public: " v-model="fields.public" :errors="errors.public" :value='fields.public'></global-input>
+           
             <!-- Admin multiselect -->
             <global-layout v-if="submitOption != 'Create'">
                 <label>Admin: </label>
@@ -25,7 +26,7 @@
 
             <!-- Type multiselect -->
             <global-layout>
-                <label>type: </label>
+                <label>Type: </label>
                 <multiselect
                     v-model="selectedType"
                     :multiple="false"
@@ -85,6 +86,7 @@
                     'day': "",
                     'hour': '',
                      'type': '',
+                     'public': false,
                 },
                 'errors' : {},
                 'action': '',
@@ -135,6 +137,10 @@
                     this.formData.set('groupId', this.selectedGroup.id);
                 }
 
+                if(this.fields.public != undefined){
+                    this.formData.set('public', this.fields.public ? 1 : 0);
+                }
+
                 if(this.selectedType != ''){
                     this.formData.set('type', this.selectedType);
                 }else{
@@ -170,7 +176,7 @@
             create(){
                 this.setFormData();
                 this.action = "season";
-
+                
                 apiCall.postData(this.action, this.formData)
                 .then(response =>{
                     this.$bus.$emit('reloadSeasons');
@@ -187,6 +193,7 @@
                 this.setFormData();
                 this.action =  'season/' + this.season.id;
 
+
                 apiCall.updateData(this.action, this.formData)
                 .then(response =>{
                    this.$bus.$emit('reloadSeasons');
@@ -196,6 +203,7 @@
                 }).catch(error => {
                         this.errors = error;
                 });
+                
             },
 
             setData(){
@@ -207,6 +215,7 @@
                 this.multigroupUsers = this.season.group.group_users;
                 this.selectedType = this.season.type;
                 this.fields.hour = this.season.start_hour;
+                this.fields.public = this.season.public ? true : false;
             }
         },
 

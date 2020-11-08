@@ -89,7 +89,7 @@ const router = new VueRouter({
             component: Calendar,
             props: true,
             meta: { 
-                requiresAuth: true
+                //requiresAuth: true
             }
         },
 

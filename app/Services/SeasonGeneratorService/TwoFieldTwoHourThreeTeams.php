@@ -119,11 +119,15 @@ class TwoFieldTwoHourThreeTeams implements IGenerator
             
             //Gameday
             $gamesArray[$date]['datum'] = $date;
+            $gamesArray[$date][$teamnumber][$playerId]['teamId'] = $team->id;;
             if (isset($gamesArray[$date][$teamnumber]['player1']) === false) {
                 $gamesArray[$date][$teamnumber]['player1'] = $playerId;
             } else {
                 $gamesArray[$date][$teamnumber]['player2'] = $playerId;
-            }           
+            }      
+            $gamesArray[$date]['teamIds'][$team->id]['teamId'] = $team->id;
+            $gamesArray[$date]['teamIds'][$team->id]['team'] = $teamnumber;
+            $gamesArray[$date]['teamIds'][$team->id]['groupUserId'] = $playerId;
         }
         //return $gamesArray;
         return $this->createJsonSeason($gamesArray, $season);
@@ -137,13 +141,16 @@ class TwoFieldTwoHourThreeTeams implements IGenerator
     public function saveSeason($jsonSeason)
     {
         $jsonArray = json_decode($jsonSeason);
-        foreach ($jsonArray->data As $day) {
-            foreach ($day->teams As $users) {
+        foreach ($jsonArray->editData As $day) {
+            foreach ($day->data As $users) {
+                if($users->team == ""){
+                    continue;
+                }
                 $team = new Team();
                 $team->season_id = $jsonArray->seasonData->id;
                 $team->date = $day->day;
                 $team->team = $users->team;
-                $team->group_user_id = $users->groupUserId;
+                $team->group_user_id = $users->groupUser;
                 $this->team->saveTeam($team);
             }
         }
@@ -430,6 +437,7 @@ class TwoFieldTwoHourThreeTeams implements IGenerator
      */
     protected function createJsonSeason($gamesArray, Season $season)
     {
+        
         $getNow = new \Carbon\Carbon();
         $getNow->addDay(-1);
         $nextDate = new \Carbon\Carbon();
@@ -446,23 +454,23 @@ class TwoFieldTwoHourThreeTeams implements IGenerator
         foreach ($gamesArray as $game) {
             $datum =  $game['datum'];
 
+            foreach($arrayJson['generateGroupUserData'] AS $groupUser){
+                $arrayJson['data'][$y]['user'][$groupUser['id']]['groupUser'] = $groupUser['id'];
+                $arrayJson['data'][$y]['user'][$groupUser['id']]['team'] = "";
+                $arrayJson['data'][$y]['user'][$groupUser['id']]['teamId'] ="";
+            }
+
             if ($getNow <= \Carbon\Carbon::parse($datum) && $nextDate >= \Carbon\Carbon::parse($datum)) {
                 $arrayJson['currentPlayDay'] = $y;
                 $nextDate->addDay(-14);
             }
 
-            $arrayJson['data'][$y]['day'] = $datum;
+            //$arrayJson['data'][$y]['day'] = $datum;
             
             for ($z=1;$z<=3;$z++) {
                 $team = 'team'.$z;
                 $teamplayerOne = isset($game[$team]['player1']) === true ? $game[$team]['player1'] : "";
                 $teamplayerTwo = isset($game[$team]['player2']) === true ? $game[$team]['player2'] : "";
-
-                $arrayJson['data'][$y]['teams'][$teamplayerOne]['team'] =  $team;
-                $arrayJson['data'][$y]['teams'][$teamplayerOne]['groupUserId'] =  $teamplayerOne;
-
-                $arrayJson['data'][$y]['teams'][$teamplayerTwo]['team']  =  $team;
-                $arrayJson['data'][$y]['teams'][$teamplayerTwo]['groupUserId'] =  $teamplayerTwo;
 
                 if ($team != "team3") {
                     if (isset($arrayJson['stats'][$teamplayerOne]['against'][$teamplayerTwo]) === false) {
@@ -480,9 +488,39 @@ class TwoFieldTwoHourThreeTeams implements IGenerator
                 isset($arrayJson['stats'][$teamplayerTwo][$team]) === true ? $arrayJson['stats'][$teamplayerTwo][$team]++ : $arrayJson['stats'][$teamplayerTwo][$team] = 1;
                 isset($arrayJson['stats'][$teamplayerOne]['total']) === true ? $arrayJson['stats'][$teamplayerOne]['total']++ : $arrayJson['stats'][$teamplayerOne]['total'] = 1;
                 isset($arrayJson['stats'][$teamplayerTwo]['total']) === true ? $arrayJson['stats'][$teamplayerTwo]['total']++ : $arrayJson['stats'][$teamplayerTwo]['total'] = 1;
-
+                
                 $x++;
+                $teamId = 0;
+                $arrayJson['data'][$y]['day'] = $datum;
+                if($teamplayerOne > 0){
+                    $teamId = isset($game[$team][$teamplayerOne]['teamId']) === true ? $game[$team][$teamplayerOne]['teamId'] : "";
+
+                    $arrayJson['data'][$y]['user'][$teamplayerOne]['groupUser'] = $teamplayerOne;
+                    $arrayJson['data'][$y]['user'][$teamplayerOne]['team'] = $team;
+                    $arrayJson['data'][$y]['user'][$teamplayerOne]['teamId'] = $teamId;
+                }
+
+                if($teamplayerTwo > 0){
+                    $teamId = isset($game[$team][$teamplayerOne]['teamId']) === true ? $game[$team][$teamplayerOne]['teamId'] : "";
+
+                    $arrayJson['data'][$y]['user'][$teamplayerTwo]['groupUser'] = $teamplayerTwo;
+                    $arrayJson['data'][$y]['user'][$teamplayerTwo]['team'] = $team;
+                    $arrayJson['data'][$y]['user'][$teamplayerTwo]['teamId'] = $teamId;
+                }
+                /** end new array to build the calendar */
             }
+            /** new array to build the calendar */
+            $arrayJson['data'][$y]['day'] = $datum;
+            if(isset($game['teamIds']) === true){
+                foreach($game['teamIds'] AS $teamIds){
+                    $teamId = $teamIds['teamId'];
+                    $arrayJson['data'][$y]['teams'][$teamId]['teamId'] = $teamId;
+                    $arrayJson['data'][$y]['teams'][$teamId]['team'] = $teamIds['team'];
+                    $arrayJson['data'][$y]['teams'][$teamId]['groupUserId'] = $teamIds['groupUserId'];           
+                }
+            }
+            
+             /** end new array to build the calendar */
             $y++;
         }
         return $arrayJson;

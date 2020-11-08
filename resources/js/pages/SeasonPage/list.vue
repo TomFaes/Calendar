@@ -8,6 +8,7 @@
                     <th  class="d-none d-sm-table-cell">Type</th>
                     <th>Periode</th>
                     <th>Wanneer</th>
+                    <th class="d-none d-sm-table-cell">Public</th>
                     <th class="d-none d-sm-table-cell">Admin</th>
                     <th class="d-none d-sm-table-cell">Groep</th>
                      <th>Options</th>                  
@@ -19,15 +20,15 @@
                          <td class="d-none d-sm-table-cell">{{ data.type }}</td>
                         <td>{{ convertDate(data.begin) }} tot  {{ convertDate(data.end) }}</td>
                         <td>{{ data.day }} {{ convertTime(data.start_hour) }}</td>
+                        <td class="d-none d-sm-table-cell">{{ data.public ? 'Yes' : 'No'}}</td>
                         <td class="d-none d-sm-table-cell">{{ data.admin.fullName }}</td>
                         <td class="d-none d-sm-table-cell">{{ data.group.name }}</td>
-                        <td>            
+                        <td>
                             <button v-if="user.id == data.admin_id" class="btn btn-primary" @click.prevent="editSeason(data.id)"><i class="fa fa-edit" style="heigth:14px; width:14px"></i></button>
                             <button v-if="user.id == data.admin_id" class="btn btn-danger" @click.prevent="deleteSeason(data)"><i class="fa fa-trash" style="heigth:14px; width:14px"></i></button>
                             <button v-if="data.seasonDraw == 0"  class="btn btn-secondary" @click.prevent="absences(data.id)">Afwezigheden</button>
                             <router-link v-if="data.seasonDraw == 0 && user.id == data.admin_id" :to="{ name: 'generate', params: { id: data.id }}" class="btn btn-secondary">Generate</router-link>
                             <router-link v-if="data.seasonDraw > 0" :to="{ name: 'calendar', params: { id: data.id }}" class="btn btn-secondary"><i class="far fa-calendar-alt"></i></router-link>
-
                         </td>
                     </tr>
                     <tr v-if="updateField == data.id">

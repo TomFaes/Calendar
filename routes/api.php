@@ -12,6 +12,7 @@ use App\Http\Controllers\Season\SeasonController;
 use App\Http\Controllers\Season\ActiveSeasonController;
 use App\Http\Controllers\Season\SeasonGeneratorController;
 use App\Http\Controllers\Season\AbsenceController;
+use App\Http\Controllers\Season\TeamController;
 
 //All routes for profiles
 Route::get('/profile', [ProfileController::class, 'index']);
@@ -53,6 +54,9 @@ Route::get('/season/{id}/generator/new', [SeasonGeneratorController::class, 'gen
 
 Route::get('season/{season_id}/absence/', [AbsenceController::class, 'index']);
 Route::post('season/{season_id}/absence', [AbsenceController::class, 'store']);
+
+//All routes for teams
+Route::post('team/range', [TeamController::class, 'updateRange']);
 
 //delete method doesn't work on 000webhost
 Route::post('/profile/delete', [ProfileController::class, 'destroy']);

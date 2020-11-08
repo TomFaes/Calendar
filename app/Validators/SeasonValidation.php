@@ -17,7 +17,6 @@ class SeasonValidation extends Validation
                 'end' => 'required|date|',
                 'hour' => 'required|',
                 'type' => 'required|string|max:255'
-
             ],
             [
                 'name.required' => 'een seizoensnaam is verplicht',
@@ -28,7 +27,6 @@ class SeasonValidation extends Validation
                 'end.date' => 'eind datum moet een datum format bevatten',
                 'hour.required' => 'Uur is een verplicht veld',
                 'type' => 'type is een verplicht veld'
-
             ]
         );
     }

@@ -73,7 +73,7 @@
 
             update(){
                 this.setFormData();
-                this.action =  'profile',
+                this.action =  'profile';
 
                 apiCall.postData(this.action, this.formData)
                 .then(response =>{

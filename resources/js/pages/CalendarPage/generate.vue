@@ -8,7 +8,7 @@
             <h1>Generate {{  calendarData['seasonData']['name'] }}</h1>
             <button  class="btn btn-secondary" @click.prevent="generateSeason()">Regenerate season</button>
             <button  class="btn btn-secondary" @click.prevent="saveSeason()">Save season</button>
-                <two-field-two-hour-three-teams-page :calendarData="calendarData" :userData="calendarData['generateGroupUserData']"></two-field-two-hour-three-teams-page>   
+            <two-field-two-hour-three-teams-page :calendarData="calendarData" :userData="calendarData['generateGroupUserData']" :loggedInUser="$attrs.user"  :generate="true"></two-field-two-hour-three-teams-page>              
         </div>
         <div v-else>
             onbekende calendar view
@@ -20,7 +20,7 @@
     import apiCall from '../../services/ApiCall.js';
     import  router from "../../services/router.js";
     import TwoFieldTwoHourThreeTeamsPage from '../CalendarPage/twoFieldTwoHourThreeTeams.vue';
-
+    
     export default {
         components: {
             TwoFieldTwoHourThreeTeamsPage,
@@ -47,13 +47,14 @@
                 });
             }, 
 
-            generateSeason(){
+            generateSeason(){                
                 apiCall.getData('season/' +  this.id + '/generator/new')
                 .then(response =>{
                     this.calendarData = response;
                 }).catch(() => {
                     console.log('handle server error from here');
                 });
+                
             },
 
             saveSeason(){

@@ -57,8 +57,15 @@ This version isn't completly finished. Next things are still in development:
     - unverified user of deleted group was shown on index page.
     - bug with create random string for password
 
+# Version 2.04: 
+- make option to see the season when you don't have an account
+- the season can be updated after a season has started by the season admin
+
 # Future
-- create an option to make the calendar public(no account needed to see the calendar). Default will be only for logged in users. 
+- add php basic unit testing(version 2.05). 
 - Add more generators
     - singe field one hour double generator
-- update a calendar after a season is generated
+
+- player update season
+    - add config option to a season if this option should be available
+    - add option for a player to update his own season dates

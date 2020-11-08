@@ -5,7 +5,7 @@
                 <nav-bar :user=user></nav-bar><br>
                 <message-box></message-box>
                 <unverified-user v-if="auth == true && displayNav == ''"></unverified-user>
-                <router-view :key="$route.path"></router-view>
+                <router-view :key="$route.path" :user=user></router-view>
                 <login   login v-if="displayNav == 'login' && auth == false "></login>
             </global-layout>
         </div>

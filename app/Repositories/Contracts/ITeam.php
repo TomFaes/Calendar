@@ -13,7 +13,9 @@ interface ITeam
     public function getArrayOfSeasons($userId);
     public function getPlayDay($seasonId, $start, $end);
     
+    //public function updateRangeTeams(Array $request, $userId);
     public function deleteTeam($teamId);
     public function saveTeam(Team $team);
+    
 
 }

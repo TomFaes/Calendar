@@ -29,7 +29,7 @@ class GroupUserRepo extends Repository implements IGroupUser
 
     public function getGroupsOfUser($userId)
     {
-        return GroupUser::with(['group', 'user'])->where('user_id', $userId)->where('verified',1)->OrderBy('firstname', 'asc', 'name', 'asc')->get();
+        return GroupUser::with(['group', 'user'])->where('user_id', $userId)->where('verified',1)->get();
     }
 
     public function getUnverifiedGroupUsers($userId)

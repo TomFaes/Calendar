@@ -26,16 +26,17 @@ class GroupRepo extends Repository implements Contracts\IGroup
      * @return Object
      */
     public function getUserGroups($userId, $itemsPerPage = 0)
-    {        
+    { 
+        
         if ($itemsPerPage > 0) {
             return Group::whereHas('groupUsers', function ($query) use ($userId) {
                 $query->where('user_id', '=', $userId)->where('verified', 1);
             })->orWhere('admin_id', $userId)->with(['groupUsers','admin'])->paginate($itemsPerPage);
         }
+
         return Group::whereHas('groupUsers', function ($query) use ($userId) {
             $query->where('user_id', '=', $userId)->where('verified', 1);
-        })->orWhere('admin_id', $userId)->with(['groupUsers','admin'])->get();
-        
+        })->orWhere('admin_id', $userId)->with(['groupUsers','admin'])->get();        
     }
 
     public function getArrayOfGroupUsers($groupId)

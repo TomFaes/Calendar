@@ -1,17 +1,27 @@
 <template>
-    <div v-if="calendarData['seasonData'] != undefined">
-        <div v-if="calendarData['seasonData']['type'] == 'TwoFieldTwoHourThreeTeams'">
-            <h1>{{  calendarData['seasonData']['name'] }}</h1>
-                <two-field-two-hour-three-teams-page :calendarData="calendarData" :userData="calendarData['groupUserData']"></two-field-two-hour-three-teams-page>   
+    <div>
+        <div v-if="statusCode == 200">
+            <div v-if="calendarData['seasonData'] != undefined">
+                <div v-if="calendarData['seasonData']['type'] == 'TwoFieldTwoHourThreeTeams'">   
+                    <two-field-two-hour-three-teams-page :calendarData="calendarData" :userData="calendarData['groupUserData']" :loggedInUser="$attrs.user"></two-field-two-hour-three-teams-page>              
+                </div>
+                <div v-else>
+                    onbekende calendar view
+                </div>
+            </div>
         </div>
-        <div v-else>
-            onbekende calendar view
+         <div v-else-if="statusCode == 0">
+             
+         </div>
+        <div v-else> 
+            <h1>THIS IS NOT A PUBLIC SEASON</h1>
         </div>
     </div>
 </template>
 
 <script>
     import apiCall from '../../services/ApiCall.js';
+    
     import TwoFieldTwoHourThreeTeamsPage from '../CalendarPage/twoFieldTwoHourThreeTeams.vue';
 
     export default {
@@ -22,6 +32,7 @@
         data () {
             return {
                 'calendarData': {},
+                'statusCode' : 0,
             }
         },
         
@@ -31,9 +42,10 @@
 
         methods: {
             loadSeasonCalendar(){
-                apiCall.getData('season/' +  this.id + '/generator')
+                apiCall.getDataAdv('season/' +  this.id + '/generator')
                 .then(response =>{
-                    this.calendarData = response;
+                    this.statusCode = response.status;
+                    this.calendarData = response.data;
                 }).catch(() => {
                     console.log('handle server error from here');
                 });
@@ -42,6 +54,9 @@
 
         mounted(){
             this.loadSeasonCalendar();
+            this.$bus.$on('reloadCalendar', (groupId) => {
+                   this.loadSeasonCalendar(groupId);
+            });
         }
     }
 </script>
