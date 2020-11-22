@@ -141,8 +141,8 @@ class TwoFieldTwoHourThreeTeams implements IGenerator
     public function saveSeason($jsonSeason)
     {
         $jsonArray = json_decode($jsonSeason);
-        foreach ($jsonArray->editData As $day) {
-            foreach ($day->data As $users) {
+        foreach ($jsonArray->data As $day) {
+            foreach ($day->user As $users) {
                 if($users->team == ""){
                     continue;
                 }

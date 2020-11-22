@@ -19,7 +19,9 @@ class GroupService
 
     /**
      * this function will check if the new user is already added to some existing groups
+     * Not needed anymore???
      */
+    /*
     public function checkNewUser(User $user){
         if(isset($user->id) === true){
             $this->addUserToGroupUser($user);
@@ -27,6 +29,7 @@ class GroupService
         }
         return false;
     }
+    */
 
     /**
      * check if a users email is used in the group users

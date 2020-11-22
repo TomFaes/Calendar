@@ -26,17 +26,6 @@ class TeamRepo extends Repository implements ITeam
         return Team::where('season_id', $seasonId)->get();
     }
 
-    public function getArrayOfSeasonUsers($seasonId)
-    {
-        $arrayUsers = array();
-        //get all players for a season
-        $teamUsers = team::select('player_id')->where('season_id', $seasonId)->groupby('player_id')->get();
-        foreach ($teamUsers as $user) {
-            $arrayUsers[$user->player_id] = $user->player_id;
-        }
-        return $arrayUsers;
-    }
-
      /**
      * will get all users in a season
      *
@@ -55,28 +44,6 @@ class TeamRepo extends Repository implements ITeam
             }
         }
         return $arrayUsers;
-    }
-
-    public function getArrayOfSeasons($userId)
-    {
-        $arraySeasons = array();
-        $seasons = team::select('season_id')->where('player_id', $userId)->groupby('season_id')->get();
-        foreach ($seasons as $season) {
-            $arraySeasons[$season->season_id] = $season->season_id;
-        }
-        return $arraySeasons;
-    }
-
-    /**
-     * @param $seasonId
-     * @param $start: datetime (format 2018-07-31 10:30:00)
-     * @param $end: datetime (format 2018-07-31 10:30:00)
-     * @return \Illuminate\Support\Collection
-     */
-    public function getPlayDay($seasonId, $start, $end)
-    {
-        $playDay = Team::whereBetween('date', array($start, $end))->where('season_id', $seasonId)->get();
-        return $playDay;
     }
 
     public function getTeamsOnDate($seasonId, $date)
@@ -98,9 +65,9 @@ class TeamRepo extends Repository implements ITeam
 
     public function deleteTeam($teamId)
     {
-        $absence = $this->getTeam($teamId);
-        $seasonId = $absence->season_id;
-        $absence->delete();
+        $team = $this->getTeam($teamId);
+        $seasonId = $team->season_id;
+        $team->delete();
         return $seasonId;
     }
 
@@ -111,5 +78,6 @@ class TeamRepo extends Repository implements ITeam
     public function saveTeam(Team $team)
     {
         $team->save();
+        return $team;
     }
 }

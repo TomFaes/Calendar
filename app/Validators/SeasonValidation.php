@@ -12,20 +12,20 @@ class SeasonValidation extends Validation
             $request,
             [
                 'name' => 'required|string|max:255',
-                'groupId' => 'required|',
+                'group_id' => 'required|',
                 'begin' => 'required|date|',
                 'end' => 'required|date|',
-                'hour' => 'required|',
+                'start_hour' => 'required|',
                 'type' => 'required|string|max:255'
             ],
             [
                 'name.required' => 'een seizoensnaam is verplicht',
-                'groupId.required' => 'group is een verplicht veld',
+                'group_id.required' => 'group is een verplicht veld',
                 'begin.required' => 'begin datum is een verplicht veld',
                 'begin.date' => 'begin datum moet een datum format bevatten',
                 'end.required' => 'eind datum is een verplicht veld',
                 'end.date' => 'eind datum moet een datum format bevatten',
-                'hour.required' => 'Uur is een verplicht veld',
+                'start_hour.required' => 'Uur is een verplicht veld',
                 'type' => 'type is een verplicht veld'
             ]
         );

@@ -61,11 +61,21 @@ This version isn't completly finished. Next things are still in development:
 - make option to see the season when you don't have an account
 - the season can be updated after a season has started by the season admin
 
-# Future
-- add php basic unit testing(version 2.05). 
-- Add more generators
-    - singe field one hour double generator
+# Version 2.05: 
+- implement phpUnit testing
+- bugfixes
+    - all fields were diplayed 2 times on creating a season
 
-- player update season
-    - add config option to a season if this option should be available
-    - add option for a player to update his own season dates
+# Future
+Version 2.06
+    - implement option for the admin to add season absences for other players
+    - player update season
+        - add option for a player to request replacement
+Version 2.07
+    - Add more generators
+        - singe field one hour double generator
+        - 2 fields double hour generator.
+
+Version 3.XX: 
+    - update to Laravel 8
+    

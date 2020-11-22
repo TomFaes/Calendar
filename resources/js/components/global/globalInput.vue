@@ -10,10 +10,9 @@
             </div>
         </global-layout>
 
-        <global-layout :sizeForm="sizeForm" v-if="type == 'switchButton'">
+        <global-layout :sizeForm="sizeForm" v-else-if="type == 'switchButton'">
             <label :for=inputName>{{ tekstLabel }}</label>
             <div class="custom-control custom-switch">
-
                 <input  :disabled=disabled type='checkbox' class="custom-control-input" :name=inputName :id=inputId  :value="value" @input="$emit('input',  switchState)" @click="changeSwitch()" :checked="checked">
                 <label class="custom-control-label" :for=inputName></label>
             </div>

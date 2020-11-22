@@ -39,15 +39,7 @@ class GroupRepo extends Repository implements Contracts\IGroup
         })->orWhere('admin_id', $userId)->with(['groupUsers','admin'])->get();        
     }
 
-    public function getArrayOfGroupUsers($groupId)
-    {
-        $groupUserArray = array();
-        $group = Group::find($groupId);
-        foreach ($group->Users as $groupUser) {
-            $groupUserArray[$groupUser->id] = $groupUser->id;
-        }
-        return $groupUserArray;
-    }
+    
     
     /***************************************************************************
      Next function will create or update the group object in de database
@@ -77,22 +69,6 @@ class GroupRepo extends Repository implements Contracts\IGroup
         return $group;
     }
     
-    public function addUsers(Request $request, $groupId)
-    {
-        $group = $this->getGroup($groupId);
-        foreach ($request['groupUsers'] AS $userId) {
-            $group->users()->attach($userId);
-        }
-        return $group;
-    }
-    
-    public function deleteGroupUser($userId, $groupId)
-    {
-        $group = $this->getGroup($groupId);
-        $group->users()->detach($userId);
-        return $group;
-    }
-
     public function delete($groupId)
     {
         $group = $this->getGroup($groupId);

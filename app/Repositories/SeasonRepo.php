@@ -21,19 +21,9 @@ class SeasonRepo extends Repository implements ISeason
         return Season::with(['group'])->find($id);
     }
 
-    /**
-     * Get all seasons from a list of seasonids
-     * @param  array  $listSeasons: give a list of seasons seperated by ','
-     * @return object Seasons
-     */
-    public function getSeasonsFromList($listSeasons)
-    {
-        return Season::whereIn('id', $listSeasons)->orderBy('begin', 'desc')->get();
-    }
-
     public function getActiveSeasons($userId)
     {
-        $today = $mytime = Carbon::now();
+        $today = Carbon::now();
 
         return Season::whereDate('end' , '>=', $today->format('Y-m-d'))
         ->whereDate('begin' , '<=', $today->addDays(14)->format('Y-m-d'))
@@ -68,8 +58,8 @@ class SeasonRepo extends Repository implements ISeason
         isset($data['name']) === true ? $season->name = $data['name'] : "";
         isset($data['begin']) === true ? $season->begin = $data['begin'] : "";
         isset($data['end']) === true ? $season->end = $data['end'] : "";
-        isset($data['userId']) === true ? $season->admin_id = $data['userId'] : "";
-        isset($data['groupId']) === true ? $season->group_id = $data['groupId'] : "";
+        isset($data['admin_id']) === true ? $season->admin_id = $data['admin_id'] : "";
+        isset($data['group_id']) === true ? $season->group_id = $data['group_id'] : "";
         isset($data['name']) === true ? $season->name = $data['name'] : "";
         isset($data['begin']) != "" ? $season->day = \Carbon\Carbon::parse($data['begin'] )->format('l') : "";
         
@@ -84,7 +74,7 @@ class SeasonRepo extends Repository implements ISeason
         }
 
         isset($data['type']) === true ? $season->type = $data['type'] : "";
-        isset($data['hour']) === true ? $season->start_hour = $data['hour'] : "";
+        isset($data['start_hour']) === true ? $season->start_hour = $data['start_hour'] : "";
         isset($data['public']) === true ? $season->public = $data['public'] : "";
         return $season;
     }

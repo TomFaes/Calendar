@@ -15,6 +15,5 @@ interface IUser {
     public function delete($userId);
 
     public function createSocialUser($socialUser);
-    public function existingUser($socialUser);
     public function checkEmail($email);
 }

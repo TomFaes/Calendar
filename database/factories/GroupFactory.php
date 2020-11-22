@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\User;
+use App\Models\Group;
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 
@@ -15,15 +15,9 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(User::class, function (Faker $faker) {
+$factory->define(Group::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
-        'firstname' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'forget_user' =>  0,
-        'name' => $faker->name,
-        'role' => 'User',
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
-        'remember_token' => Str::random(10),
+        'admin_id' => App\Models\User::first()
     ];
 });

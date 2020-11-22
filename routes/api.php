@@ -36,7 +36,7 @@ Route::post('/group/{group_id}/user/{id}', [GroupUsersController::class, 'update
 
 //All routes for unverified users
 Route::get('/unverified-group-user', [UnverifiedGroupUsersController::class, 'index']);
-Route::post('/unverified-group-user', [UnverifiedGroupUsersController::class, 'store']);
+//Route::post('/unverified-group-user', [UnverifiedGroupUsersController::class, 'store']);
 Route::post('/unverified-group-user/{id}', [UnverifiedGroupUsersController::class, 'update']);
 
 //All routes for Seasons
@@ -65,5 +65,6 @@ Route::post('/group/{id}/delete', [GroupController::class, 'destroy']);
 Route::post('group/{group_id}/user/{id}/delete', [GroupUsersController::class, 'destroy']);
 Route::post('/unverified-group-user/{id}/delete', [UnverifiedGroupUsersController::class, 'destroy']);
 Route::post('/season/{id}/delete', [SeasonController::class, 'destroy']);
-Route::post('/season/{id}/generator/delete', [SeasonGeneratorController::class, 'destroy']);
+
+Route::post('/season/{id}/generator/{season_id}/delete', [SeasonGeneratorController::class, 'destroy']);
 Route::post('/absence/{id}/delete', [AbsenceController::class, 'destroy']);

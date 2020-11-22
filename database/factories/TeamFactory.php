@@ -1,7 +1,10 @@
 <?php
 
-use App\Models\User;
-use Illuminate\Support\Str;
+use Carbon\Carbon;
+use App\Models\GroupUser;
+use App\Models\Season;
+
+use App\Models\Team;
 use Faker\Generator as Faker;
 
 /*
@@ -15,15 +18,11 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(User::class, function (Faker $faker) {
+$factory->define(Team::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
-        'firstname' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'forget_user' =>  0,
-        'name' => $faker->name,
-        'role' => 'User',
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
-        'remember_token' => Str::random(10),
+        'season_id' =>  Season::first()->id,
+        'date' => Carbon::now()->addMonths(1)->format('Y-m-d'),
+        'team' =>$faker->randomElement(['team1', 'team2', 'team3', 'free']),
+        'group_user_id' => GroupUser::inRandomOrder()->first(),
     ];
 });

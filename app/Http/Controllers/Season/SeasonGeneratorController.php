@@ -110,7 +110,6 @@ class SeasonGeneratorController extends Controller
 
     public function generateSeason($seasonId)
     {
-        //public function generateSeason(Season $season)
         $season = $this->season->getSeason($seasonId);
         $seasonGenerator = GeneratorFactory::generate($season->type);
         $calendar = $seasonGenerator->generateSeason($season);

@@ -1,6 +1,7 @@
 <?php
 
-use App\Models\User;
+use Carbon\Carbon;
+use App\Models\Season;
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 
@@ -15,15 +16,16 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(User::class, function (Faker $faker) {
+$factory->define(Season::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
-        'firstname' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'forget_user' =>  0,
-        'name' => $faker->name,
-        'role' => 'User',
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
-        'remember_token' => Str::random(10),
+        'begin' => Carbon::now()->subDays(1)->format('Y-m-d'),
+        'end' =>  Carbon::now()->addMonths(1)->format('Y-m-d'),
+        'active' => 1,
+        'group_id' =>  App\Models\Group::first(),
+        'admin_id' => App\Models\User::first(),
+        'day' => 'do',
+        'start_hour' => "20:00",
+        'type' => 'TwoFieldTwoHourThreeTeams'
     ];
 });

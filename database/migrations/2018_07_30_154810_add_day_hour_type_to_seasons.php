@@ -14,9 +14,9 @@ class AddDayHourTypeToSeasons extends Migration
     public function up()
     {
         Schema::table('seasons', function(Blueprint $table) {
-            $table->string('day');
-            $table->time('start_hour');
-            $table->string('type');
+            $table->string('day')->nullable();
+            $table->time('start_hour')->nullable();
+            $table->string('type')->nullable();
         });
     }
 

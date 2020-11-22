@@ -1,7 +1,10 @@
 <?php
 
+use Carbon\Carbon;
 use App\Models\User;
-use Illuminate\Support\Str;
+use App\Models\Season;
+
+use App\Models\Absence;
 use Faker\Generator as Faker;
 
 /*
@@ -15,15 +18,10 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(User::class, function (Faker $faker) {
+$factory->define(Absence::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
-        'firstname' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'forget_user' =>  0,
-        'name' => $faker->name,
-        'role' => 'User',
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
-        'remember_token' => Str::random(10),
+        'season_id' =>  Season::first()->id,
+        'date' => Carbon::now()->addMonths(1)->format('Y-m-d'),
+        'user_id' => User::first(),
     ];
 });

@@ -41,7 +41,7 @@ class AuthenticationController extends Controller
             //get account info from the user who logged in
             $socialUser = Socialite::with($account)->user();
             //check if the user exist
-            $user = $this->user->existingUser($socialUser);
+            $user = $this->user->checkEmail($socialUser->getEmail());
             //if user doesn't exist create one
             if ($user == null) {
                 $user = $this->user->createSocialUser($socialUser);

@@ -49,7 +49,7 @@ class User extends Authenticatable
 
     public function seasonAdmin()
     {
-        return $this->hasMany('App\Models\Season', 'admin_id', 'id');
+        //return $this->hasMany('App\Models\Season', 'admin_id', 'id');
     }
 
     public function absence()

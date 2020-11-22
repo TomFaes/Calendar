@@ -5,8 +5,8 @@
             <global-input type='text' inputName="name" inputId="name" tekstLabel="Naam: " v-model="fields.name" :errors="errors.name" :value='fields.name'></global-input>
             <global-input type='date' inputName="begin" inputId="begin" tekstLabel="Begin: " v-model="fields.begin" :errors="errors.begin" :value='fields.begin'></global-input>
             <global-input type='date' inputName="end" inputId="end" tekstLabel="End: " v-model="fields.end" :errors="errors.end" :value='fields.end'></global-input>
-            <global-input type='time' inputName="hour" inputId="hour" tekstLabel="Start uur: " v-model="fields.hour" :errors="errors.hour" :value='fields.hour'></global-input>
-             <global-input type='switchButton' inputName="public" inputId="public" tekstLabel="Public: " v-model="fields.public" :errors="errors.public" :value='fields.public'></global-input>
+            <global-input type='time' inputName="start_hour" inputId="start_hour" tekstLabel="Start uur: " v-model="fields.start_hour" :errors="errors.start_hour" :value='fields.start_hour'></global-input>
+            <global-input type='switchButton' inputName="public" inputId="public" tekstLabel="Public: " v-model="fields.public" :errors="errors.public" :value='fields.public'></global-input>
            
             <!-- Admin multiselect -->
             <global-layout v-if="submitOption != 'Create'">
@@ -84,7 +84,7 @@
                     'begin': Moment().format('YYYY-MM-DD'),
                     'end': Moment().format('YYYY-MM-DD'),
                     'day': "",
-                    'hour': '',
+                    'start_hour': '',
                      'type': '',
                      'public': false,
                 },
@@ -125,16 +125,16 @@
                     this.formData.set('day', this.fields.day);
                 }
 
-                if(this.fields.hour != undefined){
-                    this.formData.set('hour', this.fields.hour);
+                if(this.fields.start_hour != undefined){
+                    this.formData.set('start_hour', this.fields.start_hour);
                 }
 
                 if(this.selectedUser.id > 0){
-                    this.formData.set('userId', this.selectedUser.id);
+                    this.formData.set('admin_id', this.selectedUser.id);
                 }
 
                  if(this.selectedGroup.id > 0){
-                    this.formData.set('groupId', this.selectedGroup.id);
+                    this.formData.set('group_id', this.selectedGroup.id);
                 }
 
                 if(this.fields.public != undefined){
@@ -214,7 +214,7 @@
                 this.selectedUser = this.season.admin;
                 this.multigroupUsers = this.season.group.group_users;
                 this.selectedType = this.season.type;
-                this.fields.hour = this.season.start_hour;
+                this.fields.start_hour = this.season.start_hour;
                 this.fields.public = this.season.public ? true : false;
             }
         },

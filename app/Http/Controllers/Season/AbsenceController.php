@@ -72,7 +72,7 @@ class AbsenceController extends Controller
     public function destroy($id) 
     {
         $this->absence->delete($id);
-        return response()->json("absence is removed", 200);
+        return response()->json("absence is removed", 204);
     }
     
    
