@@ -6,6 +6,7 @@ use Carbon\Carbon;
 
 use Tests\TestCase;
 use App\Models\Absence;
+use App\Models\GroupUser;
 use App\Models\Season;
 use App\Models\User;
 
@@ -17,6 +18,7 @@ class AbsenceTest extends TestCase
     protected $data;
     protected $repo;
     protected $allUsers;
+    protected $getAllGroupUsers;
     protected $getAllSeasons;
 
     public function setUp() : void
@@ -28,13 +30,14 @@ class AbsenceTest extends TestCase
         $this->testData = Absence::with(['user', 'season'])->get();
 
         $this->getAllUsers = User::all();
+        $this->getAllGroupUsers = GroupUser::all();
         $this->getAllSeasons = Season::all();
 
         //default dataset
         $this->data = [
             'season_id' => $this->getAllSeasons[0]->id,
             'date' => Carbon::now()->format('Y-m-d'),
-            'user_id' => $this->getAllUsers[0]->id,
+            'group_user_id' => $this->getAllGroupUsers[0]->id,
         ];
     }
 
@@ -46,7 +49,7 @@ class AbsenceTest extends TestCase
         $this->assertInstanceOf(Absence::class, $testData);
         $this->assertEquals($data['season_id'], $testData->season_id);
         $this->assertEquals($data['date'], $testData->date);
-        $this->assertEquals($data['user_id'], $testData->user_id);
+        $this->assertEquals($data['group_user_id'], $testData->group_user_id);
     }
 
     public function test_get_all_seasons()
@@ -67,8 +70,8 @@ class AbsenceTest extends TestCase
     }
 
     public function test_get_absence_of_a_user_in_a_season()
-    {        
-        $found = $this->repo->getUserAbsence($this->getAllSeasons[0]->id, $this->getAllUsers[0]->id);
+    {
+        $found = $this->repo->getUserAbsence($this->getAllSeasons[0]->id, $this->getAllGroupUsers[0]->id);
         $this->assertEquals(10, count($found));
         echo PHP_EOL.'[42m OK  [0m get absence of a user in a season';
     }
@@ -87,9 +90,9 @@ class AbsenceTest extends TestCase
         echo PHP_EOL.'[42m OK  [0m get an array of absences of a season';
     }
 
-    public function test_create_season()
+    public function test_create_absence()
     {
-        $season = $this->repo->create($this->data,  $this->getAllSeasons[0]->id, $this->getAllUsers[0]->id);        
+        $season = $this->repo->create($this->data,  $this->getAllSeasons[0]->id);        
         $this->dataTests($this->data, $season);
         echo PHP_EOL.'[42m OK  [0m create an absence';
     }

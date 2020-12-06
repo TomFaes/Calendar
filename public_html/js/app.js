@@ -2703,6 +2703,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2712,13 +2733,14 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       edit: false,
-      display: "",
+      replacement: false,
       editIndex: "",
       editUserId: "",
       editCalendarData: {},
       updateButtons: {},
       updateData: {},
-      'formData': new FormData()
+      'formData': new FormData(),
+      getLoggedInGroupUserId: 0
     };
   },
   props: {
@@ -2733,6 +2755,37 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    showEditCalenderButton: function showEditCalenderButton() {
+      if (this.loggedInUser.id != this.editCalendarData['seasonData']['admin_id']) {
+        return false;
+      }
+
+      return true;
+    },
+    showUpdateButtons: function showUpdateButtons(index, groupUserId) {
+      if (this.editIndex != index) {
+        return false;
+      }
+
+      if (this.editUserId != groupUserId) {
+        return false;
+      }
+
+      if (this.loggedInUser.id != this.editCalendarData['seasonData']['admin_id']) {
+        return false;
+      }
+
+      return true;
+    },
+    getLoggedInGroupUser: function getLoggedInGroupUser() {
+      console.log(this.loggedInUser.id);
+
+      for (var groupUser in this.userData) {
+        if (this.loggedInUser.id == this.userData[groupUser]['user_id']) {
+          this.getLoggedInGroupUserId = this.userData[groupUser]['id'];
+        }
+      }
+    },
     editCalendar: function editCalendar() {
       if (this.edit === false) {
         this.edit = true;
@@ -2742,42 +2795,65 @@ __webpack_require__.r(__webpack_exports__);
       this.edit = false;
       return;
     },
+    askReplacement: function askReplacement() {
+      if (this.replacement == false) {
+        this.replacement = true;
+        return true;
+      }
+
+      this.replacement = false;
+      return;
+    },
     convertDate: function convertDate(value) {
       return moment__WEBPACK_IMPORTED_MODULE_1___default()(value, "YYYY-MM-DD").format('DD/MMM');
     },
-    convertToDatabaseDate: function convertToDatabaseDate(value) {
-      return moment__WEBPACK_IMPORTED_MODULE_1___default()(value, "YYYY-MM-DD").format('YYYYMMDD');
+    compareDates: function compareDates(value) {
+      var date1 = moment__WEBPACK_IMPORTED_MODULE_1___default()(value).format('YYYYMMDD');
+      ;
+      var date2 = moment__WEBPACK_IMPORTED_MODULE_1___default()().format('YYYYMMDD');
+      ;
+
+      if (date1 < date2) {
+        return false;
+      }
+
+      return true;
     },
-    getBackground: function getBackground(userId, date, team) {
+    getBackground: function getBackground(groupUserId, date, team) {
+      var replacement = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "";
       var colorClass = "";
 
       if (team == "") {
         colorClass = "free";
       }
 
+      if (replacement == "replacement") {
+        return "replacement";
+      }
+
       if (this.calendarData['absenceData'] == undefined) {
         return colorClass;
       }
 
-      if (this.calendarData['absenceData'][userId] == undefined) {
+      if (this.calendarData['absenceData'][groupUserId] == undefined) {
         return colorClass;
       }
 
-      for (var i = 0; i < this.calendarData['absenceData'][userId]['date'].length; i++) {
-        if (date == this.calendarData['absenceData'][userId]['date'][i]) {
+      for (var i = 0; i < this.calendarData['absenceData'][groupUserId]['date'].length; i++) {
+        if (date == this.calendarData['absenceData'][groupUserId]['date'][i]) {
           colorClass = "absence";
         }
       }
 
       return colorClass;
     },
-    editTeam: function editTeam(index, userId) {
-      if (index == this.editIndex && userId == this.editUserId) {
+    editTeam: function editTeam(index, groupUserId) {
+      if (index == this.editIndex && groupUserId == this.editUserId) {
         this.editIndex = "";
         this.editUserId = "";
       } else {
         this.editIndex = index;
-        this.editUserId = userId;
+        this.editUserId = groupUserId;
       }
 
       this.updateButtons = {};
@@ -2786,7 +2862,7 @@ __webpack_require__.r(__webpack_exports__);
       var x = 2;
 
       for (var calendar in this.editCalendarData['data'][index]['teams']) {
-        if (this.calendarData.data[index].user[userId].team == this.editCalendarData['data'][index]['teams'][calendar]['team']) {
+        if (this.calendarData.data[index].user[groupUserId].team == this.editCalendarData['data'][index]['teams'][calendar]['team']) {
           continue;
         }
 
@@ -2824,8 +2900,6 @@ __webpack_require__.r(__webpack_exports__);
           return;
         }
 
-        this.editCalendarData['data'][index]['user'][userId]['team'] = "";
-        this.editCalendarData['data'][index]['user'][userId]['teamId'] = "";
         this.editCalendarData['data'][index]['teams'][currentTeamId]['groupUserId'] = null;
         this.editCalendarData['data'][index]['user'][userId]['team'] = "";
         this.editCalendarData['data'][index]['user'][userId]['teamId'] = "";
@@ -2872,10 +2946,50 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         _this.errors = error;
       });
+    },
+    askForReplacement: function askForReplacement(groupUser, teamId) {
+      var _this2 = this;
+
+      _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__["default"].postData('team/' + teamId + '/askForReplacement').then(function (response) {
+        _this2.message = "Vervangingsaanvraag is aanvaard";
+
+        _this2.$bus.$emit('showMessage', _this2.message, 'green', '2000');
+
+        _this2.$bus.$emit('reloadCalendar');
+      })["catch"](function (error) {
+        _this2.errors = error;
+      });
+    },
+    cancelRequestForReplacement: function cancelRequestForReplacement(groupUser, teamId) {
+      var _this3 = this;
+
+      _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__["default"].postData('team/' + teamId + '/cancelRequestForReplacement').then(function (response) {
+        _this3.message = "Vervanging is geannulleerd";
+
+        _this3.$bus.$emit('showMessage', _this3.message, 'green', '2000');
+
+        _this3.$bus.$emit('reloadCalendar');
+      })["catch"](function (error) {
+        _this3.errors = error;
+      });
+    },
+    confirmReplacement: function confirmReplacement(groupUser, teamId) {
+      var _this4 = this;
+
+      _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__["default"].postData('team/' + teamId + '/confirmReplacement').then(function (response) {
+        _this4.message = "Vervanging aanvaard";
+
+        _this4.$bus.$emit('showMessage', _this4.message, 'green', '2000');
+
+        _this4.$bus.$emit('reloadCalendar');
+      })["catch"](function (error) {
+        _this4.errors = error;
+      });
     }
   },
   mounted: function mounted() {
     this.editCalendarData = this.calendarData;
+    this.getLoggedInGroupUser();
   }
 });
 
@@ -3954,13 +4068,13 @@ __webpack_require__.r(__webpack_exports__);
     convertDate: function convertDate(value) {
       return moment__WEBPACK_IMPORTED_MODULE_0___default()(value, "YYYY-MM-DD").format('DD/MMM');
     },
-    getBackground: function getBackground(userId, date) {
+    getBackground: function getBackground(groupUserId, date) {
       var colorClass = "free";
 
       if (this.calendarData['absenceData'] != undefined) {
-        if (this.calendarData['absenceData'][userId] != undefined) {
-          for (var i = 0; i < this.calendarData['absenceData'][userId]['date'].length; i++) {
-            if (date == this.calendarData['absenceData'][userId]['date'][i]) {
+        if (this.calendarData['absenceData'][groupUserId] != undefined) {
+          for (var i = 0; i < this.calendarData['absenceData'][groupUserId]['date'].length; i++) {
+            if (date == this.calendarData['absenceData'][groupUserId]['date'][i]) {
               colorClass = "absence";
             }
           }
@@ -4125,18 +4239,22 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       'playdateList': {},
-      'updateField': 0,
-      'selectedGroup': 0,
       'formData': new FormData(),
-      'absenseList': {},
-      'user': {}
+      'absenseList': {}
     };
   },
   components: {
     Moment: moment__WEBPACK_IMPORTED_MODULE_1___default.a
   },
   props: {
-    'season': {}
+    'season': {},
+    'selectedGroupUser': {}
+  },
+  watch: {
+    'selectedGroupUser': function selectedGroupUser() {
+      this.playdateList = {};
+      this.loadPlayDateList();
+    }
   },
   methods: {
     loadPlayDateList: function loadPlayDateList() {
@@ -4154,17 +4272,19 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__["default"].getData('season/' + this.season.id + "/absence").then(function (response) {
-        _this2.absenseList = response;
+        if (response[_this2.selectedGroupUser.id] != undefined) {
+          _this2.absenseList = response[_this2.selectedGroupUser.id];
 
-        _this2.playdateList.forEach(function (playData, index) {
-          _this2.$set(_this2.playdateList[index], 'absenceId', 0);
+          _this2.playdateList.forEach(function (playData, index) {
+            _this2.$set(_this2.playdateList[index], 'absenceId', 0);
 
-          _this2.absenseList.forEach(function (element) {
-            if (playData.date == element.date) {
-              _this2.playdateList[index]['absenceId'] = element.id;
-            }
+            _this2.absenseList.forEach(function (element) {
+              if (playData.date == element.date) {
+                _this2.playdateList[index]['absenceId'] = element.id;
+              }
+            });
           });
-        });
+        }
       })["catch"](function () {
         console.log('handle server error from here list');
       });
@@ -4173,6 +4293,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       this.formData.set('date', data.date);
+      this.formData.set('group_user_id', this.selectedGroupUser.id);
       _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__["default"].postData('season/' + this.season.id + "/absence", this.formData).then(function (response) {
         _this3.formData = new FormData();
 
@@ -4377,7 +4498,8 @@ __webpack_require__.r(__webpack_exports__);
         'day': "",
         'start_hour': '',
         'type': '',
-        'public': false
+        'public': false,
+        'allow_replacement': false
       },
       'errors': {},
       'action': '',
@@ -4428,6 +4550,10 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.fields["public"] != undefined) {
         this.formData.set('public', this.fields["public"] ? 1 : 0);
+      }
+
+      if (this.fields.allow_replacement != undefined) {
+        this.formData.set('allow_replacement', this.fields.allow_replacement ? 1 : 0);
       }
 
       if (this.selectedType != '') {
@@ -4506,6 +4632,7 @@ __webpack_require__.r(__webpack_exports__);
       this.selectedType = this.season.type;
       this.fields.start_hour = this.season.start_hour;
       this.fields["public"] = this.season["public"] ? true : false;
+      this.fields.allow_replacement = this.season.allow_replacement ? true : false;
     }
   },
   mounted: function mounted() {
@@ -4582,6 +4709,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4593,7 +4728,9 @@ __webpack_require__.r(__webpack_exports__);
       'dataList': {},
       'updateField': 0,
       'selectedGroup': 0,
-      'showAbsence': 0
+      'showAbsence': 0,
+      'selectedGroupUser': {},
+      'user': []
     };
   },
   components: {
@@ -4635,12 +4772,23 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
     },
-    absences: function absences(id) {
-      if (this.showAbsence == id) {
+    absences: function absences(data) {
+      //console.log(data.group)
+      if (this.showAbsence == data.id) {
         this.showAbsence = 0;
       } else {
-        this.showAbsence = id;
+        this.showAbsence = data.id;
+
+        for (var i = 0; i < data.group.group_users.length; i++) {
+          if (this.user.id == data.group.group_users[i].user_id) {
+            this.selectedGroupUser = data.group.group_users[i];
+            break;
+          }
+        }
       }
+    },
+    setGroupUser: function setGroupUser(groupUser) {
+      this.selectedGroupUser = groupUser;
     },
     convertDate: function convertDate(value) {
       return moment__WEBPACK_IMPORTED_MODULE_4___default()(value, "YYYY-MM-DD").format('DD/MM/YYYY');
@@ -9480,7 +9628,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.absence[data-v-a289623e]{\r\n    background-color: red;\n}\n.free[data-v-a289623e]{\r\n    background-color: #343a40;\n}\ntd[data-v-a289623e]:hover {\r\n    background-color: lightgray;\n}\r\n", ""]);
+exports.push([module.i, "\n.absence[data-v-a289623e]{\r\n    background-color: red;\n}\n.free[data-v-a289623e]{\r\n    background-color: #343a40;\n}\n.replacement[data-v-a289623e] {\r\n    background-color: yellow;\n}\ntd[data-v-a289623e]:hover {\r\n    background-color: lightgray;\n}\r\n", ""]);
 
 // exports
 
@@ -9557,6 +9705,25 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 // module
 exports.push([module.i, "\n.margin-around[data-v-b6d0d2ee]{\r\n    margin-bottom: 5px !important;\r\n    margin-left: 10px ;\n}\r\n\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/SeasonPage/list.vue?vue&type=style&index=0&id=6055aefc&scoped=true&lang=css&":
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/SeasonPage/list.vue?vue&type=style&index=0&id=6055aefc&scoped=true&lang=css& ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.absenceButton[data-v-6055aefc] {\r\n    margin: 2px;\n}\r\n", ""]);
 
 // exports
 
@@ -62113,6 +62280,36 @@ if(false) {}
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/SeasonPage/list.vue?vue&type=style&index=0&id=6055aefc&scoped=true&lang=css&":
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/SeasonPage/list.vue?vue&type=style&index=0&id=6055aefc&scoped=true&lang=css& ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./list.vue?vue&type=style&index=0&id=6055aefc&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/SeasonPage/list.vue?vue&type=style&index=0&id=6055aefc&scoped=true&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-multiselect/dist/vue-multiselect.min.css?vue&type=style&index=0&lang=css&":
 /*!*************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-multiselect/dist/vue-multiselect.min.css?vue&type=style&index=0&lang=css& ***!
@@ -63566,8 +63763,7 @@ var render = function() {
                       _vm._s(_vm.calendarData["seasonData"]["name"]) +
                       "\n            "
                   ),
-                  _vm.loggedInUser.id ==
-                  _vm.editCalendarData["seasonData"]["admin_id"]
+                  _vm.showEditCalenderButton()
                     ? _c(
                         "button",
                         {
@@ -63586,7 +63782,26 @@ var render = function() {
                           })
                         ]
                       )
-                    : _vm._e()
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-warning",
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.askReplacement($event)
+                        }
+                      }
+                    },
+                    [
+                      _c("i", {
+                        staticClass: "fas fa-exchange-alt",
+                        staticStyle: { heigth: "14px", width: "14px" }
+                      })
+                    ]
+                  )
                 ])
               : _vm._e(),
             _vm._v(" "),
@@ -63637,10 +63852,10 @@ var render = function() {
                     _vm._v(" "),
                     _c(
                       "tbody",
-                      _vm._l(_vm.userData, function(user) {
+                      _vm._l(_vm.userData, function(groupUser) {
                         return _c(
                           "tr",
-                          { key: user.id },
+                          { key: groupUser.id },
                           [
                             _c(
                               "td",
@@ -63651,7 +63866,15 @@ var render = function() {
                                   left: "0"
                                 }
                               },
-                              [_vm._v(_vm._s(user.firstname))]
+                              [
+                                _vm._v(
+                                  _vm._s(
+                                    groupUser.user_id != null
+                                      ? groupUser.user.firstname
+                                      : groupUser.firstname
+                                  )
+                                )
+                              ]
                             ),
                             _vm._v(" "),
                             _vm._l(_vm.editCalendarData["data"], function(
@@ -63665,36 +63888,37 @@ var render = function() {
                                       {
                                         key: data.id,
                                         class: _vm.getBackground(
-                                          user.id,
+                                          groupUser.id,
                                           data.day,
-                                          data["user"][user.id]["team"]
+                                          data["user"][groupUser.id]["team"]
                                         ),
                                         on: {
                                           click: function($event) {
                                             $event.preventDefault()
-                                            return _vm.editTeam(index, user.id)
+                                            return _vm.editTeam(
+                                              index,
+                                              groupUser.id
+                                            )
                                           }
                                         }
                                       },
                                       [
-                                        data["user"][user.id]["team"] == "team1"
-                                          ? _c("center", [_vm._v("1")])
-                                          : _vm._e(),
+                                        _c("center", [
+                                          _vm._v(
+                                            "\n                                        " +
+                                              _vm._s(
+                                                data["user"][groupUser.id][
+                                                  "team"
+                                                ].replace("team", "")
+                                              ) +
+                                              "\n                                    "
+                                          )
+                                        ]),
                                         _vm._v(" "),
-                                        data["user"][user.id]["team"] == "team2"
-                                          ? _c("center", [_vm._v("2")])
-                                          : _vm._e(),
-                                        _vm._v(" "),
-                                        data["user"][user.id]["team"] == "team3"
-                                          ? _c("center", [_vm._v("3")])
-                                          : _vm._e(),
-                                        _vm._v(" "),
-                                        _vm.editIndex == index &&
-                                        _vm.editUserId == user.id &&
-                                        _vm.loggedInUser.id ==
-                                          _vm.editCalendarData["seasonData"][
-                                            "admin_id"
-                                          ]
+                                        _vm.showUpdateButtons(
+                                          index,
+                                          groupUser.id
+                                        )
                                           ? _c(
                                               "span",
                                               _vm._l(
@@ -63716,10 +63940,10 @@ var render = function() {
                                                           $event.stopPropagation()
                                                           return _vm.updateTeam(
                                                             index,
-                                                            user.id,
+                                                            groupUser.id,
                                                             button,
                                                             data["user"][
-                                                              user.id
+                                                              groupUser.id
                                                             ]["teamId"]
                                                           )
                                                         }
@@ -63735,30 +63959,156 @@ var render = function() {
                                       ],
                                       1
                                     )
+                                  : _vm.edit == false &&
+                                    data["user"][groupUser.id] == undefined
+                                  ? _c("td", {
+                                      key: data.id,
+                                      class: _vm.getBackground(
+                                        groupUser.id,
+                                        data.day,
+                                        ""
+                                      )
+                                    })
                                   : _vm._e(),
                                 _vm._v(" "),
-                                _vm.edit == false
+                                _vm.edit == false &&
+                                data["user"][groupUser.id]["replacement"] == 1
                                   ? _c(
                                       "td",
                                       {
                                         key: data.id,
                                         class: _vm.getBackground(
-                                          user.id,
+                                          groupUser.id,
                                           data.day,
-                                          data["user"][user.id]["team"]
+                                          "",
+                                          "replacement"
                                         )
                                       },
                                       [
-                                        data["user"][user.id]["team"] == "team1"
-                                          ? _c("center", [_vm._v("1")])
+                                        _c("center", [
+                                          _vm._v(
+                                            _vm._s(
+                                              data["user"][groupUser.id][
+                                                "team"
+                                              ].replace("team", "")
+                                            )
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        groupUser.user_id ==
+                                          _vm.loggedInUser.id &&
+                                        _vm.replacement == true
+                                          ? _c("span", [
+                                              _c(
+                                                "button",
+                                                {
+                                                  staticClass:
+                                                    "btn btn-warning",
+                                                  on: {
+                                                    click: function($event) {
+                                                      $event.stopPropagation()
+                                                      return _vm.cancelRequestForReplacement(
+                                                        groupUser.id,
+                                                        data["user"][
+                                                          groupUser.id
+                                                        ]["teamId"]
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [_vm._v("Vervanging annuleren")]
+                                              )
+                                            ])
                                           : _vm._e(),
                                         _vm._v(" "),
-                                        data["user"][user.id]["team"] == "team2"
-                                          ? _c("center", [_vm._v("2")])
-                                          : _vm._e(),
+                                        data["user"][
+                                          _vm.getLoggedInGroupUserId
+                                        ]["teamId"] == ""
+                                          ? _c("span", [
+                                              _c(
+                                                "button",
+                                                {
+                                                  staticClass:
+                                                    "btn btn-warning",
+                                                  on: {
+                                                    click: function($event) {
+                                                      $event.stopPropagation()
+                                                      return _vm.confirmReplacement(
+                                                        groupUser.id,
+                                                        data["user"][
+                                                          groupUser.id
+                                                        ]["teamId"]
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _c("i", {
+                                                    staticClass:
+                                                      "fas fa-exchange-alt",
+                                                    staticStyle: {
+                                                      heigth: "14px",
+                                                      width: "14px"
+                                                    }
+                                                  })
+                                                ]
+                                              )
+                                            ])
+                                          : _vm._e()
+                                      ],
+                                      1
+                                    )
+                                  : _vm.edit == false
+                                  ? _c(
+                                      "td",
+                                      {
+                                        key: data.id,
+                                        class: _vm.getBackground(
+                                          groupUser.id,
+                                          data.day,
+                                          data["user"][groupUser.id]["team"]
+                                        )
+                                      },
+                                      [
+                                        _c("center", [
+                                          _vm._v(
+                                            "\n                                        " +
+                                              _vm._s(
+                                                data["user"][groupUser.id][
+                                                  "team"
+                                                ].replace("team", "")
+                                              ) +
+                                              "\n                                    "
+                                          )
+                                        ]),
                                         _vm._v(" "),
-                                        data["user"][user.id]["team"] == "team3"
-                                          ? _c("center", [_vm._v("3")])
+                                        groupUser.user_id ==
+                                          _vm.loggedInUser.id &&
+                                        data["user"][groupUser.id]["teamId"] !=
+                                          "" &&
+                                        _vm.compareDates(data.day) &&
+                                        _vm.replacement == true
+                                          ? _c("span", [
+                                              _c(
+                                                "button",
+                                                {
+                                                  staticClass:
+                                                    "btn btn-warning",
+                                                  on: {
+                                                    click: function($event) {
+                                                      $event.stopPropagation()
+                                                      return _vm.askForReplacement(
+                                                        groupUser.id,
+                                                        data["user"][
+                                                          groupUser.id
+                                                        ]["teamId"]
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [_vm._v("Vervanging gezocht")]
+                                              )
+                                            ])
                                           : _vm._e()
                                       ],
                                       1
@@ -63800,6 +64150,8 @@ var render = function() {
       : _vm._e(),
     _vm._v(" "),
     _c("br"),
+    _c("hr"),
+    _c("br"),
     _vm._v(" "),
     _vm.calendarData["stats"] != undefined
       ? _c(
@@ -63825,8 +64177,17 @@ var render = function() {
                 { staticClass: "free", staticStyle: { color: "white" } },
                 [_vm._v("Beschikbaar voor eventuele vervanging")]
               ),
+              _c("br"),
+              _vm._v(" "),
+              _c("span", { staticClass: "replacement" }, [
+                _vm._v("Zoekt naar vervanging")
+              ]),
               _c("br")
             ]),
+            _vm._v(" "),
+            _c("br"),
+            _c("hr"),
+            _c("br"),
             _vm._v(" "),
             _c("global-layout", { attrs: { sizeForm: "xlarge" } }, [
               _c(
@@ -65289,38 +65650,46 @@ var render = function() {
                     _vm._v(" "),
                     _c(
                       "tbody",
-                      _vm._l(_vm.userData, function(user) {
-                        return _c("tr", { key: user.id }, [
+                      _vm._l(_vm.userData, function(groupUser) {
+                        return _c("tr", { key: groupUser.id }, [
                           _c(
                             "td",
                             {
                               staticStyle: { position: "absolute", left: "0" }
                             },
-                            [_vm._v(_vm._s(user.firstname))]
+                            [
+                              _vm._v(
+                                _vm._s(
+                                  groupUser.user_id != null
+                                    ? groupUser.user.firstname
+                                    : groupUser.firstname
+                                )
+                              )
+                            ]
                           ),
                           _vm._v(" "),
                           _vm.calendarData["data"][
                             _vm.calendarData["currentPlayDay"]
-                          ]["user"][user.id]["team"] != ""
+                          ]["user"][groupUser.id]["team"] != ""
                             ? _c(
                                 "td",
                                 [
                                   _c("center", [
                                     _vm.calendarData["data"][
                                       _vm.calendarData["currentPlayDay"]
-                                    ]["user"][user.id]["team"] == "team1"
+                                    ]["user"][groupUser.id]["team"] == "team1"
                                       ? _c("span", [_vm._v("1")])
                                       : _vm._e(),
                                     _vm._v(" "),
                                     _vm.calendarData["data"][
                                       _vm.calendarData["currentPlayDay"]
-                                    ]["user"][user.id]["team"] == "team2"
+                                    ]["user"][groupUser.id]["team"] == "team2"
                                       ? _c("span", [_vm._v("2")])
                                       : _vm._e(),
                                     _vm._v(" "),
                                     _vm.calendarData["data"][
                                       _vm.calendarData["currentPlayDay"]
-                                    ]["user"][user.id]["team"] == "team3"
+                                    ]["user"][groupUser.id]["team"] == "team3"
                                       ? _c("span", [_vm._v("3")])
                                       : _vm._e()
                                   ])
@@ -65329,7 +65698,7 @@ var render = function() {
                               )
                             : _c("td", {
                                 class: _vm.getBackground(
-                                  user.id,
+                                  groupUser.id,
                                   _vm.calendarData["data"][
                                     _vm.calendarData["currentPlayDay"]
                                   ]["day"]
@@ -65763,6 +66132,24 @@ var render = function() {
           }
         }),
         _vm._v(" "),
+        _c("global-input", {
+          attrs: {
+            type: "switchButton",
+            inputName: "allow_replacement",
+            inputId: "allow_replacement",
+            tekstLabel: "Allow replacements: ",
+            errors: _vm.errors.allow_replacement,
+            value: _vm.fields.allow_replacement
+          },
+          model: {
+            value: _vm.fields.allow_replacement,
+            callback: function($$v) {
+              _vm.$set(_vm.fields, "allow_replacement", $$v)
+            },
+            expression: "fields.allow_replacement"
+          }
+        }),
+        _vm._v(" "),
         _vm.submitOption != "Create"
           ? _c(
               "global-layout",
@@ -65986,7 +66373,7 @@ var render = function() {
                               on: {
                                 click: function($event) {
                                   $event.preventDefault()
-                                  return _vm.absences(data.id)
+                                  return _vm.absences(data)
                                 }
                               }
                             },
@@ -66053,8 +66440,66 @@ var render = function() {
                         "td",
                         { attrs: { colspan: "100%" } },
                         [
+                          _vm.user.id == data.admin_id
+                            ? _c(
+                                "span",
+                                [
+                                  _vm._l(data.group.group_users, function(
+                                    groupUser
+                                  ) {
+                                    return _c(
+                                      "button",
+                                      {
+                                        key: groupUser.id,
+                                        staticClass:
+                                          "btn btn-warning absenceButton",
+                                        on: {
+                                          click: function($event) {
+                                            $event.preventDefault()
+                                            return _vm.setGroupUser(groupUser)
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          _vm._s(
+                                            groupUser.user_id != null
+                                              ? groupUser.user.firstname
+                                              : groupUser.firstname
+                                          )
+                                        )
+                                      ]
+                                    )
+                                  }),
+                                  _vm._v(" "),
+                                  _c("hr"),
+                                  _vm._v(" "),
+                                  _c("center", [
+                                    _vm._v(
+                                      "\n                                " +
+                                        _vm._s(
+                                          _vm.selectedGroupUser.user_id != null
+                                            ? _vm.selectedGroupUser.user
+                                                .firstname
+                                            : _vm.selectedGroupUser.firstname
+                                        ) +
+                                        "\n                            "
+                                    )
+                                  ])
+                                ],
+                                2
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c("br"),
+                          _vm._v(" "),
                           _vm.showAbsence == data.id
-                            ? _c("absenceForm", { attrs: { season: data } })
+                            ? _c("absenceForm", {
+                                attrs: {
+                                  season: data,
+                                  selectedGroupUser: _vm.selectedGroupUser
+                                }
+                              })
                             : _vm._e()
                         ],
                         1
@@ -85108,7 +85553,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _list_vue_vue_type_template_id_6055aefc_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./list.vue?vue&type=template&id=6055aefc&scoped=true& */ "./resources/js/pages/SeasonPage/list.vue?vue&type=template&id=6055aefc&scoped=true&");
 /* harmony import */ var _list_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./list.vue?vue&type=script&lang=js& */ "./resources/js/pages/SeasonPage/list.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _list_vue_vue_type_style_index_0_id_6055aefc_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./list.vue?vue&type=style&index=0&id=6055aefc&scoped=true&lang=css& */ "./resources/js/pages/SeasonPage/list.vue?vue&type=style&index=0&id=6055aefc&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
 
 
 
@@ -85116,7 +85563,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _list_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _list_vue_vue_type_template_id_6055aefc_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
   _list_vue_vue_type_template_id_6055aefc_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
@@ -85145,6 +85592,22 @@ component.options.__file = "resources/js/pages/SeasonPage/list.vue"
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_list_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./list.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/SeasonPage/list.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_list_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/pages/SeasonPage/list.vue?vue&type=style&index=0&id=6055aefc&scoped=true&lang=css&":
+/*!*********************************************************************************************************!*\
+  !*** ./resources/js/pages/SeasonPage/list.vue?vue&type=style&index=0&id=6055aefc&scoped=true&lang=css& ***!
+  \*********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_list_vue_vue_type_style_index_0_id_6055aefc_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./list.vue?vue&type=style&index=0&id=6055aefc&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/SeasonPage/list.vue?vue&type=style&index=0&id=6055aefc&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_list_vue_vue_type_style_index_0_id_6055aefc_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_list_vue_vue_type_style_index_0_id_6055aefc_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_list_vue_vue_type_style_index_0_id_6055aefc_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_list_vue_vue_type_style_index_0_id_6055aefc_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+
 
 /***/ }),
 

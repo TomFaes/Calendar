@@ -11,7 +11,7 @@
                     <th class="d-none d-sm-table-cell">Public</th>
                     <th class="d-none d-sm-table-cell">Admin</th>
                     <th class="d-none d-sm-table-cell">Groep</th>
-                     <th>Options</th>                  
+                    <th>Options</th>                  
                 </tr>
             </thead>
             <tbody  v-for="data in dataList"  :key="data.id" >
@@ -26,7 +26,7 @@
                         <td>
                             <button v-if="user.id == data.admin_id" class="btn btn-primary" @click.prevent="editSeason(data.id)"><i class="fa fa-edit" style="heigth:14px; width:14px"></i></button>
                             <button v-if="user.id == data.admin_id" class="btn btn-danger" @click.prevent="deleteSeason(data)"><i class="fa fa-trash" style="heigth:14px; width:14px"></i></button>
-                            <button v-if="data.seasonDraw == 0"  class="btn btn-secondary" @click.prevent="absences(data.id)">Afwezigheden</button>
+                            <button v-if="data.seasonDraw == 0"  class="btn btn-secondary" @click.prevent="absences(data)">Afwezigheden</button>
                             <router-link v-if="data.seasonDraw == 0 && user.id == data.admin_id" :to="{ name: 'generate', params: { id: data.id }}" class="btn btn-secondary">Generate</router-link>
                             <router-link v-if="data.seasonDraw > 0" :to="{ name: 'calendar', params: { id: data.id }}" class="btn btn-secondary"><i class="far fa-calendar-alt"></i></router-link>
                         </td>
@@ -38,7 +38,15 @@
                     </tr>
                      <tr v-if="showAbsence == data.id">
                         <td colspan="100%">
-                            <absenceForm  v-if="showAbsence == data.id" :season=data></absenceForm>
+                            <span v-if="user.id == data.admin_id">
+                                <button v-for="groupUser in data.group.group_users"  :key="groupUser.id"  class="btn btn-warning absenceButton" @click.prevent="setGroupUser(groupUser)">{{  groupUser.user_id != null ? groupUser.user.firstname : groupUser.firstname }}</button>
+                                <hr>
+                                <center>
+                                    {{  selectedGroupUser.user_id != null ? selectedGroupUser.user.firstname : selectedGroupUser.firstname }}
+                                </center>
+                            </span>
+                            <br>
+                            <absenceForm  v-if="showAbsence == data.id" :season=data :selectedGroupUser=selectedGroupUser></absenceForm>
                         </td>
                     </tr>
             </tbody>
@@ -60,6 +68,8 @@
                 'updateField' : 0,
                 'selectedGroup': 0,
                 'showAbsence': 0,
+                'selectedGroupUser': {},
+                'user': [],
             }
         },
 
@@ -102,12 +112,23 @@
                 }
             },
 
-            absences(id){
-                if( this.showAbsence == id){
+            absences(data){
+                //console.log(data.group)
+                if( this.showAbsence == data.id){
                     this.showAbsence = 0;
                 }else{
-                    this.showAbsence = id;
+                    this.showAbsence = data.id;
+                    for(var i = 0; i < data.group.group_users.length; i++){
+                        if(this.user.id == data.group.group_users[i].user_id){
+                            this.selectedGroupUser = data.group.group_users[i];
+                            break;
+                        }
+                    } 
                 }
+            },
+
+            setGroupUser(groupUser){
+                this.selectedGroupUser = groupUser;
             },
 
             convertDate(value){
@@ -129,6 +150,9 @@
     }
 </script>
 
-<style scoped>
 
+<style scoped>
+.absenceButton {
+    margin: 2px;
+}
 </style>

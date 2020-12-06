@@ -48,7 +48,8 @@ class SeasonTest extends TestCase
             'admin_id' => $this->getAllUsers[0]->id,
             'start_hour' => "20:00:00",
             'type' => 'TwoFieldTwoHourThreeTeams',
-            'public' => 0
+            'public' => 0,
+            'allow_replacement' => 0, 
         ];
     }
 
@@ -66,6 +67,7 @@ class SeasonTest extends TestCase
         $this->assertEquals($data['start_hour'], $testData->start_hour);
         $this->assertEquals($data['type'], $testData->type);
         $this->assertEquals($data['public'], $testData->public);
+        $this->assertEquals($data['allow_replacement'], $testData->allow_replacement);
     }
 
     public function test_get_all_seasons()
@@ -139,7 +141,8 @@ class SeasonTest extends TestCase
             'admin_id' => $this->getAllUsers[1]->id,
             'start_hour' => "21:00:00",
             'type' => 'TwoFieldTwoHourThreeTeams',
-            'public' => 1
+            'public' => 1,
+            'allow_replacement' => 1
         ];
         $season = $this->repo->update($data, $this->testData[0]->id);
         $this->dataTests($data, $season);

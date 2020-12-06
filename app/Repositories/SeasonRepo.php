@@ -41,10 +41,10 @@ class SeasonRepo extends Repository implements ISeason
     {
 
         return Season::whereHas('teams.group_user', function ($query) use ($userId) {
-            $query->where('user_id', '=', $userId);
+            $query->where('user_id', '=', $userId)->where('verified', 1);
         })
         ->orwhereHas('group.groupUsers', function ($query) use ($userId) {
-            $query->where('user_id', '=', $userId);
+            $query->where('user_id', '=', $userId)->where('verified', 1);
         })
         ->orWhere('admin_id', $userId)->with(['group', 'admin', 'group.groupUsers'])->get();
     }
@@ -76,6 +76,7 @@ class SeasonRepo extends Repository implements ISeason
         isset($data['type']) === true ? $season->type = $data['type'] : "";
         isset($data['start_hour']) === true ? $season->start_hour = $data['start_hour'] : "";
         isset($data['public']) === true ? $season->public = $data['public'] : "";
+        isset($data['allow_replacement']) === true ? $season->allow_replacement = $data['allow_replacement'] : "";
         return $season;
     }
 

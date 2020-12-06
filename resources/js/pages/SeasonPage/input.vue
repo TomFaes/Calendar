@@ -7,7 +7,7 @@
             <global-input type='date' inputName="end" inputId="end" tekstLabel="End: " v-model="fields.end" :errors="errors.end" :value='fields.end'></global-input>
             <global-input type='time' inputName="start_hour" inputId="start_hour" tekstLabel="Start uur: " v-model="fields.start_hour" :errors="errors.start_hour" :value='fields.start_hour'></global-input>
             <global-input type='switchButton' inputName="public" inputId="public" tekstLabel="Public: " v-model="fields.public" :errors="errors.public" :value='fields.public'></global-input>
-           
+            <global-input type='switchButton' inputName="allow_replacement" inputId="allow_replacement" tekstLabel="Allow replacements: " v-model="fields.allow_replacement" :errors="errors.allow_replacement" :value='fields.allow_replacement'></global-input>
             <!-- Admin multiselect -->
             <global-layout v-if="submitOption != 'Create'">
                 <label>Admin: </label>
@@ -87,6 +87,7 @@
                     'start_hour': '',
                      'type': '',
                      'public': false,
+                     'allow_replacement' : false,
                 },
                 'errors' : {},
                 'action': '',
@@ -139,6 +140,10 @@
 
                 if(this.fields.public != undefined){
                     this.formData.set('public', this.fields.public ? 1 : 0);
+                }
+
+                if(this.fields.allow_replacement != undefined){
+                    this.formData.set('allow_replacement', this.fields.allow_replacement ? 1 : 0);
                 }
 
                 if(this.selectedType != ''){
@@ -215,7 +220,8 @@
                 this.multigroupUsers = this.season.group.group_users;
                 this.selectedType = this.season.type;
                 this.fields.start_hour = this.season.start_hour;
-                this.fields.public = this.season.public ? true : false;
+                 this.fields.public = this.season.public ? true : false;
+                this.fields.allow_replacement = this.season.allow_replacement ? true : false;
             }
         },
 

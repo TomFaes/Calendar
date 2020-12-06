@@ -6,11 +6,14 @@ use App\Models\Absence;
 use App\Models\Group;
 use App\Models\GroupUser;
 use App\Models\Season;
+use App\Models\Team;
+
 use Carbon\Carbon;
 
 use Tests\TestCase;
 
 use App\Models\User;
+use App\Repositories\TeamRepo;
 use Laravel\Passport\Passport;
 use App\Services\SeasonGeneratorService\GeneratorFactory;
 
@@ -20,6 +23,7 @@ class SeasonTest extends TestCase
     protected $allSeasons;
     protected $allAbsences;
     protected $allGroupUsers;
+    protected $allTeams;
 
     public function setUp() : void
     {
@@ -31,6 +35,7 @@ class SeasonTest extends TestCase
         $this->allGroups = Group::all();
         $this->allGroupUsers = GroupUser::all();
         $this->allAbsences = Absence::all();
+        $this->allTeams = Team::all();
     }
 
     /**
@@ -302,7 +307,8 @@ class SeasonTest extends TestCase
             'name' => 'new name',
             'email' => 'newtest@test.be',
             'group_id' => $this->allGroupUsers[0]->group_id,
-            'user_id' => $this->allUsers[0]->id,
+            //'user_id' => $this->allUsers[0]->id,
+            'group_user_id' => $this->allGroupUsers[0]->id,
         ];
 
         $this->postJson('/api/group/'.$this->allGroupUsers[0]->group_id.'/user/'.$this->allGroupUsers[0]->id, $data);
@@ -323,6 +329,7 @@ class SeasonTest extends TestCase
 
         $data = [
             'date' => Carbon::now()->addDays(8)->format('Y-m-d'),
+            'group_user_id' => $this->allGroupUsers[0]->id,
         ];
 
         $response = $this->postJson('/api/season/'.$newSeason['id'].'/absence', $data);
@@ -332,22 +339,132 @@ class SeasonTest extends TestCase
         $this->assertEquals(200, $response->status());
         $this->assertEquals($data['date'], $response_data['date']);
 
-        $this->assertEquals($this->allUsers[0]->id, $response_data['user_id']);
+        $this->assertEquals($this->allGroupUsers[0]->id, $response_data['group_user_id']);
         $this->assertEquals($newSeason['id'], $response_data['season_id']);
 
         echo PHP_EOL.'[42m OK  [0m test store method in the AbsenceController';
     }
 
-    public function test_AbsenceController_destroy()
+    public function test_TeamController_askForReplacement()
     {
         $this->be($this->authenticatedUser());
 
-        $response = $this->postJson('/api/absence/'.$this->allAbsences[0]->id.'/delete');
-        $response->assertStatus(204);
-        $this->assertEquals(204, $response->status());
+        //set the logged in user as group user
+        foreach($this->allGroupUsers AS $key => $groupUser){
+            if($groupUser->id == $this->allTeams[0]->group_user_id){
+                $data = [
+                    'firstname' => 'new firstname',
+                    'name' => 'new name',
+                    'email' => 'newtest@test.be',
+                    'group_id' => $this->allGroupUsers[0]->group_id,
+                    'user_id' =>  $this->allUsers[0]->id,
+                ];
+                
+                $this->postJson('/api/group/'.$groupUser->group_id.'/user/'.$groupUser->id, $data);
+                $this->allGroupUsers = GroupUser::All();
+                 break;
+            }
+        }
+        
+        $response = $this->postJson('/api/team/'.$this->allTeams[0]->id.'/askForReplacement');
+        $response_data = $response->decodeResponseJson(); 
 
-        $this->assertEquals(count(Absence::all()), 9);
+        $response->assertStatus(200);
+        $this->assertEquals(200, $response->status());
+        $this->assertEquals($response_data, "Ask for replacement is set to true");
 
-        echo PHP_EOL.'[42m OK  [0m test destroy method in the AbsenceController';
+        echo PHP_EOL.'[42m OK  [0m test ask for replacement method in the TeamController';
     }
+
+    public function test_TeamController_cancelRequestForReplacement()
+    {
+        $this->be($this->authenticatedUser());
+
+        //set a request for replacement to true
+        foreach($this->allGroupUsers AS $key => $groupUser){
+            if($groupUser->id == $this->allTeams[0]->group_user_id){
+                $data = [
+                    'firstname' => 'new firstname',
+                    'name' => 'new name',
+                    'email' => 'newtest@test.be',
+                    'group_id' => $this->allGroupUsers[0]->group_id,
+                    'user_id' =>  $this->allUsers[0]->id,
+                ];
+                
+                $this->postJson('/api/group/'.$groupUser->group_id.'/user/'.$groupUser->id, $data);
+                $this->allGroupUsers = GroupUser::All();
+                 break;
+            }
+        }
+        $response = $this->postJson('/api/team/'.$this->allTeams[0]->id.'/askForReplacement');
+        $response_data = $response->decodeResponseJson(); 
+
+        $response->assertStatus(200);
+        $this->assertEquals(200, $response->status());
+        $this->assertEquals($response_data, "Ask for replacement is set to true");
+
+        //Cancel the request for replacement
+        $response = $this->postJson('/api/team/'.$this->allTeams[0]->id.'/cancelRequestForReplacement');
+        $response_data = $response->decodeResponseJson(); 
+
+        $response->assertStatus(200);
+        $this->assertEquals(200, $response->status());
+        $this->assertEquals($response_data, "Replacement is set to false");
+        echo PHP_EOL.'[42m OK  [0m test cancel request for replacement method in the TeamController';
+    }
+
+    public function test_TeamController_confirmReplacement()
+    {
+        $this->be($this->authenticatedUser());
+
+        //set a request for replacement to true
+        foreach($this->allGroupUsers AS $key => $groupUser){
+            if($groupUser->id == $this->allTeams[0]->group_user_id){
+                $data = [
+                    'firstname' => 'new firstname',
+                    'name' => 'new name',
+                    'email' => 'newtest@test.be',
+                    'group_id' => $this->allGroupUsers[0]->group_id,
+                    'user_id' =>  $this->allUsers[0]->id,
+                ];
+                
+                $this->postJson('/api/group/'.$groupUser->group_id.'/user/'.$groupUser->id, $data);
+                $this->allGroupUsers = GroupUser::All();
+                 break;
+            }
+        }
+        $response = $this->postJson('/api/team/'.$this->allTeams[0]->id.'/askForReplacement');
+        $response_data = $response->decodeResponseJson(); 
+
+        $response->assertStatus(200);
+        $this->assertEquals(200, $response->status());
+        $this->assertEquals($response_data, "Ask for replacement is set to true");
+
+        //add a new user to a group user to test replacement
+        $data = [
+            'firstname' => 'new firstname',
+            'name' => 'new name',
+            'email' => 'newtest@test.be',
+            'group_id' => $this->allGroupUsers[1]->group_id,
+            'user_id' =>  $this->allUsers[1]->id,
+        ];
+        $this->postJson('/api/group/'.$this->allGroupUsers[1]->group_id.'/user/'.$this->allGroupUsers[1]->id, $data);
+        
+        //change logged in user
+        $user = Passport::actingAs(
+            $this->allUsers[1],
+            ['create-servers']
+        );
+        $user->role = "Admin";
+        $this->be($user);
+
+        $response = $this->postJson('/api/team/'.$this->allTeams[0]->id.'/confirmReplacement');
+        $response_data = $response->decodeResponseJson(); 
+
+        $response->assertStatus(200);
+        $this->assertEquals(200, $response->status());
+        $this->assertEquals($response_data, "Confirm replacement");
+        echo PHP_EOL.'[42m OK  [0m test confirm replacement method in the TeamController';
+    }
+
 }

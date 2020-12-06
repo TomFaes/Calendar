@@ -65,12 +65,15 @@ This version isn't completly finished. Next things are still in development:
 - implement phpUnit testing
 - bugfixes
     - all fields were diplayed 2 times on creating a season
-
-# Future
-Version 2.06
+    
+# Version 2.06
     - implement option for the admin to add season absences for other players
     - player update season
         - add option for a player to request replacement
+    - bug: 
+        - unverified users wasn't always working    
+
+# Future
 Version 2.07
     - Add more generators
         - singe field one hour double generator

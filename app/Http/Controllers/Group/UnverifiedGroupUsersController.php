@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Repositories\Contracts\IGroupUser;
+use App\Services\GroupService;
 use App\Validators\GroupUserValidation;
 use Auth;
 
@@ -27,6 +28,9 @@ class UnverifiedGroupUsersController extends Controller
 
      public function index(){
         $userId = Auth::user()->id;
+        $groupService = resolve(GroupService::class);
+        $groupService->checkExistingUser(Auth::user()->email);
+
         $groupUsers = $this->groupUser->getUnverifiedGroupUsers($userId);
         return response()->json($groupUsers, 200);
      }

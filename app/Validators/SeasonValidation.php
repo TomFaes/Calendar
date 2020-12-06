@@ -16,7 +16,9 @@ class SeasonValidation extends Validation
                 'begin' => 'required|date|',
                 'end' => 'required|date|',
                 'start_hour' => 'required|',
-                'type' => 'required|string|max:255'
+                'type' => 'required|string|max:255',
+                'public' => 'nullable|boolean',
+                'allow_replacement' => 'nullable|boolean'
             ],
             [
                 'name.required' => 'een seizoensnaam is verplicht',
@@ -26,7 +28,9 @@ class SeasonValidation extends Validation
                 'end.required' => 'eind datum is een verplicht veld',
                 'end.date' => 'eind datum moet een datum format bevatten',
                 'start_hour.required' => 'Uur is een verplicht veld',
-                'type' => 'type is een verplicht veld'
+                'type' => 'type is een verplicht veld',
+                'public' => 'public must be true or false',
+                'allow_replacement' => 'allow replacements must be true or false'
             ]
         );
     }

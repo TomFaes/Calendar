@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Team extends Model
 {
     protected $fillable = [
-        'season_id','player_id', 'date',
+        'season_id','player_id', 'date', 'ask_for_replacement',
     ];
 
     public function player_one()
@@ -17,7 +17,7 @@ class Team extends Model
 
     public function group_user() 
     {
-        return $this->belongsTo('App\Models\GroupUser', 'group_user_id', 'id')->select(['id', 'firstname', 'name']);
+        return $this->belongsTo('App\Models\GroupUser', 'group_user_id', 'id')->select(['id', 'firstname', 'name', 'user_id']);
     }
 
     public function season()

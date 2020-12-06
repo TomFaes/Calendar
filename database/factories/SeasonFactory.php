@@ -26,6 +26,9 @@ $factory->define(Season::class, function (Faker $faker) {
         'admin_id' => App\Models\User::first(),
         'day' => 'do',
         'start_hour' => "20:00",
-        'type' => 'TwoFieldTwoHourThreeTeams'
+        'type' => 'TwoFieldTwoHourThreeTeams',
+        'public' => 0,
+        'allow_replacement' => 0,
+
     ];
 });

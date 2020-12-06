@@ -17,7 +17,7 @@ class CreateAbsencesTable extends Migration
             $table->increments('id');
             $table->integer('season_id')->unsigned();
             $table->date('date');
-            $table->integer('user_id')->unsigned();
+            $table->integer('user_id')->unsigned()->nullable();
             
             $table->timestamps();
             

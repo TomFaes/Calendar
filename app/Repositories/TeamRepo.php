@@ -59,7 +59,7 @@ class TeamRepo extends Repository implements ITeam
     {
         $request->input('date') != "" ? $team->date = $request->input('date') : "";
         $request->input('team') != "" ? $team->team = $request->input('team') : "";
-        $request->input('playerOneId') != "" ? $team->player_id = $request->input('playerOneId') : "";
+        $request->input('ask_for_replacement') != "" ? $team->player_id = $request->input('ask_for_replacement') : "";
         return $team;
     }
 
@@ -80,4 +80,24 @@ class TeamRepo extends Repository implements ITeam
         $team->save();
         return $team;
     }
+
+    public function askForReplacement(Team $team){
+        $team->ask_for_replacement = 1;
+        $team->save();
+        return $team;
+    }
+
+    public function cancelRequestForReplacement(Team $team){
+        $team->ask_for_replacement = 0;
+        $team->save();
+        return $team;
+    }
+
+    public function confirmReplacement(Team $team, $group_user_id){
+        $team->group_user_id = $group_user_id;
+        $team->ask_for_replacement = 0;
+        $team->save();
+        return $team;
+    }
+
 }

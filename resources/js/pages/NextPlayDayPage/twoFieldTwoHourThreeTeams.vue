@@ -21,16 +21,16 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="user in userData" :key="user.id"> 
-                                    <td style="position:absolute; left:0;">{{ user.firstname }}</td>
-                                     <td v-if="calendarData['data'][calendarData['currentPlayDay']]['user'][user.id]['team'] != ''">
+                                <tr v-for="groupUser in userData" :key="groupUser.id"> 
+                                    <td style="position:absolute; left:0;">{{  groupUser.user_id != null ? groupUser.user.firstname : groupUser.firstname }}</td>
+                                    <td v-if="calendarData['data'][calendarData['currentPlayDay']]['user'][groupUser.id]['team'] != ''">
                                         <center>
-                                                <span v-if="calendarData['data'][calendarData['currentPlayDay']]['user'][user.id]['team'] == 'team1'">1</span>
-                                                <span v-if="calendarData['data'][calendarData['currentPlayDay']]['user'][user.id]['team'] == 'team2'">2</span>
-                                                <span v-if="calendarData['data'][calendarData['currentPlayDay']]['user'][user.id]['team'] == 'team3'">3</span>
+                                                <span v-if="calendarData['data'][calendarData['currentPlayDay']]['user'][groupUser.id]['team'] == 'team1'">1</span>
+                                                <span v-if="calendarData['data'][calendarData['currentPlayDay']]['user'][groupUser.id]['team'] == 'team2'">2</span>
+                                                <span v-if="calendarData['data'][calendarData['currentPlayDay']]['user'][groupUser.id]['team'] == 'team3'">3</span>
                                         </center>
-                                     </td>
-                                     <td v-else :class="getBackground(user.id, calendarData['data'][calendarData['currentPlayDay']]['day'])"></td>
+                                    </td>
+                                     <td v-else :class="getBackground(groupUser.id, calendarData['data'][calendarData['currentPlayDay']]['day'])"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -78,12 +78,12 @@
                 return Moment(value, "YYYY-MM-DD").format('DD/MMM');
             },
 
-            getBackground(userId, date){
+            getBackground(groupUserId, date){
                 var colorClass = "free";
                 if(this.calendarData['absenceData'] != undefined){
-                    if(this.calendarData['absenceData'][userId] != undefined){
-                        for(var i = 0; i < this.calendarData['absenceData'][userId]['date'].length; i++){
-                            if(date ==  this.calendarData['absenceData'][userId]['date'][i]){
+                    if(this.calendarData['absenceData'][groupUserId] != undefined){
+                        for(var i = 0; i < this.calendarData['absenceData'][groupUserId]['date'].length; i++){
+                            if(date ==  this.calendarData['absenceData'][groupUserId]['date'][i]){
                                 colorClass = "absence";
                             }
                         }   

@@ -21,22 +21,21 @@ class AbsenceRepo extends Repository implements IAbsence
         return Absence::find($id);
     }
 
-    public function getUserAbsence($seasonId, $userId)
+    public function getUserAbsence($seasonId, $groupUserId)
     {
-        return Absence::where('user_id', $userId)->where('season_id', $seasonId)->orderBy('date', 'asc')->get();
+        return Absence::where('group_user_id', $groupUserId)->where('season_id', $seasonId)->orderBy('date', 'asc')->get();
     }
 
     public function getSeasonAbsence($seasonId)
     {
         return Absence::where('season_id', $seasonId)->get();
     }
-    
+
     public function getSeasonAbsenceArray($seasonId)
     {
         $absenceArray = array();
         foreach ($this->getSeasonAbsence($seasonId) as $absence) {
-            $date = str_replace("-", "", $absence->date);
-            $absenceArray[$absence->user_id]['date'][] = $absence->date;
+            $absenceArray[$absence->group_user_id]['date'][] = $absence->date;
         }
         return $absenceArray;
     }
@@ -45,12 +44,12 @@ class AbsenceRepo extends Repository implements IAbsence
     Next function will create or update the group object in de database
      **************************************************************************/
 
-    public function create(Array $request, $seasonId, $userId)
+    public function create(Array $request, $seasonId)
     {
         $absence = new Absence();
         $absence->date = $request['date'];
         $absence->season_id = $seasonId;
-        $absence->user_id = $userId;
+        $absence->group_user_id = $request['group_user_id'];
         $absence->save();
         return $absence;
     }

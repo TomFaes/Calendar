@@ -57,6 +57,10 @@ Route::post('season/{season_id}/absence', [AbsenceController::class, 'store']);
 
 //All routes for teams
 Route::post('team/range', [TeamController::class, 'updateRange']);
+Route::post('team/{id}/askForReplacement', [TeamController::class, 'askForReplacement']);
+Route::post('team/{id}/cancelRequestForReplacement', [TeamController::class, 'cancelRequestForReplacement']);
+Route::post('team/{id}/confirmReplacement', [TeamController::class, 'confirmReplacement']);
+
 
 //delete method doesn't work on 000webhost
 Route::post('/profile/delete', [ProfileController::class, 'destroy']);

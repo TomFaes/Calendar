@@ -44,7 +44,11 @@ class AbsenceController extends Controller
      */
     public function index($seasonId) 
     {
-        $absence = $this->absence->getUserAbsence($seasonId, Auth::user()->id);
+        $season = $this->season->getSeason($seasonId);
+        $absence = array();
+        foreach($season->group->groupUsers AS $groupUser){
+            $absence[$groupUser->id] = $this->absence->getUserAbsence($seasonId, $groupUser->id);
+        }
         return response()->json($absence, 200);
     }
     
@@ -56,9 +60,9 @@ class AbsenceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, $seasonId) 
-    {        
+    {
         $this->absenceValidator->validateCreateAbsence($request);
-        $absence = $this->absence->create($request->all(), $seasonId, Auth::user()->id);
+        $absence = $this->absence->create($request->all(), $seasonId);
         return response()->json($absence, 200);
     }
     

@@ -1,10 +1,10 @@
 <?php
 
 use Carbon\Carbon;
-use App\Models\User;
 use App\Models\Season;
 
 use App\Models\Absence;
+use App\Models\GroupUser;
 use Faker\Generator as Faker;
 
 /*
@@ -22,6 +22,6 @@ $factory->define(Absence::class, function (Faker $faker) {
     return [
         'season_id' =>  Season::first()->id,
         'date' => Carbon::now()->addMonths(1)->format('Y-m-d'),
-        'user_id' => User::first(),
+        'group_user_id' => GroupUser::first(),
     ];
 });

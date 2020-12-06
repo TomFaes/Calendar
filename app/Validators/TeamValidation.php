@@ -13,12 +13,12 @@ class TeamValidation extends Validation
             [
                 'date' => 'required|',
                 'team' => 'required|',
-                'playerOneId' => 'required|',
+                'ask_for_replacement' => 'nullable|boolean'
             ],
             [
                 'date.required' => 'Afwezig op is een verplicht veld',
                 'team.required' => 'Team op is een verplicht veld',
-                'playerOneId.required' => 'Speler 1 is een verplicht veld'
+                'ask_for_replacement' => 'allow replacements must be true or false'
             ]
         );
     }
