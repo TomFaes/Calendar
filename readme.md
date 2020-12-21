@@ -29,7 +29,7 @@ All generators will need the following methods
 
 To add a new Generator you need to do 3 things. Create a new generator with the above methods, create a view and add the options to the dropdowns of a season. 
 
-# Version 2.00: 
+# Version 2.00: 10/08/2020
 Some major changes: 
 The controllers has been changed to REST API. The front is changed from blade to a Vue.js front-end with the use of vue router and vue store. 
 
@@ -38,17 +38,17 @@ This version isn't completly finished. Next things are still in development:
 - tweaking a season calendar
 - generating a season.
 
-# Version 2.01: 
+# Version 2.01: 21/08/2020
 - reworked generator
 - added main page calendars
 
-# Version 2.02: Current live version
+# Version 2.02: 28/08/2020
 - rework the generator to get less calls(data is gatered in the generator)
 - update the calendar view + nex play day view
 - team is now connected to the group user instead of a user. This way a user doesn't need an account to be part of the group. 
 - change the delete group user option. user is removed from group but group user record isn't soft deleted. This was needed to keep past calendars active
 
-# Version 2.03: 
+# Version 2.03: 19/09/2020
 - add swipe to the next play day view
 - creation of 2 global layout components(input & layout)
 - convert route files to tulpe methods
@@ -57,28 +57,39 @@ This version isn't completly finished. Next things are still in development:
     - unverified user of deleted group was shown on index page.
     - bug with create random string for password
 
-# Version 2.04: 
+# Version 2.04: 08/11/2020
 - make option to see the season when you don't have an account
 - the season can be updated after a season has started by the season admin
 
-# Version 2.05: 
+# Version 2.05: 22/11/2020
 - implement phpUnit testing
 - bugfixes
     - all fields were diplayed 2 times on creating a season
     
-# Version 2.06
+# Version 2.06: 06/12/2020
     - implement option for the admin to add season absences for other players
     - player update season
         - add option for a player to request replacement
     - bug: 
-        - unverified users wasn't always working    
+        - unverified users wasn't always working   
 
-# Future
-Version 2.07
+# Version 2.07: Current live version
+    - rework generators
+        - create abstract class for the double generators, only the methods that are different are in the generator classes
+    - rework generator views
+        - create mixin to have all the methods that are used for the double generators
     - Add more generators
         - singe field one hour double generator
         - 2 fields double hour generator.
+    - bugs
+        - fixed bug with logout
+        - when a day had to few teams the day disappeared
+        - if a an absent player was added to a team the player stayed red
 
+        
+
+# Future
 Version 3.XX: 
     - update to Laravel 8
+    - create calendars for small teams. 
     

@@ -27,7 +27,6 @@
                                         <center>
                                                 <span v-if="calendarData['data'][calendarData['currentPlayDay']]['user'][groupUser.id]['team'] == 'team1'">1</span>
                                                 <span v-if="calendarData['data'][calendarData['currentPlayDay']]['user'][groupUser.id]['team'] == 'team2'">2</span>
-                                                <span v-if="calendarData['data'][calendarData['currentPlayDay']]['user'][groupUser.id]['team'] == 'team3'">3</span>
                                         </center>
                                     </td>
                                      <td v-else :class="getBackground(groupUser.id, calendarData['data'][calendarData['currentPlayDay']]['day'])"></td>

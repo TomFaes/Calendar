@@ -10,6 +10,18 @@
             <button  class="btn btn-secondary" @click.prevent="saveSeason()">Save season</button>
             <two-field-two-hour-three-teams-page :calendarData="calendarData" :userData="calendarData['generateGroupUserData']" :loggedInUser="$attrs.user"  :generate="true"></two-field-two-hour-three-teams-page>              
         </div>
+        <div v-else-if="calendarData['seasonData']['type']  == 'SingleFieldOneHourTwoTeams'">
+            <h1>Generate {{  calendarData['seasonData']['name'] }}</h1>
+            <button  class="btn btn-secondary" @click.prevent="generateSeason()">Regenerate season</button>
+            <button  class="btn btn-secondary" @click.prevent="saveSeason()">Save season</button>
+            <single-field-one-hour-two-teams-page :calendarData="calendarData" :userData="calendarData['generateGroupUserData']" :loggedInUser="$attrs.user"  :generate="true"></single-field-one-hour-two-teams-page>  
+        </div>
+        <div v-else-if="calendarData['seasonData']['type']  == 'TwoFieldTwoHourFourTeams'">
+            <h1>Generate {{  calendarData['seasonData']['name'] }}</h1>
+            <button  class="btn btn-secondary" @click.prevent="generateSeason()">Regenerate season</button>
+            <button  class="btn btn-secondary" @click.prevent="saveSeason()">Save season</button>
+            <two-field-two-hour-four-teams-page :calendarData="calendarData" :userData="calendarData['generateGroupUserData']" :loggedInUser="$attrs.user"  :generate="true"></two-field-two-hour-four-teams-page>              
+        </div>
         <div v-else>
             onbekende calendar view
         </div>
@@ -20,10 +32,14 @@
     import apiCall from '../../services/ApiCall.js';
     import  router from "../../services/router.js";
     import TwoFieldTwoHourThreeTeamsPage from '../CalendarPage/twoFieldTwoHourThreeTeams.vue';
+    import SingleFieldOneHourTwoTeamsPage from '../CalendarPage/singleFieldOneHourTwoTeams.vue';
+    import TwoFieldTwoHourFourTeamsPage from '../CalendarPage/twoFieldTwoHourFourTeams.vue';
     
     export default {
         components: {
             TwoFieldTwoHourThreeTeamsPage,
+            SingleFieldOneHourTwoTeamsPage,
+            TwoFieldTwoHourFourTeamsPage,
         },
 
         data () {

@@ -5,6 +5,14 @@
                 <div v-if="calendarData['seasonData']['type'] == 'TwoFieldTwoHourThreeTeams'">   
                     <two-field-two-hour-three-teams-page :calendarData="calendarData" :userData="calendarData['groupUserData']" :loggedInUser="$attrs.user"></two-field-two-hour-three-teams-page>              
                 </div>
+                <div v-else-if="calendarData['seasonData']['type'] == 'SingleFieldOneHourTwoTeams'">    
+                    <single-field-one-hour-two-teams-page :calendarData="calendarData" :userData="calendarData['groupUserData']" :loggedInUser="$attrs.user"></single-field-one-hour-two-teams-page>          
+                </div>
+
+                <div v-else-if="calendarData['seasonData']['type'] == 'TwoFieldTwoHourFourTeams'">   
+                    <two-field-two-hour-four-teams-page :calendarData="calendarData" :userData="calendarData['groupUserData']" :loggedInUser="$attrs.user"></two-field-two-hour-four-teams-page>              
+                </div>
+                
                 <div v-else>
                     onbekende calendar view
                 </div>
@@ -23,10 +31,14 @@
     import apiCall from '../../services/ApiCall.js';
     
     import TwoFieldTwoHourThreeTeamsPage from '../CalendarPage/twoFieldTwoHourThreeTeams.vue';
-
+    import SingleFieldOneHourTwoTeamsPage from '../CalendarPage/singleFieldOneHourTwoTeams.vue';
+    import TwoFieldTwoHourFourTeamsPage from '../CalendarPage/twoFieldTwoHourFourTeams.vue';
+    
     export default {
         components: {
             TwoFieldTwoHourThreeTeamsPage,
+            SingleFieldOneHourTwoTeamsPage,
+            TwoFieldTwoHourFourTeamsPage
         },
 
         data () {

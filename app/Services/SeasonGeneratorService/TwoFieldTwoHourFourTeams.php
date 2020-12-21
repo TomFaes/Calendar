@@ -4,27 +4,28 @@ namespace App\Services\SeasonGeneratorService;
 
 use App\Models\Season;
 
+
+
 /**
     |--------------------------------------------------------------------------
-    | Generate TwoFieldTwoHourThreeTeams Season
+    | Generate TwoFieldTwoHourFourTeams Season
     |--------------------------------------------------------------------------
-    | TwoFieldTwoHourThreeTeams season: A season is created based on 2 courts for 2 hours and there will be 3 teams,
+    | TwoFieldTwoHourFourTeams season: A season is created based on 2 courts for 2 hours and there will be 4 teams,
     |
     | 1st Field: 2 hours double
-    | 2nd Field: 2 hours single
+    | 2nd Field: 2 hours double
     |
-    | 3 teams will be created 1 & 2 will play 1 hour single, team 3 will play 2 hours double
+    | 4 teams will be created and will play 2 hours double
     | teams 1 and 2 will switch each hour
     | 
     | conditions:
     | - the time between play dates shouldn't be more the 2 weeks(with the exception if players are absence)
-    | - Everyone should play atleast once with everyone in team 1 or 2
     | - Players shouldn't be in the same team with a player twice
     |exception:
     | - if the season is really long then it is possible to play more then once in the same team
     | - If there are alot of absence people on the same day it is possible to play more then once in the same team
     */
-class TwoFieldTwoHourThreeTeams extends AbstractDoubleGenerator implements IGenerator
+class TwoFieldTwoHourFourTeams extends AbstractDoubleGenerator implements IGenerator
 {
     /**
      * create the season day
@@ -36,7 +37,7 @@ class TwoFieldTwoHourThreeTeams extends AbstractDoubleGenerator implements IGene
     {
          //Every gameday there is a new random draw for teams
         //This is done to avoid the same players will always be in the first match if the backup needs to be used
-        $teamShuffle = [1,2,3];
+        $teamShuffle = [1,2,3,4];
         shuffle($teamShuffle);
         foreach ($teamShuffle AS $number) {
             $player1 = $player2 = "";
@@ -96,7 +97,7 @@ class TwoFieldTwoHourThreeTeams extends AbstractDoubleGenerator implements IGene
             $gamesArray['season'][$date][$teamnumber]['player1'] = $player1;
             $gamesArray['season'][$date][$teamnumber]['player2'] = $player2;
 
-            //controle number to see if there are 6 players each week
+            //controle number to see if there are 8 players each week
             if (isset($gamesArray['season'][$date]['gameCounter'])  === false) {
                 $gamesArray['season'][$date]['gameCounter'] = 0;
             }
@@ -121,6 +122,7 @@ class TwoFieldTwoHourThreeTeams extends AbstractDoubleGenerator implements IGene
             $personStat[$groupUser->id]['team1'] = 0;
             $personStat[$groupUser->id]['team2'] = 0;
             $personStat[$groupUser->id]['team3'] = 0;
+            $personStat[$groupUser->id]['team4'] = 0;
             $personStat[$groupUser->id]['nonPlayedWeeks'] = 0;
         }
         return $personStat;
@@ -135,7 +137,7 @@ class TwoFieldTwoHourThreeTeams extends AbstractDoubleGenerator implements IGene
     {
         $jsonArray = json_decode($jsonSeason);
         foreach ($jsonArray->data As $day) {
-            $team1 = $team2 = $team3 = 0;
+            $team1 = $team2 = $team3 = $team4 =  0;
             foreach ($day->user As $users) {
                 if($users->team == ""){
                     continue;
@@ -151,6 +153,9 @@ class TwoFieldTwoHourThreeTeams extends AbstractDoubleGenerator implements IGene
                 if($users->team == "team3"){
                     $team3++;
                 }
+                if($users->team == "team4"){
+                    $team4++;
+                }
             }
             
             if($team1 == 0){
@@ -165,7 +170,12 @@ class TwoFieldTwoHourThreeTeams extends AbstractDoubleGenerator implements IGene
                 $this->saveTeam($jsonArray->seasonData->id, $day->day, 'team3');
                 $this->saveTeam($jsonArray->seasonData->id, $day->day, 'team3');
             }
+            if($team4 == 0){
+                $this->saveTeam($jsonArray->seasonData->id, $day->day, 'team4');
+                $this->saveTeam($jsonArray->seasonData->id, $day->day, 'team4');
+            }
         }
     }
 
+    
 }

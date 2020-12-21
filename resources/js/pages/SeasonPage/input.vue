@@ -25,7 +25,7 @@
             </global-layout>
 
             <!-- Type multiselect -->
-            <global-layout>
+            <global-layout v-if="seasonDraw == 0">
                 <label>Type: </label>
                 <multiselect
                     v-model="selectedType"
@@ -97,9 +97,10 @@
                 'selectedGroup': [],
                 'multiGroups': [],
                 'selectedType': '',
-                'multiType': ['None', 'TwoFieldTwoHourThreeTeams'],
+                'multiType': ['None', 'TwoFieldTwoHourThreeTeams', 'SingleFieldOneHourTwoTeams', 'TwoFieldTwoHourFourTeams'],
                 'formData': new FormData(),
                 'message': '',
+                'seasonDraw': 0
             }
         },
 
@@ -222,6 +223,7 @@
                 this.fields.start_hour = this.season.start_hour;
                  this.fields.public = this.season.public ? true : false;
                 this.fields.allow_replacement = this.season.allow_replacement ? true : false;
+                this.seasonDraw = this.season.seasonDraw ?? 0;
             }
         },
 

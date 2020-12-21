@@ -2,30 +2,29 @@
 
 namespace App\Services\SeasonGeneratorService;
 
+use App\Models\Team;
 use App\Models\Season;
 
 /**
     |--------------------------------------------------------------------------
-    | Generate TwoFieldTwoHourThreeTeams Season
+    | Generate SingleFieldOneHourTwoTeams Season
     |--------------------------------------------------------------------------
-    | TwoFieldTwoHourThreeTeams season: A season is created based on 2 courts for 2 hours and there will be 3 teams,
+    | SingleFieldOneHourTwoTeams season: A season is created based on 1 courts for 1(or more) hours and there will be 2 teams,
     |
-    | 1st Field: 2 hours double
-    | 2nd Field: 2 hours single
+    | 1 Field: 1(or more) hours double
     |
-    | 3 teams will be created 1 & 2 will play 1 hour single, team 3 will play 2 hours double
-    | teams 1 and 2 will switch each hour
-    | 
+    | 2 teams wil be created that wil play 1(or more) hour single
+    |
     | conditions:
     | - the time between play dates shouldn't be more the 2 weeks(with the exception if players are absence)
-    | - Everyone should play atleast once with everyone in team 1 or 2
     | - Players shouldn't be in the same team with a player twice
     |exception:
     | - if the season is really long then it is possible to play more then once in the same team
     | - If there are alot of absence people on the same day it is possible to play more then once in the same team
     */
-class TwoFieldTwoHourThreeTeams extends AbstractDoubleGenerator implements IGenerator
+class SingleFieldOneHourTwoTeams extends AbstractDoubleGenerator implements IGenerator
 {
+
     /**
      * create the season day
      * @param $seasonDate
@@ -36,7 +35,7 @@ class TwoFieldTwoHourThreeTeams extends AbstractDoubleGenerator implements IGene
     {
          //Every gameday there is a new random draw for teams
         //This is done to avoid the same players will always be in the first match if the backup needs to be used
-        $teamShuffle = [1,2,3];
+        $teamShuffle = [1,2];
         shuffle($teamShuffle);
         foreach ($teamShuffle AS $number) {
             $player1 = $player2 = "";
@@ -81,12 +80,6 @@ class TwoFieldTwoHourThreeTeams extends AbstractDoubleGenerator implements IGene
             $gamesArray['person'][$player1]["totalGames"]++;
             $gamesArray['person'][$player2]["totalGames"]++;
 
-            if ($teamnumber != "team3") {
-                $gamesArray['person'][$player1]['against'][$player1]['name'] = $gamesArray['person'][$player1]['name'];
-                $gamesArray['person'][$player1]['against'][$player2]['name'] = $gamesArray['person'][$player2]['name'];
-                $gamesArray['person'][$player2]['against'][$player1]['name'] = $gamesArray['person'][$player1]['name'];
-                $gamesArray['person'][$player2]['against'][$player2]['name'] = $gamesArray['person'][$player2]['name'];
-            }
 
             //set the counter to 0 for non played weeks
             $gamesArray['person'][$player1]['nonPlayedWeeks'] = 0;
@@ -96,7 +89,7 @@ class TwoFieldTwoHourThreeTeams extends AbstractDoubleGenerator implements IGene
             $gamesArray['season'][$date][$teamnumber]['player1'] = $player1;
             $gamesArray['season'][$date][$teamnumber]['player2'] = $player2;
 
-            //controle number to see if there are 6 players each week
+            //controle number to see if there are 4 players each week
             if (isset($gamesArray['season'][$date]['gameCounter'])  === false) {
                 $gamesArray['season'][$date]['gameCounter'] = 0;
             }
@@ -105,7 +98,7 @@ class TwoFieldTwoHourThreeTeams extends AbstractDoubleGenerator implements IGene
         return $gamesArray;
     }
 
-    /**
+     /**
      * set the user Array with some default data
      * @param Season $season
      * @return array
@@ -120,7 +113,6 @@ class TwoFieldTwoHourThreeTeams extends AbstractDoubleGenerator implements IGene
             $personStat[$groupUser->id]['datumAbsent'] = $this->getUserAbsenceDays($groupUser->id, $season->id);
             $personStat[$groupUser->id]['team1'] = 0;
             $personStat[$groupUser->id]['team2'] = 0;
-            $personStat[$groupUser->id]['team3'] = 0;
             $personStat[$groupUser->id]['nonPlayedWeeks'] = 0;
         }
         return $personStat;
@@ -135,7 +127,7 @@ class TwoFieldTwoHourThreeTeams extends AbstractDoubleGenerator implements IGene
     {
         $jsonArray = json_decode($jsonSeason);
         foreach ($jsonArray->data As $day) {
-            $team1 = $team2 = $team3 = 0;
+            $team1 = $team2 = 0;
             foreach ($day->user As $users) {
                 if($users->team == ""){
                     continue;
@@ -148,9 +140,6 @@ class TwoFieldTwoHourThreeTeams extends AbstractDoubleGenerator implements IGene
                 if($users->team == "team2"){
                     $team2++;
                 }
-                if($users->team == "team3"){
-                    $team3++;
-                }
             }
             
             if($team1 == 0){
@@ -161,11 +150,6 @@ class TwoFieldTwoHourThreeTeams extends AbstractDoubleGenerator implements IGene
                 $this->saveTeam($jsonArray->seasonData->id, $day->day, 'team2');
                 $this->saveTeam($jsonArray->seasonData->id, $day->day, 'team2');
             }
-            if($team3 == 0){
-                $this->saveTeam($jsonArray->seasonData->id, $day->day, 'team3');
-                $this->saveTeam($jsonArray->seasonData->id, $day->day, 'team3');
-            }
         }
     }
-
 }

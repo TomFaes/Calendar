@@ -2458,6 +2458,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../services/ApiCall.js */ "./resources/js/services/ApiCall.js");
 /* harmony import */ var _services_router_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/router.js */ "./resources/js/services/router.js");
 /* harmony import */ var _CalendarPage_twoFieldTwoHourThreeTeams_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../CalendarPage/twoFieldTwoHourThreeTeams.vue */ "./resources/js/pages/CalendarPage/twoFieldTwoHourThreeTeams.vue");
+/* harmony import */ var _CalendarPage_singleFieldOneHourTwoTeams_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../CalendarPage/singleFieldOneHourTwoTeams.vue */ "./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue");
+/* harmony import */ var _CalendarPage_twoFieldTwoHourFourTeams_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../CalendarPage/twoFieldTwoHourFourTeams.vue */ "./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue");
 //
 //
 //
@@ -2476,12 +2478,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    TwoFieldTwoHourThreeTeamsPage: _CalendarPage_twoFieldTwoHourThreeTeams_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+    TwoFieldTwoHourThreeTeamsPage: _CalendarPage_twoFieldTwoHourThreeTeams_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    SingleFieldOneHourTwoTeamsPage: _CalendarPage_singleFieldOneHourTwoTeams_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+    TwoFieldTwoHourFourTeamsPage: _CalendarPage_twoFieldTwoHourFourTeams_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   data: function data() {
     return {
@@ -2546,6 +2564,8 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../services/ApiCall.js */ "./resources/js/services/ApiCall.js");
 /* harmony import */ var _CalendarPage_twoFieldTwoHourThreeTeams_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../CalendarPage/twoFieldTwoHourThreeTeams.vue */ "./resources/js/pages/CalendarPage/twoFieldTwoHourThreeTeams.vue");
+/* harmony import */ var _CalendarPage_singleFieldOneHourTwoTeams_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../CalendarPage/singleFieldOneHourTwoTeams.vue */ "./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue");
+/* harmony import */ var _CalendarPage_twoFieldTwoHourFourTeams_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../CalendarPage/twoFieldTwoHourFourTeams.vue */ "./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue");
 //
 //
 //
@@ -2567,11 +2587,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    TwoFieldTwoHourThreeTeamsPage: _CalendarPage_twoFieldTwoHourThreeTeams_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+    TwoFieldTwoHourThreeTeamsPage: _CalendarPage_twoFieldTwoHourThreeTeams_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+    SingleFieldOneHourTwoTeamsPage: _CalendarPage_singleFieldOneHourTwoTeams_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    TwoFieldTwoHourFourTeamsPage: _CalendarPage_twoFieldTwoHourFourTeams_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   data: function data() {
     return {
@@ -2606,6 +2638,246 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _components_mixins_generator_doubleHour_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/mixins/generator/doubleHour.js */ "./resources/js/components/mixins/generator/doubleHour.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {},
+  //this mixin will have all methods needed to be used within this view
+  mixins: [_components_mixins_generator_doubleHour_js__WEBPACK_IMPORTED_MODULE_0__["default"]]
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _components_mixins_generator_doubleHour_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/mixins/generator/doubleHour.js */ "./resources/js/components/mixins/generator/doubleHour.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {},
+  //this mixin will have all methods needed to be used within this view
+  mixins: [_components_mixins_generator_doubleHour_js__WEBPACK_IMPORTED_MODULE_0__["default"]]
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CalendarPage/twoFieldTwoHourThreeTeams.vue?vue&type=script&lang=js&":
 /*!********************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/CalendarPage/twoFieldTwoHourThreeTeams.vue?vue&type=script&lang=js& ***!
@@ -2615,9 +2887,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../services/ApiCall.js */ "./resources/js/services/ApiCall.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _components_mixins_generator_doubleHour_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/mixins/generator/doubleHour.js */ "./resources/js/components/mixins/generator/doubleHour.js");
 //
 //
 //
@@ -2724,273 +2994,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: {
-    Moment: moment__WEBPACK_IMPORTED_MODULE_1___default.a
-  },
-  data: function data() {
-    return {
-      edit: false,
-      replacement: false,
-      editIndex: "",
-      editUserId: "",
-      editCalendarData: {},
-      updateButtons: {},
-      updateData: {},
-      'formData': new FormData(),
-      getLoggedInGroupUserId: 0
-    };
-  },
-  props: {
-    'calendarData': {},
-    'userData': {},
-    'loggedInUser': {},
-    'generate': Boolean
-  },
-  watch: {
-    calendarData: function calendarData() {
-      this.editCalendarData = this.calendarData;
-    }
-  },
-  methods: {
-    showEditCalenderButton: function showEditCalenderButton() {
-      if (this.loggedInUser.id != this.editCalendarData['seasonData']['admin_id']) {
-        return false;
-      }
-
-      return true;
-    },
-    showUpdateButtons: function showUpdateButtons(index, groupUserId) {
-      if (this.editIndex != index) {
-        return false;
-      }
-
-      if (this.editUserId != groupUserId) {
-        return false;
-      }
-
-      if (this.loggedInUser.id != this.editCalendarData['seasonData']['admin_id']) {
-        return false;
-      }
-
-      return true;
-    },
-    getLoggedInGroupUser: function getLoggedInGroupUser() {
-      console.log(this.loggedInUser.id);
-
-      for (var groupUser in this.userData) {
-        if (this.loggedInUser.id == this.userData[groupUser]['user_id']) {
-          this.getLoggedInGroupUserId = this.userData[groupUser]['id'];
-        }
-      }
-    },
-    editCalendar: function editCalendar() {
-      if (this.edit === false) {
-        this.edit = true;
-        return;
-      }
-
-      this.edit = false;
-      return;
-    },
-    askReplacement: function askReplacement() {
-      if (this.replacement == false) {
-        this.replacement = true;
-        return true;
-      }
-
-      this.replacement = false;
-      return;
-    },
-    convertDate: function convertDate(value) {
-      return moment__WEBPACK_IMPORTED_MODULE_1___default()(value, "YYYY-MM-DD").format('DD/MMM');
-    },
-    compareDates: function compareDates(value) {
-      var date1 = moment__WEBPACK_IMPORTED_MODULE_1___default()(value).format('YYYYMMDD');
-      ;
-      var date2 = moment__WEBPACK_IMPORTED_MODULE_1___default()().format('YYYYMMDD');
-      ;
-
-      if (date1 < date2) {
-        return false;
-      }
-
-      return true;
-    },
-    getBackground: function getBackground(groupUserId, date, team) {
-      var replacement = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "";
-      var colorClass = "";
-
-      if (team == "") {
-        colorClass = "free";
-      }
-
-      if (replacement == "replacement") {
-        return "replacement";
-      }
-
-      if (this.calendarData['absenceData'] == undefined) {
-        return colorClass;
-      }
-
-      if (this.calendarData['absenceData'][groupUserId] == undefined) {
-        return colorClass;
-      }
-
-      for (var i = 0; i < this.calendarData['absenceData'][groupUserId]['date'].length; i++) {
-        if (date == this.calendarData['absenceData'][groupUserId]['date'][i]) {
-          colorClass = "absence";
-        }
-      }
-
-      return colorClass;
-    },
-    editTeam: function editTeam(index, groupUserId) {
-      if (index == this.editIndex && groupUserId == this.editUserId) {
-        this.editIndex = "";
-        this.editUserId = "";
-      } else {
-        this.editIndex = index;
-        this.editUserId = groupUserId;
-      }
-
-      this.updateButtons = {};
-      this.updateButtons[0] = 'Free';
-      this.updateButtons[1] = "Absence";
-      var x = 2;
-
-      for (var calendar in this.editCalendarData['data'][index]['teams']) {
-        if (this.calendarData.data[index].user[groupUserId].team == this.editCalendarData['data'][index]['teams'][calendar]['team']) {
-          continue;
-        }
-
-        if (this.editCalendarData['data'][index]['teams'][calendar]['groupUserId'] !== null) {
-          continue;
-        }
-
-        var doubleCheck = false;
-
-        for (var check in this.updateButtons) {
-          if (this.updateButtons[check] == this.editCalendarData['data'][index]['teams'][calendar]['team']) {
-            doubleCheck = true;
-          }
-        }
-
-        if (doubleCheck == true) {
-          continue;
-        }
-
-        this.updateButtons[x] = this.editCalendarData['data'][index]['teams'][calendar]['team'];
-        x++;
-      }
-    },
-    updateTeam: function updateTeam(index, userId, buttonChoice) {
-      var currentTeamId = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
-
-      if (currentTeamId > 0) {
-        this.updateData[currentTeamId] = "";
-      }
-
-      if (buttonChoice == "Free" || buttonChoice == 'Absence') {
-        if (currentTeamId == 0) {
-          this.editIndex = "";
-          this.editUserId = "";
-          return;
-        }
-
-        this.editCalendarData['data'][index]['teams'][currentTeamId]['groupUserId'] = null;
-        this.editCalendarData['data'][index]['user'][userId]['team'] = "";
-        this.editCalendarData['data'][index]['user'][userId]['teamId'] = "";
-        this.editIndex = "";
-        this.editUserId = "";
-        return;
-      }
-
-      for (var teamId in this.editCalendarData['data'][index]['teams']) {
-        if (this.editCalendarData['data'][index]['teams'][teamId]['team'] === buttonChoice && this.editCalendarData['data'][index]['teams'][teamId]['groupUserId'] === null) {
-          this.editCalendarData['data'][index]['teams'][teamId]['groupUserId'] = userId;
-          this.editCalendarData['data'][index]['user'][userId]['team'] = buttonChoice;
-          this.editCalendarData['data'][index]['user'][userId]['teamId'] = teamId;
-          this.updateData[teamId] = userId;
-
-          if (currentTeamId > 0) {
-            this.editCalendarData['data'][index]['teams'][currentTeamId]['groupUserId'] = null;
-
-            if (buttonChoice == "Free" || buttonChoice == 'Absence') {
-              this.editCalendarData['data'][index]['user'][userId]['team'] = "";
-              this.editCalendarData['data'][index]['user'][userId]['teamId'] = "";
-            }
-          }
-
-          break;
-        }
-      }
-
-      this.editIndex = "";
-      this.editUserId = "";
-    },
-    saveTeams: function saveTeams() {
-      var _this = this;
-
-      this.formData.append('teamRange', JSON.stringify(this.updateData));
-      _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__["default"].postData('team/range', this.formData).then(function (response) {
-        _this.message = "Teams are updated";
-
-        _this.$bus.$emit('showMessage', _this.message, 'green', '2000');
-
-        _this.$bus.$emit('reloadCalendar');
-
-        _this.edit = false;
-      })["catch"](function (error) {
-        _this.errors = error;
-      });
-    },
-    askForReplacement: function askForReplacement(groupUser, teamId) {
-      var _this2 = this;
-
-      _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__["default"].postData('team/' + teamId + '/askForReplacement').then(function (response) {
-        _this2.message = "Vervangingsaanvraag is aanvaard";
-
-        _this2.$bus.$emit('showMessage', _this2.message, 'green', '2000');
-
-        _this2.$bus.$emit('reloadCalendar');
-      })["catch"](function (error) {
-        _this2.errors = error;
-      });
-    },
-    cancelRequestForReplacement: function cancelRequestForReplacement(groupUser, teamId) {
-      var _this3 = this;
-
-      _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__["default"].postData('team/' + teamId + '/cancelRequestForReplacement').then(function (response) {
-        _this3.message = "Vervanging is geannulleerd";
-
-        _this3.$bus.$emit('showMessage', _this3.message, 'green', '2000');
-
-        _this3.$bus.$emit('reloadCalendar');
-      })["catch"](function (error) {
-        _this3.errors = error;
-      });
-    },
-    confirmReplacement: function confirmReplacement(groupUser, teamId) {
-      var _this4 = this;
-
-      _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__["default"].postData('team/' + teamId + '/confirmReplacement').then(function (response) {
-        _this4.message = "Vervanging aanvaard";
-
-        _this4.$bus.$emit('showMessage', _this4.message, 'green', '2000');
-
-        _this4.$bus.$emit('reloadCalendar');
-      })["catch"](function (error) {
-        _this4.errors = error;
-      });
-    }
-  },
-  mounted: function mounted() {
-    this.editCalendarData = this.calendarData;
-    this.getLoggedInGroupUser();
-  }
+  components: {},
+  //this mixin will have all methods needed to be used within this view
+  mixins: [_components_mixins_generator_doubleHour_js__WEBPACK_IMPORTED_MODULE_0__["default"]]
 });
 
 /***/ }),
@@ -3904,9 +3912,15 @@ __webpack_require__.r(__webpack_exports__);
     submit: function submit() {
       var _this = this;
 
+      var baseUrl = "https://tenniskalender.000webhostapp.com";
+
+      if (this.envirement == "development") {
+        baseUrl = "http://localhost/tenniscalendar/public_html";
+      }
+
       this.setFormData();
-      axios.post('http://localhost/tenniscalendar/public_html/login/standard', this.formData).then(function (result) {
-        window.location.href = "http://localhost/tenniscalendar/public_html/";
+      axios.post(baseUrl + '/login/standard', this.formData).then(function (result) {
+        window.location.href = baseUrl;
       })["catch"](function (error) {
         _this.errors = "Gebruikers naam of wachtwoord is fout";
       });
@@ -3972,7 +3986,9 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      envirement: ""
+    };
   },
   props: {
     'user': {}
@@ -3980,24 +3996,94 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     displayIndex: function displayIndex() {
       this.$bus.$emit('displayNav', '');
+    },
+    logout: function logout() {
+      if (this.envirement == "development") {
+        return window.location.href = "http://localhost/tenniscalendar/public_html/logout";
+      }
+
+      return window.location.href = "https://tenniskalender.000webhostapp.com/logout";
     }
   },
-  mounted: function mounted() {}
+  mounted: function mounted() {
+    this.envirement = "development";
+  }
 });
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/NextPlayDayPage/twoFieldTwoHourThreeTeams.vue?vue&type=script&lang=js&":
-/*!***********************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/NextPlayDayPage/twoFieldTwoHourThreeTeams.vue?vue&type=script&lang=js& ***!
-  \***********************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_mixins_nextDay_doubleHour_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/mixins/nextDay/doubleHour.js */ "./resources/js/components/mixins/nextDay/doubleHour.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  //this mixin will have all methods needed to be used within this view
+  mixins: [_components_mixins_nextDay_doubleHour_js__WEBPACK_IMPORTED_MODULE_0__["default"]]
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _components_mixins_nextDay_doubleHour_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/mixins/nextDay/doubleHour.js */ "./resources/js/components/mixins/nextDay/doubleHour.js");
+//
 //
 //
 //
@@ -4044,47 +4130,70 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: {
-    Moment: moment__WEBPACK_IMPORTED_MODULE_0___default.a
-  },
-  data: function data() {
-    return {};
-  },
-  props: {
-    calendarData: {},
-    userData: {}
-  },
-  methods: {
-    nextDay: function nextDay() {
-      if (this.calendarData['currentPlayDay'] + 1 < this.calendarData['data'].length) {
-        this.calendarData['currentPlayDay']++;
-      }
-    },
-    previousDay: function previousDay() {
-      if (this.calendarData['currentPlayDay'] > 0) {
-        this.calendarData['currentPlayDay']--;
-      }
-    },
-    convertDate: function convertDate(value) {
-      return moment__WEBPACK_IMPORTED_MODULE_0___default()(value, "YYYY-MM-DD").format('DD/MMM');
-    },
-    getBackground: function getBackground(groupUserId, date) {
-      var colorClass = "free";
+  //this mixin will have all methods needed to be used within this view
+  mixins: [_components_mixins_nextDay_doubleHour_js__WEBPACK_IMPORTED_MODULE_0__["default"]]
+});
 
-      if (this.calendarData['absenceData'] != undefined) {
-        if (this.calendarData['absenceData'][groupUserId] != undefined) {
-          for (var i = 0; i < this.calendarData['absenceData'][groupUserId]['date'].length; i++) {
-            if (date == this.calendarData['absenceData'][groupUserId]['date'][i]) {
-              colorClass = "absence";
-            }
-          }
-        }
-      }
+/***/ }),
 
-      return colorClass;
-    }
-  },
-  mounted: function mounted() {}
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/NextPlayDayPage/twoFieldTwoHourThreeTeams.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/NextPlayDayPage/twoFieldTwoHourThreeTeams.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _components_mixins_nextDay_doubleHour_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/mixins/nextDay/doubleHour.js */ "./resources/js/components/mixins/nextDay/doubleHour.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  //this mixin will have all methods needed to be used within this view
+  mixins: [_components_mixins_nextDay_doubleHour_js__WEBPACK_IMPORTED_MODULE_0__["default"]]
 });
 
 /***/ }),
@@ -4509,9 +4618,10 @@ __webpack_require__.r(__webpack_exports__);
       'selectedGroup': [],
       'multiGroups': [],
       'selectedType': '',
-      'multiType': ['None', 'TwoFieldTwoHourThreeTeams'],
+      'multiType': ['None', 'TwoFieldTwoHourThreeTeams', 'SingleFieldOneHourTwoTeams', 'TwoFieldTwoHourFourTeams'],
       'formData': new FormData(),
-      'message': ''
+      'message': '',
+      'seasonDraw': 0
     };
   },
   props: {
@@ -4623,6 +4733,8 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     setData: function setData() {
+      var _this$season$seasonDr;
+
       this.fields.name = this.season.name;
       this.fields.begin = this.season.begin;
       this.fields.end = this.season.end;
@@ -4633,6 +4745,7 @@ __webpack_require__.r(__webpack_exports__);
       this.fields.start_hour = this.season.start_hour;
       this.fields["public"] = this.season["public"] ? true : false;
       this.fields.allow_replacement = this.season.allow_replacement ? true : false;
+      this.seasonDraw = (_this$season$seasonDr = this.season.seasonDraw) !== null && _this$season$seasonDr !== void 0 ? _this$season$seasonDr : 0;
     }
   },
   mounted: function mounted() {
@@ -5119,6 +5232,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _NextPlayDayPage_twoFieldTwoHourThreeTeams_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../NextPlayDayPage/twoFieldTwoHourThreeTeams.vue */ "./resources/js/pages/NextPlayDayPage/twoFieldTwoHourThreeTeams.vue");
+/* harmony import */ var _NextPlayDayPage_twoFieldTwoHourFourTeams_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../NextPlayDayPage/twoFieldTwoHourFourTeams.vue */ "./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue");
+/* harmony import */ var _NextPlayDayPage_singleFieldOneHourTwoTeams_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../NextPlayDayPage/singleFieldOneHourTwoTeams.vue */ "./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue");
 //
 //
 //
@@ -5136,13 +5251,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     Moment: moment__WEBPACK_IMPORTED_MODULE_1___default.a,
-    twoFieldTwoHourThreeTeams: _NextPlayDayPage_twoFieldTwoHourThreeTeams_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+    twoFieldTwoHourThreeTeams: _NextPlayDayPage_twoFieldTwoHourThreeTeams_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    twoFieldTwoHourFourTeams: _NextPlayDayPage_twoFieldTwoHourFourTeams_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+    singleFieldOneHourTwoTeams: _NextPlayDayPage_singleFieldOneHourTwoTeams_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   data: function data() {
     return {
@@ -9616,6 +9741,44 @@ exports.push([module.i, "\ndiv[data-v-1fa6a18c]{\r\n    display: block;\r\n    m
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=cf01056a&scoped=true&lang=css&":
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=cf01056a&scoped=true&lang=css& ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.absence[data-v-cf01056a]{\n    background-color: red;\n}\n.free[data-v-cf01056a]{\n    background-color: #343a40;\n}\n.replacement[data-v-cf01056a] {\n    background-color: yellow;\n}\ntd[data-v-cf01056a]:hover {\n    background-color: lightgray;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=b585f1d2&scoped=true&lang=css&":
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=b585f1d2&scoped=true&lang=css& ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.absence[data-v-b585f1d2]{\n    background-color: red;\n}\n.free[data-v-b585f1d2]{\n    background-color: #343a40;\n}\n.replacement[data-v-b585f1d2] {\n    background-color: yellow;\n}\ntd[data-v-b585f1d2]:hover {\n    background-color: lightgray;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CalendarPage/twoFieldTwoHourThreeTeams.vue?vue&type=style&index=0&id=a289623e&scoped=true&lang=css&":
 /*!***************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/CalendarPage/twoFieldTwoHourThreeTeams.vue?vue&type=style&index=0&id=a289623e&scoped=true&lang=css& ***!
@@ -9667,6 +9830,44 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 // module
 exports.push([module.i, "\na[data-v-e7a45472] {\r\n    color: lightgray\n}\na[data-v-e7a45472] :hover{\r\n    filter: brightness(80%);\n}\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=79135cd4&scoped=true&lang=css&":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=79135cd4&scoped=true&lang=css& ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.absence[data-v-79135cd4]{\r\n    background-color: red;\n}\n.free[data-v-79135cd4]{\r\n    background-color: #343a40;\n}\ntd[data-v-79135cd4] {\r\n    height: 50px;\r\n    width: 50%;\n}\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=383b1bbc&scoped=true&lang=css&":
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=383b1bbc&scoped=true&lang=css& ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.absence[data-v-383b1bbc]{\r\n    background-color: red;\n}\n.free[data-v-383b1bbc]{\r\n    background-color: #343a40;\n}\ntd[data-v-383b1bbc] {\r\n    height: 50px;\r\n    width: 50%;\n}\r\n", ""]);
 
 // exports
 
@@ -62130,6 +62331,66 @@ if(false) {}
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=cf01056a&scoped=true&lang=css&":
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=cf01056a&scoped=true&lang=css& ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=cf01056a&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=cf01056a&scoped=true&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=b585f1d2&scoped=true&lang=css&":
+/*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=b585f1d2&scoped=true&lang=css& ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=b585f1d2&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=b585f1d2&scoped=true&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CalendarPage/twoFieldTwoHourThreeTeams.vue?vue&type=style&index=0&id=a289623e&scoped=true&lang=css&":
 /*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/CalendarPage/twoFieldTwoHourThreeTeams.vue?vue&type=style&index=0&id=a289623e&scoped=true&lang=css& ***!
@@ -62199,6 +62460,66 @@ if(false) {}
 
 
 var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./navBar.vue?vue&type=style&index=0&id=e7a45472&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/IndexPage/navBar.vue?vue&type=style&index=0&id=e7a45472&scoped=true&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=79135cd4&scoped=true&lang=css&":
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=79135cd4&scoped=true&lang=css& ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=79135cd4&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=79135cd4&scoped=true&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=383b1bbc&scoped=true&lang=css&":
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=383b1bbc&scoped=true&lang=css& ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=383b1bbc&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=383b1bbc&scoped=true&lang=css&");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -63670,6 +63991,105 @@ var render = function() {
               ],
               1
             )
+          : _vm.calendarData["seasonData"]["type"] ==
+            "SingleFieldOneHourTwoTeams"
+          ? _c(
+              "div",
+              [
+                _c("h1", [
+                  _vm._v(
+                    "Generate " + _vm._s(_vm.calendarData["seasonData"]["name"])
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.generateSeason()
+                      }
+                    }
+                  },
+                  [_vm._v("Regenerate season")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.saveSeason()
+                      }
+                    }
+                  },
+                  [_vm._v("Save season")]
+                ),
+                _vm._v(" "),
+                _c("single-field-one-hour-two-teams-page", {
+                  attrs: {
+                    calendarData: _vm.calendarData,
+                    userData: _vm.calendarData["generateGroupUserData"],
+                    loggedInUser: _vm.$attrs.user,
+                    generate: true
+                  }
+                })
+              ],
+              1
+            )
+          : _vm.calendarData["seasonData"]["type"] == "TwoFieldTwoHourFourTeams"
+          ? _c(
+              "div",
+              [
+                _c("h1", [
+                  _vm._v(
+                    "Generate " + _vm._s(_vm.calendarData["seasonData"]["name"])
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.generateSeason()
+                      }
+                    }
+                  },
+                  [_vm._v("Regenerate season")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.saveSeason()
+                      }
+                    }
+                  },
+                  [_vm._v("Save season")]
+                ),
+                _vm._v(" "),
+                _c("two-field-two-hour-four-teams-page", {
+                  attrs: {
+                    calendarData: _vm.calendarData,
+                    userData: _vm.calendarData["generateGroupUserData"],
+                    loggedInUser: _vm.$attrs.user,
+                    generate: true
+                  }
+                })
+              ],
+              1
+            )
           : _c("div", [_vm._v("\n        onbekende calendar view\n    ")])
       ])
     : _vm._e()
@@ -63716,6 +64136,36 @@ var render = function() {
                       ],
                       1
                     )
+                  : _vm.calendarData["seasonData"]["type"] ==
+                    "SingleFieldOneHourTwoTeams"
+                  ? _c(
+                      "div",
+                      [
+                        _c("single-field-one-hour-two-teams-page", {
+                          attrs: {
+                            calendarData: _vm.calendarData,
+                            userData: _vm.calendarData["groupUserData"],
+                            loggedInUser: _vm.$attrs.user
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  : _vm.calendarData["seasonData"]["type"] ==
+                    "TwoFieldTwoHourFourTeams"
+                  ? _c(
+                      "div",
+                      [
+                        _c("two-field-two-hour-four-teams-page", {
+                          attrs: {
+                            calendarData: _vm.calendarData,
+                            userData: _vm.calendarData["groupUserData"],
+                            loggedInUser: _vm.$attrs.user
+                          }
+                        })
+                      ],
+                      1
+                    )
                   : _c("div", [
                       _vm._v(
                         "\n                onbekende calendar view\n            "
@@ -63727,6 +64177,1200 @@ var render = function() {
       : _vm.statusCode == 0
       ? _c("div")
       : _c("div", [_c("h1", [_vm._v("THIS IS NOT A PUBLIC SEASON")])])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue?vue&type=template&id=cf01056a&scoped=true&":
+/*!*************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue?vue&type=template&id=cf01056a&scoped=true& ***!
+  \*************************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _vm.editCalendarData["data"] != undefined
+      ? _c(
+          "div",
+          [
+            _vm.generate == false
+              ? _c("h1", [
+                  _vm._v(
+                    "\n            " +
+                      _vm._s(_vm.calendarData["seasonData"]["name"]) +
+                      "\n            "
+                  ),
+                  _vm.showEditCalenderButton()
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.editCalendar($event)
+                            }
+                          }
+                        },
+                        [
+                          _c("i", {
+                            staticClass: "fa fa-edit",
+                            staticStyle: { heigth: "14px", width: "14px" }
+                          })
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.calendarData["seasonData"]["allow_replacement"] == 1
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-warning",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.askReplacement($event)
+                            }
+                          }
+                        },
+                        [
+                          _c("i", {
+                            staticClass: "fas fa-exchange-alt",
+                            staticStyle: { heigth: "14px", width: "14px" }
+                          })
+                        ]
+                      )
+                    : _vm._e()
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("global-layout", { attrs: { sizeForm: "xlarge" } }, [
+              _c(
+                "div",
+                { staticStyle: { "overflow-x": "auto", "margin-left": "4em" } },
+                [
+                  _c("table", { staticClass: "table" }, [
+                    _c("thead", [
+                      _c(
+                        "tr",
+                        [
+                          _c(
+                            "th",
+                            {
+                              staticStyle: {
+                                position: "absolute",
+                                width: "3em",
+                                left: "0"
+                              },
+                              attrs: { scope: "col" }
+                            },
+                            [_vm._v("Player")]
+                          ),
+                          _vm._v(" "),
+                          _vm._l(_vm.editCalendarData["data"], function(date) {
+                            return _c(
+                              "th",
+                              {
+                                key: date.id,
+                                staticStyle: { "text-align": "center" },
+                                attrs: { scope: "col" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                " +
+                                    _vm._s(_vm.convertDate(date.day)) +
+                                    "\n                            "
+                                )
+                              ]
+                            )
+                          })
+                        ],
+                        2
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "tbody",
+                      _vm._l(_vm.userData, function(groupUser) {
+                        return _c(
+                          "tr",
+                          { key: groupUser.id },
+                          [
+                            _c(
+                              "td",
+                              {
+                                staticStyle: {
+                                  position: "absolute",
+                                  width: "3em",
+                                  left: "0"
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  _vm._s(
+                                    groupUser.user_id != null
+                                      ? groupUser.user.firstname
+                                      : groupUser.firstname
+                                  )
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _vm._l(_vm.editCalendarData["data"], function(
+                              data,
+                              index
+                            ) {
+                              return [
+                                _vm.edit == true
+                                  ? _c(
+                                      "td",
+                                      {
+                                        key: data.id,
+                                        class: _vm.getBackground(
+                                          groupUser.id,
+                                          data.day,
+                                          data["user"][groupUser.id]["team"]
+                                        ),
+                                        on: {
+                                          click: function($event) {
+                                            $event.preventDefault()
+                                            return _vm.editTeam(
+                                              index,
+                                              groupUser.id
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c("center", [
+                                          _vm._v(
+                                            "\n                                        " +
+                                              _vm._s(
+                                                data["user"][groupUser.id][
+                                                  "team"
+                                                ].replace("team", "")
+                                              ) +
+                                              "\n                                    "
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _vm.showUpdateButtons(
+                                          index,
+                                          groupUser.id
+                                        )
+                                          ? _c(
+                                              "span",
+                                              _vm._l(
+                                                _vm.updateButtons,
+                                                function(button) {
+                                                  return _c(
+                                                    "button",
+                                                    {
+                                                      key: button,
+                                                      staticClass:
+                                                        "btn btn-secondary",
+                                                      staticStyle: {
+                                                        width: "100%"
+                                                      },
+                                                      on: {
+                                                        click: function(
+                                                          $event
+                                                        ) {
+                                                          $event.stopPropagation()
+                                                          return _vm.updateTeam(
+                                                            index,
+                                                            groupUser.id,
+                                                            button,
+                                                            data["user"][
+                                                              groupUser.id
+                                                            ]["teamId"]
+                                                          )
+                                                        }
+                                                      }
+                                                    },
+                                                    [_vm._v(_vm._s(button))]
+                                                  )
+                                                }
+                                              ),
+                                              0
+                                            )
+                                          : _vm._e()
+                                      ],
+                                      1
+                                    )
+                                  : _vm.edit == false &&
+                                    data["user"][groupUser.id] == undefined
+                                  ? _c("td", {
+                                      key: data.id,
+                                      class: _vm.getBackground(
+                                        groupUser.id,
+                                        data.day,
+                                        ""
+                                      )
+                                    })
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _vm.edit == false &&
+                                data["user"][groupUser.id]["replacement"] == 1
+                                  ? _c(
+                                      "td",
+                                      {
+                                        key: data.id,
+                                        class: _vm.getBackground(
+                                          groupUser.id,
+                                          data.day,
+                                          "",
+                                          "replacement"
+                                        )
+                                      },
+                                      [
+                                        _c("center", [
+                                          _vm._v(
+                                            _vm._s(
+                                              data["user"][groupUser.id][
+                                                "team"
+                                              ].replace("team", "")
+                                            )
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        groupUser.user_id ==
+                                          _vm.loggedInUser.id &&
+                                        _vm.replacement == true
+                                          ? _c("span", [
+                                              _c(
+                                                "button",
+                                                {
+                                                  staticClass:
+                                                    "btn btn-warning",
+                                                  on: {
+                                                    click: function($event) {
+                                                      $event.stopPropagation()
+                                                      return _vm.cancelRequestForReplacement(
+                                                        groupUser.id,
+                                                        data["user"][
+                                                          groupUser.id
+                                                        ]["teamId"]
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [_vm._v("Vervanging annuleren")]
+                                              )
+                                            ])
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        data["user"][
+                                          _vm.getLoggedInGroupUserId
+                                        ]["teamId"] == ""
+                                          ? _c("span", [
+                                              _c(
+                                                "button",
+                                                {
+                                                  staticClass:
+                                                    "btn btn-warning",
+                                                  on: {
+                                                    click: function($event) {
+                                                      $event.stopPropagation()
+                                                      return _vm.confirmReplacement(
+                                                        groupUser.id,
+                                                        data["user"][
+                                                          groupUser.id
+                                                        ]["teamId"]
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _c("i", {
+                                                    staticClass:
+                                                      "fas fa-exchange-alt",
+                                                    staticStyle: {
+                                                      heigth: "14px",
+                                                      width: "14px"
+                                                    }
+                                                  })
+                                                ]
+                                              )
+                                            ])
+                                          : _vm._e()
+                                      ],
+                                      1
+                                    )
+                                  : _vm.edit == false
+                                  ? _c(
+                                      "td",
+                                      {
+                                        key: data.id,
+                                        class: _vm.getBackground(
+                                          groupUser.id,
+                                          data.day,
+                                          data["user"][groupUser.id]["team"]
+                                        )
+                                      },
+                                      [
+                                        _c("center", [
+                                          _vm._v(
+                                            "\n                                        " +
+                                              _vm._s(
+                                                data["user"][groupUser.id][
+                                                  "team"
+                                                ].replace("team", "")
+                                              ) +
+                                              "\n                                    "
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        groupUser.user_id ==
+                                          _vm.loggedInUser.id &&
+                                        data["user"][groupUser.id]["teamId"] !=
+                                          "" &&
+                                        _vm.compareDates(data.day) &&
+                                        _vm.replacement == true
+                                          ? _c("span", [
+                                              _c(
+                                                "button",
+                                                {
+                                                  staticClass:
+                                                    "btn btn-warning",
+                                                  on: {
+                                                    click: function($event) {
+                                                      $event.stopPropagation()
+                                                      return _vm.askForReplacement(
+                                                        groupUser.id,
+                                                        data["user"][
+                                                          groupUser.id
+                                                        ]["teamId"]
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [_vm._v("Vervanging gezocht")]
+                                              )
+                                            ])
+                                          : _vm._e()
+                                      ],
+                                      1
+                                    )
+                                  : _vm._e()
+                              ]
+                            })
+                          ],
+                          2
+                        )
+                      }),
+                      0
+                    )
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _vm.edit == true
+                ? _c("div", [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.saveTeams()
+                          }
+                        }
+                      },
+                      [_vm._v(" Save")]
+                    )
+                  ])
+                : _vm._e()
+            ])
+          ],
+          1
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _c("br"),
+    _c("hr"),
+    _c("br"),
+    _vm._v(" "),
+    _vm.calendarData["stats"] != undefined
+      ? _c(
+          "div",
+          [
+            _c("global-layout", { attrs: { sizeForm: "xlarge" } }, [
+              _c("span", { staticClass: "absence" }, [
+                _vm._v("Kan niet spelen")
+              ]),
+              _c("br"),
+              _vm._v(" "),
+              _c(
+                "span",
+                { staticClass: "free", staticStyle: { color: "white" } },
+                [_vm._v("Beschikbaar voor eventuele vervanging")]
+              ),
+              _c("br"),
+              _vm._v(" "),
+              _c("span", { staticClass: "replacement" }, [
+                _vm._v("Zoekt naar vervanging")
+              ]),
+              _c("br")
+            ]),
+            _vm._v(" "),
+            _c("br"),
+            _c("hr"),
+            _c("br"),
+            _vm._v(" "),
+            _c("global-layout", { attrs: { sizeForm: "xlarge" } }, [
+              _c(
+                "div",
+                { staticStyle: { "overflow-x": "auto", "margin-left": "4em" } },
+                [
+                  _c("table", { staticClass: "table" }, [
+                    _c("thead", [
+                      _c("tr", [
+                        _c(
+                          "th",
+                          {
+                            staticStyle: {
+                              position: "absolute",
+                              width: "3em",
+                              left: "0"
+                            },
+                            attrs: { scope: "col" }
+                          },
+                          [_vm._v("Naam")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "th",
+                          {
+                            staticStyle: { "text-align": "center" },
+                            attrs: { scope: "col" }
+                          },
+                          [_vm._v("Ploeg 1")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "th",
+                          {
+                            staticStyle: { "text-align": "center" },
+                            attrs: { scope: "col" }
+                          },
+                          [_vm._v("Ploeg 2")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "th",
+                          {
+                            staticStyle: { "text-align": "center" },
+                            attrs: { scope: "col" }
+                          },
+                          [_vm._v("Totaal")]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "tbody",
+                      _vm._l(_vm.userData, function(user) {
+                        return _c("tr", { key: user.id }, [
+                          _c(
+                            "td",
+                            {
+                              staticStyle: {
+                                position: "absolute",
+                                width: "3em",
+                                left: "0"
+                              }
+                            },
+                            [_vm._v(_vm._s(user.firstname))]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "td",
+                            [
+                              _c("center", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.calendarData["stats"][user.id]["team1"]
+                                  )
+                                )
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "td",
+                            [
+                              _c("center", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.calendarData["stats"][user.id]["team2"]
+                                  )
+                                )
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "td",
+                            [
+                              _c("center", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.calendarData["stats"][user.id]["total"]
+                                  )
+                                )
+                              ])
+                            ],
+                            1
+                          )
+                        ])
+                      }),
+                      0
+                    )
+                  ])
+                ]
+              )
+            ])
+          ],
+          1
+        )
+      : _vm._e()
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue?vue&type=template&id=b585f1d2&scoped=true&":
+/*!***********************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue?vue&type=template&id=b585f1d2&scoped=true& ***!
+  \***********************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _vm.editCalendarData["data"] != undefined
+      ? _c(
+          "div",
+          [
+            _vm.generate == false
+              ? _c("h1", [
+                  _vm._v(
+                    "\n            " +
+                      _vm._s(_vm.calendarData["seasonData"]["name"]) +
+                      "\n            "
+                  ),
+                  _vm.showEditCalenderButton()
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.editCalendar($event)
+                            }
+                          }
+                        },
+                        [
+                          _c("i", {
+                            staticClass: "fa fa-edit",
+                            staticStyle: { heigth: "14px", width: "14px" }
+                          })
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.calendarData["seasonData"]["allow_replacement"] == 1
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-warning",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.askReplacement($event)
+                            }
+                          }
+                        },
+                        [
+                          _c("i", {
+                            staticClass: "fas fa-exchange-alt",
+                            staticStyle: { heigth: "14px", width: "14px" }
+                          })
+                        ]
+                      )
+                    : _vm._e()
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("global-layout", { attrs: { sizeForm: "xlarge" } }, [
+              _c(
+                "div",
+                { staticStyle: { "overflow-x": "auto", "margin-left": "4em" } },
+                [
+                  _c("table", { staticClass: "table" }, [
+                    _c("thead", [
+                      _c(
+                        "tr",
+                        [
+                          _c(
+                            "th",
+                            {
+                              staticStyle: {
+                                position: "absolute",
+                                width: "3em",
+                                left: "0"
+                              },
+                              attrs: { scope: "col" }
+                            },
+                            [_vm._v("Player")]
+                          ),
+                          _vm._v(" "),
+                          _vm._l(_vm.editCalendarData["data"], function(date) {
+                            return _c(
+                              "th",
+                              {
+                                key: date.id,
+                                staticStyle: { "text-align": "center" },
+                                attrs: { scope: "col" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                " +
+                                    _vm._s(_vm.convertDate(date.day)) +
+                                    "\n                            "
+                                )
+                              ]
+                            )
+                          })
+                        ],
+                        2
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "tbody",
+                      _vm._l(_vm.userData, function(groupUser) {
+                        return _c(
+                          "tr",
+                          { key: groupUser.id },
+                          [
+                            _c(
+                              "td",
+                              {
+                                staticStyle: {
+                                  position: "absolute",
+                                  width: "3em",
+                                  left: "0"
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  _vm._s(
+                                    groupUser.user_id != null
+                                      ? groupUser.user.firstname
+                                      : groupUser.firstname
+                                  )
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _vm._l(_vm.editCalendarData["data"], function(
+                              data,
+                              index
+                            ) {
+                              return [
+                                _vm.edit == true
+                                  ? _c(
+                                      "td",
+                                      {
+                                        key: data.id,
+                                        class: _vm.getBackground(
+                                          groupUser.id,
+                                          data.day,
+                                          data["user"][groupUser.id]["team"]
+                                        ),
+                                        on: {
+                                          click: function($event) {
+                                            $event.preventDefault()
+                                            return _vm.editTeam(
+                                              index,
+                                              groupUser.id
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c("center", [
+                                          _vm._v(
+                                            "\n                                        " +
+                                              _vm._s(
+                                                data["user"][groupUser.id][
+                                                  "team"
+                                                ].replace("team", "")
+                                              ) +
+                                              "\n                                    "
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _vm.showUpdateButtons(
+                                          index,
+                                          groupUser.id
+                                        )
+                                          ? _c(
+                                              "span",
+                                              _vm._l(
+                                                _vm.updateButtons,
+                                                function(button) {
+                                                  return _c(
+                                                    "button",
+                                                    {
+                                                      key: button,
+                                                      staticClass:
+                                                        "btn btn-secondary",
+                                                      staticStyle: {
+                                                        width: "100%"
+                                                      },
+                                                      on: {
+                                                        click: function(
+                                                          $event
+                                                        ) {
+                                                          $event.stopPropagation()
+                                                          return _vm.updateTeam(
+                                                            index,
+                                                            groupUser.id,
+                                                            button,
+                                                            data["user"][
+                                                              groupUser.id
+                                                            ]["teamId"]
+                                                          )
+                                                        }
+                                                      }
+                                                    },
+                                                    [_vm._v(_vm._s(button))]
+                                                  )
+                                                }
+                                              ),
+                                              0
+                                            )
+                                          : _vm._e()
+                                      ],
+                                      1
+                                    )
+                                  : _vm.edit == false &&
+                                    data["user"][groupUser.id] == undefined
+                                  ? _c("td", {
+                                      key: data.id,
+                                      class: _vm.getBackground(
+                                        groupUser.id,
+                                        data.day,
+                                        ""
+                                      )
+                                    })
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _vm.edit == false &&
+                                data["user"][groupUser.id]["replacement"] == 1
+                                  ? _c(
+                                      "td",
+                                      {
+                                        key: data.id,
+                                        class: _vm.getBackground(
+                                          groupUser.id,
+                                          data.day,
+                                          "",
+                                          "replacement"
+                                        )
+                                      },
+                                      [
+                                        _c("center", [
+                                          _vm._v(
+                                            _vm._s(
+                                              data["user"][groupUser.id][
+                                                "team"
+                                              ].replace("team", "")
+                                            )
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        groupUser.user_id ==
+                                          _vm.loggedInUser.id &&
+                                        _vm.replacement == true
+                                          ? _c("span", [
+                                              _c(
+                                                "button",
+                                                {
+                                                  staticClass:
+                                                    "btn btn-warning",
+                                                  on: {
+                                                    click: function($event) {
+                                                      $event.stopPropagation()
+                                                      return _vm.cancelRequestForReplacement(
+                                                        groupUser.id,
+                                                        data["user"][
+                                                          groupUser.id
+                                                        ]["teamId"]
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [_vm._v("Vervanging annuleren")]
+                                              )
+                                            ])
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        data["user"][
+                                          _vm.getLoggedInGroupUserId
+                                        ]["teamId"] == ""
+                                          ? _c("span", [
+                                              _c(
+                                                "button",
+                                                {
+                                                  staticClass:
+                                                    "btn btn-warning",
+                                                  on: {
+                                                    click: function($event) {
+                                                      $event.stopPropagation()
+                                                      return _vm.confirmReplacement(
+                                                        groupUser.id,
+                                                        data["user"][
+                                                          groupUser.id
+                                                        ]["teamId"]
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _c("i", {
+                                                    staticClass:
+                                                      "fas fa-exchange-alt",
+                                                    staticStyle: {
+                                                      heigth: "14px",
+                                                      width: "14px"
+                                                    }
+                                                  })
+                                                ]
+                                              )
+                                            ])
+                                          : _vm._e()
+                                      ],
+                                      1
+                                    )
+                                  : _vm.edit == false
+                                  ? _c(
+                                      "td",
+                                      {
+                                        key: data.id,
+                                        class: _vm.getBackground(
+                                          groupUser.id,
+                                          data.day,
+                                          data["user"][groupUser.id]["team"]
+                                        )
+                                      },
+                                      [
+                                        _c("center", [
+                                          _vm._v(
+                                            "\n                                        " +
+                                              _vm._s(
+                                                data["user"][groupUser.id][
+                                                  "team"
+                                                ].replace("team", "")
+                                              ) +
+                                              "\n                                    "
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        groupUser.user_id ==
+                                          _vm.loggedInUser.id &&
+                                        data["user"][groupUser.id]["teamId"] !=
+                                          "" &&
+                                        _vm.compareDates(data.day) &&
+                                        _vm.replacement == true
+                                          ? _c("span", [
+                                              _c(
+                                                "button",
+                                                {
+                                                  staticClass:
+                                                    "btn btn-warning",
+                                                  on: {
+                                                    click: function($event) {
+                                                      $event.stopPropagation()
+                                                      return _vm.askForReplacement(
+                                                        groupUser.id,
+                                                        data["user"][
+                                                          groupUser.id
+                                                        ]["teamId"]
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [_vm._v("Vervanging gezocht")]
+                                              )
+                                            ])
+                                          : _vm._e()
+                                      ],
+                                      1
+                                    )
+                                  : _vm._e()
+                              ]
+                            })
+                          ],
+                          2
+                        )
+                      }),
+                      0
+                    )
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _vm.edit == true
+                ? _c("div", [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.saveTeams()
+                          }
+                        }
+                      },
+                      [_vm._v(" Save")]
+                    )
+                  ])
+                : _vm._e()
+            ])
+          ],
+          1
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _c("br"),
+    _c("hr"),
+    _c("br"),
+    _vm._v(" "),
+    _vm.calendarData["stats"] != undefined
+      ? _c(
+          "div",
+          [
+            _c("global-layout", { attrs: { sizeForm: "xlarge" } }, [
+              _c("span", { staticClass: "absence" }, [
+                _vm._v("Kan niet spelen")
+              ]),
+              _c("br"),
+              _vm._v(" "),
+              _c(
+                "span",
+                { staticClass: "free", staticStyle: { color: "white" } },
+                [_vm._v("Beschikbaar voor eventuele vervanging")]
+              ),
+              _c("br"),
+              _vm._v(" "),
+              _c("span", { staticClass: "replacement" }, [
+                _vm._v("Zoekt naar vervanging")
+              ]),
+              _c("br")
+            ]),
+            _vm._v(" "),
+            _c("br"),
+            _c("hr"),
+            _c("br"),
+            _vm._v(" "),
+            _c("global-layout", { attrs: { sizeForm: "xlarge" } }, [
+              _c(
+                "div",
+                { staticStyle: { "overflow-x": "auto", "margin-left": "4em" } },
+                [
+                  _c("table", { staticClass: "table" }, [
+                    _c("thead", [
+                      _c("tr", [
+                        _c(
+                          "th",
+                          {
+                            staticStyle: {
+                              position: "absolute",
+                              width: "3em",
+                              left: "0"
+                            },
+                            attrs: { scope: "col" }
+                          },
+                          [_vm._v("Naam")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "th",
+                          {
+                            staticStyle: { "text-align": "center" },
+                            attrs: { scope: "col" }
+                          },
+                          [_vm._v("Ploeg 1")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "th",
+                          {
+                            staticStyle: { "text-align": "center" },
+                            attrs: { scope: "col" }
+                          },
+                          [_vm._v("Ploeg 2")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "th",
+                          {
+                            staticStyle: { "text-align": "center" },
+                            attrs: { scope: "col" }
+                          },
+                          [_vm._v("Ploeg 3")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "th",
+                          {
+                            staticStyle: { "text-align": "center" },
+                            attrs: { scope: "col" }
+                          },
+                          [_vm._v("Ploeg 4")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "th",
+                          {
+                            staticStyle: { "text-align": "center" },
+                            attrs: { scope: "col" }
+                          },
+                          [_vm._v("Totaal")]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "tbody",
+                      _vm._l(_vm.userData, function(user) {
+                        return _c("tr", { key: user.id }, [
+                          _c(
+                            "td",
+                            {
+                              staticStyle: {
+                                position: "absolute",
+                                width: "3em",
+                                left: "0"
+                              }
+                            },
+                            [_vm._v(_vm._s(user.firstname))]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "td",
+                            [
+                              _c("center", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.calendarData["stats"][user.id]["team1"]
+                                  )
+                                )
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "td",
+                            [
+                              _c("center", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.calendarData["stats"][user.id]["team2"]
+                                  )
+                                )
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "td",
+                            [
+                              _c("center", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.calendarData["stats"][user.id]["team3"]
+                                  )
+                                )
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "td",
+                            [
+                              _c("center", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.calendarData["stats"][user.id]["team4"]
+                                  )
+                                )
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "td",
+                            [
+                              _c("center", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.calendarData["stats"][user.id]["total"]
+                                  )
+                                )
+                              ])
+                            ],
+                            1
+                          )
+                        ])
+                      }),
+                      0
+                    )
+                  ])
+                ]
+              )
+            ])
+          ],
+          1
+        )
+      : _vm._e()
   ])
 }
 var staticRenderFns = []
@@ -63784,24 +65428,26 @@ var render = function() {
                       )
                     : _vm._e(),
                   _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-warning",
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          return _vm.askReplacement($event)
-                        }
-                      }
-                    },
-                    [
-                      _c("i", {
-                        staticClass: "fas fa-exchange-alt",
-                        staticStyle: { heigth: "14px", width: "14px" }
-                      })
-                    ]
-                  )
+                  _vm.calendarData["seasonData"]["allow_replacement"] == 1
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-warning",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.askReplacement($event)
+                            }
+                          }
+                        },
+                        [
+                          _c("i", {
+                            staticClass: "fas fa-exchange-alt",
+                            staticStyle: { heigth: "14px", width: "14px" }
+                          })
+                        ]
+                      )
+                    : _vm._e()
                 ])
               : _vm._e(),
             _vm._v(" "),
@@ -65485,8 +67131,14 @@ var render = function() {
                       _c(
                         "a",
                         {
-                          staticClass: "nav-link js-scroll-trigger",
-                          attrs: { href: "logout" }
+                          staticClass:
+                            "nav-link js-scroll-trigger nav-link js-scroll-trigger item-link",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.logout($event)
+                            }
+                          }
                         },
                         [_vm._v("Logout")]
                       )
@@ -65553,6 +67205,352 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue?vue&type=template&id=79135cd4&scoped=true&":
+/*!****************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue?vue&type=template&id=79135cd4&scoped=true& ***!
+  \****************************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("h3", [
+      _c(
+        "button",
+        {
+          staticClass: "btn-info",
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              return _vm.previousDay()
+            }
+          }
+        },
+        [_c("i", { staticClass: "fas fa-angle-double-left" })]
+      ),
+      _vm._v(
+        " \n            " +
+          _vm._s(_vm.calendarData["seasonData"]["name"]) +
+          "\n        "
+      ),
+      _c(
+        "button",
+        {
+          staticClass: "btn-info",
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              return _vm.nextDay()
+            }
+          }
+        },
+        [_c("i", { staticClass: "fas fa-angle-double-right" })]
+      )
+    ]),
+    _vm._v(" "),
+    _vm.calendarData["data"] != undefined
+      ? _c("div", { staticClass: "container" }, [
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-lg-3 col-1" }),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-lg-6 col-10" }, [
+              _c(
+                "div",
+                { staticStyle: { "overflow-x": "auto", "margin-left": "4em" } },
+                [
+                  _c("table", { staticClass: "table" }, [
+                    _c("thead", [
+                      _c("tr", [
+                        _c(
+                          "th",
+                          {
+                            staticStyle: { position: "absolute", left: "0" },
+                            attrs: { scope: "col" }
+                          },
+                          [_vm._v("Player")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "th",
+                          {
+                            staticStyle: { "text-align": "center" },
+                            attrs: { scope: "col" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                    " +
+                                _vm._s(
+                                  _vm.convertDate(
+                                    _vm.calendarData["data"][
+                                      _vm.calendarData["currentPlayDay"]
+                                    ]["day"]
+                                  )
+                                ) +
+                                "\n                                "
+                            )
+                          ]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "tbody",
+                      _vm._l(_vm.userData, function(groupUser) {
+                        return _c("tr", { key: groupUser.id }, [
+                          _c(
+                            "td",
+                            {
+                              staticStyle: { position: "absolute", left: "0" }
+                            },
+                            [
+                              _vm._v(
+                                _vm._s(
+                                  groupUser.user_id != null
+                                    ? groupUser.user.firstname
+                                    : groupUser.firstname
+                                )
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _vm.calendarData["data"][
+                            _vm.calendarData["currentPlayDay"]
+                          ]["user"][groupUser.id]["team"] != ""
+                            ? _c(
+                                "td",
+                                [
+                                  _c("center", [
+                                    _vm.calendarData["data"][
+                                      _vm.calendarData["currentPlayDay"]
+                                    ]["user"][groupUser.id]["team"] == "team1"
+                                      ? _c("span", [_vm._v("1")])
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    _vm.calendarData["data"][
+                                      _vm.calendarData["currentPlayDay"]
+                                    ]["user"][groupUser.id]["team"] == "team2"
+                                      ? _c("span", [_vm._v("2")])
+                                      : _vm._e()
+                                  ])
+                                ],
+                                1
+                              )
+                            : _c("td", {
+                                class: _vm.getBackground(
+                                  groupUser.id,
+                                  _vm.calendarData["data"][
+                                    _vm.calendarData["currentPlayDay"]
+                                  ]["day"]
+                                )
+                              })
+                        ])
+                      }),
+                      0
+                    )
+                  ])
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-lg-3 col-1" })
+          ])
+        ])
+      : _vm._e()
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue?vue&type=template&id=383b1bbc&scoped=true&":
+/*!**************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue?vue&type=template&id=383b1bbc&scoped=true& ***!
+  \**************************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("h3", [
+      _c(
+        "button",
+        {
+          staticClass: "btn-info",
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              return _vm.previousDay()
+            }
+          }
+        },
+        [_c("i", { staticClass: "fas fa-angle-double-left" })]
+      ),
+      _vm._v(
+        " \n            " +
+          _vm._s(_vm.calendarData["seasonData"]["name"]) +
+          "\n        "
+      ),
+      _c(
+        "button",
+        {
+          staticClass: "btn-info",
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              return _vm.nextDay()
+            }
+          }
+        },
+        [_c("i", { staticClass: "fas fa-angle-double-right" })]
+      )
+    ]),
+    _vm._v(" "),
+    _vm.calendarData["data"] != undefined
+      ? _c("div", { staticClass: "container" }, [
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-lg-3 col-1" }),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-lg-6 col-10" }, [
+              _c(
+                "div",
+                { staticStyle: { "overflow-x": "auto", "margin-left": "4em" } },
+                [
+                  _c("table", { staticClass: "table" }, [
+                    _c("thead", [
+                      _c("tr", [
+                        _c(
+                          "th",
+                          {
+                            staticStyle: { position: "absolute", left: "0" },
+                            attrs: { scope: "col" }
+                          },
+                          [_vm._v("Player")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "th",
+                          {
+                            staticStyle: { "text-align": "center" },
+                            attrs: { scope: "col" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                    " +
+                                _vm._s(
+                                  _vm.convertDate(
+                                    _vm.calendarData["data"][
+                                      _vm.calendarData["currentPlayDay"]
+                                    ]["day"]
+                                  )
+                                ) +
+                                "\n                                "
+                            )
+                          ]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "tbody",
+                      _vm._l(_vm.userData, function(groupUser) {
+                        return _c("tr", { key: groupUser.id }, [
+                          _c(
+                            "td",
+                            {
+                              staticStyle: { position: "absolute", left: "0" }
+                            },
+                            [
+                              _vm._v(
+                                _vm._s(
+                                  groupUser.user_id != null
+                                    ? groupUser.user.firstname
+                                    : groupUser.firstname
+                                )
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _vm.calendarData["data"][
+                            _vm.calendarData["currentPlayDay"]
+                          ]["user"][groupUser.id]["team"] != ""
+                            ? _c(
+                                "td",
+                                [
+                                  _c("center", [
+                                    _vm.calendarData["data"][
+                                      _vm.calendarData["currentPlayDay"]
+                                    ]["user"][groupUser.id]["team"] == "team1"
+                                      ? _c("span", [_vm._v("1")])
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    _vm.calendarData["data"][
+                                      _vm.calendarData["currentPlayDay"]
+                                    ]["user"][groupUser.id]["team"] == "team2"
+                                      ? _c("span", [_vm._v("2")])
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    _vm.calendarData["data"][
+                                      _vm.calendarData["currentPlayDay"]
+                                    ]["user"][groupUser.id]["team"] == "team3"
+                                      ? _c("span", [_vm._v("3")])
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    _vm.calendarData["data"][
+                                      _vm.calendarData["currentPlayDay"]
+                                    ]["user"][groupUser.id]["team"] == "team4"
+                                      ? _c("span", [_vm._v("4")])
+                                      : _vm._e()
+                                  ])
+                                ],
+                                1
+                              )
+                            : _c("td", {
+                                class: _vm.getBackground(
+                                  groupUser.id,
+                                  _vm.calendarData["data"][
+                                    _vm.calendarData["currentPlayDay"]
+                                  ]["day"]
+                                )
+                              })
+                        ])
+                      }),
+                      0
+                    )
+                  ])
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-lg-3 col-1" })
+          ])
+        ])
+      : _vm._e()
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/NextPlayDayPage/twoFieldTwoHourThreeTeams.vue?vue&type=template&id=44c34536&scoped=true&":
 /*!***************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/NextPlayDayPage/twoFieldTwoHourThreeTeams.vue?vue&type=template&id=44c34536&scoped=true& ***!
@@ -65584,7 +67582,7 @@ var render = function() {
         [_c("i", { staticClass: "fas fa-angle-double-left" })]
       ),
       _vm._v(
-        " \n    " +
+        " \n            " +
           _vm._s(_vm.calendarData["seasonData"]["name"]) +
           "\n        "
       ),
@@ -66179,30 +68177,32 @@ var render = function() {
             )
           : _vm._e(),
         _vm._v(" "),
-        _c(
-          "global-layout",
-          [
-            _c("label", [_vm._v("Type: ")]),
-            _vm._v(" "),
-            _c("multiselect", {
-              attrs: {
-                multiple: false,
-                options: _vm.multiType,
-                "close-on-select": true,
-                "clear-on-select": true,
-                placeholder: "Selecteer een seizoens generator"
-              },
-              model: {
-                value: _vm.selectedType,
-                callback: function($$v) {
-                  _vm.selectedType = $$v
-                },
-                expression: "selectedType"
-              }
-            })
-          ],
-          1
-        ),
+        _vm.seasonDraw == 0
+          ? _c(
+              "global-layout",
+              [
+                _c("label", [_vm._v("Type: ")]),
+                _vm._v(" "),
+                _c("multiselect", {
+                  attrs: {
+                    multiple: false,
+                    options: _vm.multiType,
+                    "close-on-select": true,
+                    "clear-on-select": true,
+                    placeholder: "Selecteer een seizoens generator"
+                  },
+                  model: {
+                    value: _vm.selectedType,
+                    callback: function($$v) {
+                      _vm.selectedType = $$v
+                    },
+                    expression: "selectedType"
+                  }
+                })
+              ],
+              1
+            )
+          : _vm._e(),
         _vm._v(" "),
         _vm.submitOption == "Create"
           ? _c(
@@ -66910,6 +68910,33 @@ var render = function() {
                       "div",
                       [
                         _c("two-field-two-hour-three-teams", {
+                          attrs: {
+                            calendarData: calendar,
+                            userData: calendar["groupUserData"]
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  : calendar["seasonData"]["type"] == "TwoFieldTwoHourFourTeams"
+                  ? _c(
+                      "div",
+                      [
+                        _c("two-field-two-hour-four-teams", {
+                          attrs: {
+                            calendarData: calendar,
+                            userData: calendar["groupUserData"]
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  : calendar["seasonData"]["type"] ==
+                    "SingleFieldOneHourTwoTeams"
+                  ? _c(
+                      "div",
+                      [
+                        _c("single-field-one-hour-two-teams", {
                           attrs: {
                             calendarData: calendar,
                             userData: calendar["groupUserData"]
@@ -82160,7 +84187,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapMutations", function() { return mapMutations; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapState", function() { return mapState; });
 /*!
- * vuex v3.5.1
+ * vuex v3.6.0
  * (c) 2020 Evan You
  * @license MIT
  */
@@ -82447,7 +84474,11 @@ ModuleCollection.prototype.isRegistered = function isRegistered (path) {
   var parent = this.get(path.slice(0, -1));
   var key = path[path.length - 1];
 
-  return parent.hasChild(key)
+  if (parent) {
+    return parent.hasChild(key)
+  }
+
+  return false
 };
 
 function update (path, targetModule, newModule) {
@@ -83387,7 +85418,7 @@ function pad (num, maxLength) {
 var index = {
   Store: Store,
   install: install,
-  version: '3.5.1',
+  version: '3.6.0',
   mapState: mapState,
   mapMutations: mapMutations,
   mapGetters: mapGetters,
@@ -83704,6 +85735,348 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_globalLayout_vue_vue_type_template_id_3119e51e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/components/mixins/generator/doubleHour.js":
+/*!****************************************************************!*\
+  !*** ./resources/js/components/mixins/generator/doubleHour.js ***!
+  \****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../services/ApiCall.js */ "./resources/js/services/ApiCall.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    Moment: moment__WEBPACK_IMPORTED_MODULE_1___default.a
+  },
+  data: function data() {
+    return {
+      edit: false,
+      replacement: false,
+      editIndex: "",
+      editUserId: "",
+      editCalendarData: {},
+      updateButtons: {},
+      updateData: {},
+      'formData': new FormData(),
+      getLoggedInGroupUserId: 0
+    };
+  },
+  props: {
+    'calendarData': {},
+    'userData': {},
+    'loggedInUser': {},
+    'generate': Boolean
+  },
+  watch: {
+    calendarData: function calendarData() {
+      this.editCalendarData = this.calendarData;
+    }
+  },
+  methods: {
+    showEditCalenderButton: function showEditCalenderButton() {
+      if (this.loggedInUser.id != this.editCalendarData['seasonData']['admin_id']) {
+        return false;
+      }
+
+      return true;
+    },
+    showUpdateButtons: function showUpdateButtons(index, groupUserId) {
+      if (this.editIndex != index) {
+        return false;
+      }
+
+      if (this.editUserId != groupUserId) {
+        return false;
+      }
+
+      if (this.loggedInUser.id != this.editCalendarData['seasonData']['admin_id']) {
+        return false;
+      }
+
+      return true;
+    },
+    getLoggedInGroupUser: function getLoggedInGroupUser() {
+      for (var groupUser in this.userData) {
+        if (this.loggedInUser.id == this.userData[groupUser]['user_id']) {
+          this.getLoggedInGroupUserId = this.userData[groupUser]['id'];
+        }
+      }
+    },
+    editCalendar: function editCalendar() {
+      if (this.edit === false) {
+        this.edit = true;
+        return;
+      }
+
+      this.edit = false;
+      return;
+    },
+    askReplacement: function askReplacement() {
+      if (this.replacement == false) {
+        this.replacement = true;
+        return true;
+      }
+
+      this.replacement = false;
+      return;
+    },
+    convertDate: function convertDate(value) {
+      return moment__WEBPACK_IMPORTED_MODULE_1___default()(value, "YYYY-MM-DD").format('DD/MMM');
+    },
+    compareDates: function compareDates(value) {
+      var date1 = moment__WEBPACK_IMPORTED_MODULE_1___default()(value).format('YYYYMMDD');
+      ;
+      var date2 = moment__WEBPACK_IMPORTED_MODULE_1___default()().format('YYYYMMDD');
+      ;
+
+      if (date1 < date2) {
+        return false;
+      }
+
+      return true;
+    },
+    getBackground: function getBackground(groupUserId, date, team) {
+      var replacement = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "";
+      var colorClass = "";
+
+      if (team == "") {
+        colorClass = "free";
+      }
+
+      if (replacement == "replacement") {
+        return "replacement";
+      }
+
+      if (this.calendarData['absenceData'] == undefined) {
+        return colorClass;
+      }
+
+      if (this.calendarData['absenceData'][groupUserId] == undefined) {
+        return colorClass;
+      }
+
+      if (team != '') {
+        return colorClass;
+      }
+
+      for (var i = 0; i < this.calendarData['absenceData'][groupUserId]['date'].length; i++) {
+        if (date == this.calendarData['absenceData'][groupUserId]['date'][i]) {
+          colorClass = "absence";
+        }
+      }
+
+      return colorClass;
+    },
+    editTeam: function editTeam(index, groupUserId) {
+      if (index == this.editIndex && groupUserId == this.editUserId) {
+        this.editIndex = "";
+        this.editUserId = "";
+      } else {
+        this.editIndex = index;
+        this.editUserId = groupUserId;
+      }
+
+      this.updateButtons = {};
+      this.updateButtons[0] = 'Free';
+      this.updateButtons[1] = "Absence";
+      var x = 2;
+
+      for (var calendar in this.editCalendarData['data'][index]['teams']) {
+        if (this.calendarData.data[index].user[groupUserId].team == this.editCalendarData['data'][index]['teams'][calendar]['team']) {
+          continue;
+        }
+
+        if (this.editCalendarData['data'][index]['teams'][calendar]['groupUserId'] !== null) {
+          continue;
+        }
+
+        var doubleCheck = false;
+
+        for (var check in this.updateButtons) {
+          if (this.updateButtons[check] == this.editCalendarData['data'][index]['teams'][calendar]['team']) {
+            doubleCheck = true;
+          }
+        }
+
+        if (doubleCheck == true) {
+          continue;
+        }
+
+        this.updateButtons[x] = this.editCalendarData['data'][index]['teams'][calendar]['team'];
+        x++;
+      }
+    },
+    updateTeam: function updateTeam(index, userId, buttonChoice) {
+      var currentTeamId = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+
+      if (currentTeamId > 0) {
+        this.updateData[currentTeamId] = "";
+      }
+
+      if (buttonChoice == "Free" || buttonChoice == 'Absence') {
+        if (currentTeamId == 0) {
+          this.editIndex = "";
+          this.editUserId = "";
+          return;
+        }
+
+        this.editCalendarData['data'][index]['teams'][currentTeamId]['groupUserId'] = null;
+        this.editCalendarData['data'][index]['user'][userId]['team'] = "";
+        this.editCalendarData['data'][index]['user'][userId]['teamId'] = "";
+        this.editIndex = "";
+        this.editUserId = "";
+        return;
+      }
+
+      for (var teamId in this.editCalendarData['data'][index]['teams']) {
+        if (this.editCalendarData['data'][index]['teams'][teamId]['team'] === buttonChoice && this.editCalendarData['data'][index]['teams'][teamId]['groupUserId'] === null) {
+          this.editCalendarData['data'][index]['teams'][teamId]['groupUserId'] = userId;
+          this.editCalendarData['data'][index]['user'][userId]['team'] = buttonChoice;
+          this.editCalendarData['data'][index]['user'][userId]['teamId'] = teamId;
+          this.updateData[teamId] = userId;
+
+          if (currentTeamId > 0) {
+            this.editCalendarData['data'][index]['teams'][currentTeamId]['groupUserId'] = null;
+
+            if (buttonChoice == "Free" || buttonChoice == 'Absence') {
+              this.editCalendarData['data'][index]['user'][userId]['team'] = "";
+              this.editCalendarData['data'][index]['user'][userId]['teamId'] = "";
+            }
+          }
+
+          break;
+        }
+      }
+
+      this.editIndex = "";
+      this.editUserId = "";
+    },
+    saveTeams: function saveTeams() {
+      var _this = this;
+
+      this.formData.append('teamRange', JSON.stringify(this.updateData));
+      _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__["default"].postData('team/range', this.formData).then(function (response) {
+        _this.message = "Teams are updated";
+
+        _this.$bus.$emit('showMessage', _this.message, 'green', '2000');
+
+        _this.$bus.$emit('reloadCalendar');
+
+        _this.edit = false;
+      })["catch"](function (error) {
+        _this.errors = error;
+      });
+    },
+    askForReplacement: function askForReplacement(groupUser, teamId) {
+      var _this2 = this;
+
+      _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__["default"].postData('team/' + teamId + '/askForReplacement').then(function (response) {
+        _this2.message = "Vervangingsaanvraag is aanvaard";
+
+        _this2.$bus.$emit('showMessage', _this2.message, 'green', '2000');
+
+        _this2.$bus.$emit('reloadCalendar');
+      })["catch"](function (error) {
+        _this2.errors = error;
+      });
+    },
+    cancelRequestForReplacement: function cancelRequestForReplacement(groupUser, teamId) {
+      var _this3 = this;
+
+      _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__["default"].postData('team/' + teamId + '/cancelRequestForReplacement').then(function (response) {
+        _this3.message = "Vervanging is geannulleerd";
+
+        _this3.$bus.$emit('showMessage', _this3.message, 'green', '2000');
+
+        _this3.$bus.$emit('reloadCalendar');
+      })["catch"](function (error) {
+        _this3.errors = error;
+      });
+    },
+    confirmReplacement: function confirmReplacement(groupUser, teamId) {
+      var _this4 = this;
+
+      _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__["default"].postData('team/' + teamId + '/confirmReplacement').then(function (response) {
+        _this4.message = "Vervanging aanvaard";
+
+        _this4.$bus.$emit('showMessage', _this4.message, 'green', '2000');
+
+        _this4.$bus.$emit('reloadCalendar');
+      })["catch"](function (error) {
+        _this4.errors = error;
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.editCalendarData = this.calendarData;
+    this.getLoggedInGroupUser();
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/mixins/nextDay/doubleHour.js":
+/*!**************************************************************!*\
+  !*** ./resources/js/components/mixins/nextDay/doubleHour.js ***!
+  \**************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    Moment: moment__WEBPACK_IMPORTED_MODULE_0___default.a
+  },
+  data: function data() {
+    return {};
+  },
+  props: {
+    calendarData: {},
+    userData: {}
+  },
+  methods: {
+    nextDay: function nextDay() {
+      if (this.calendarData['currentPlayDay'] + 1 < this.calendarData['data'].length) {
+        this.calendarData['currentPlayDay']++;
+      }
+    },
+    previousDay: function previousDay() {
+      if (this.calendarData['currentPlayDay'] > 0) {
+        this.calendarData['currentPlayDay']--;
+      }
+    },
+    convertDate: function convertDate(value) {
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()(value, "YYYY-MM-DD").format('DD/MMM');
+    },
+    getBackground: function getBackground(groupUserId, date) {
+      var colorClass = "free";
+
+      if (this.calendarData['absenceData'] != undefined) {
+        if (this.calendarData['absenceData'][groupUserId] != undefined) {
+          for (var i = 0; i < this.calendarData['absenceData'][groupUserId]['date'].length; i++) {
+            if (date == this.calendarData['absenceData'][groupUserId]['date'][i]) {
+              colorClass = "absence";
+            }
+          }
+        }
+      }
+
+      return colorClass;
+    }
+  }
+});
 
 /***/ }),
 
@@ -84410,6 +86783,180 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_index_vue_vue_type_template_id_2fdc770e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_index_vue_vue_type_template_id_2fdc770e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue":
+/*!************************************************************************!*\
+  !*** ./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue ***!
+  \************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _singleFieldOneHourTwoTeams_vue_vue_type_template_id_cf01056a_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./singleFieldOneHourTwoTeams.vue?vue&type=template&id=cf01056a&scoped=true& */ "./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue?vue&type=template&id=cf01056a&scoped=true&");
+/* harmony import */ var _singleFieldOneHourTwoTeams_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./singleFieldOneHourTwoTeams.vue?vue&type=script&lang=js& */ "./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _singleFieldOneHourTwoTeams_vue_vue_type_style_index_0_id_cf01056a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=cf01056a&scoped=true&lang=css& */ "./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=cf01056a&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _singleFieldOneHourTwoTeams_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _singleFieldOneHourTwoTeams_vue_vue_type_template_id_cf01056a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _singleFieldOneHourTwoTeams_vue_vue_type_template_id_cf01056a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "cf01056a",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************!*\
+  !*** ./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_singleFieldOneHourTwoTeams_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./singleFieldOneHourTwoTeams.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_singleFieldOneHourTwoTeams_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=cf01056a&scoped=true&lang=css&":
+/*!*********************************************************************************************************************************!*\
+  !*** ./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=cf01056a&scoped=true&lang=css& ***!
+  \*********************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_singleFieldOneHourTwoTeams_vue_vue_type_style_index_0_id_cf01056a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=cf01056a&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=cf01056a&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_singleFieldOneHourTwoTeams_vue_vue_type_style_index_0_id_cf01056a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_singleFieldOneHourTwoTeams_vue_vue_type_style_index_0_id_cf01056a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_singleFieldOneHourTwoTeams_vue_vue_type_style_index_0_id_cf01056a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_singleFieldOneHourTwoTeams_vue_vue_type_style_index_0_id_cf01056a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+
+
+/***/ }),
+
+/***/ "./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue?vue&type=template&id=cf01056a&scoped=true&":
+/*!*******************************************************************************************************************!*\
+  !*** ./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue?vue&type=template&id=cf01056a&scoped=true& ***!
+  \*******************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_singleFieldOneHourTwoTeams_vue_vue_type_template_id_cf01056a_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./singleFieldOneHourTwoTeams.vue?vue&type=template&id=cf01056a&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CalendarPage/singleFieldOneHourTwoTeams.vue?vue&type=template&id=cf01056a&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_singleFieldOneHourTwoTeams_vue_vue_type_template_id_cf01056a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_singleFieldOneHourTwoTeams_vue_vue_type_template_id_cf01056a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue":
+/*!**********************************************************************!*\
+  !*** ./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue ***!
+  \**********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _twoFieldTwoHourFourTeams_vue_vue_type_template_id_b585f1d2_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./twoFieldTwoHourFourTeams.vue?vue&type=template&id=b585f1d2&scoped=true& */ "./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue?vue&type=template&id=b585f1d2&scoped=true&");
+/* harmony import */ var _twoFieldTwoHourFourTeams_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./twoFieldTwoHourFourTeams.vue?vue&type=script&lang=js& */ "./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _twoFieldTwoHourFourTeams_vue_vue_type_style_index_0_id_b585f1d2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=b585f1d2&scoped=true&lang=css& */ "./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=b585f1d2&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _twoFieldTwoHourFourTeams_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _twoFieldTwoHourFourTeams_vue_vue_type_template_id_b585f1d2_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _twoFieldTwoHourFourTeams_vue_vue_type_template_id_b585f1d2_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "b585f1d2",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************!*\
+  !*** ./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_twoFieldTwoHourFourTeams_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./twoFieldTwoHourFourTeams.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_twoFieldTwoHourFourTeams_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=b585f1d2&scoped=true&lang=css&":
+/*!*******************************************************************************************************************************!*\
+  !*** ./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=b585f1d2&scoped=true&lang=css& ***!
+  \*******************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_twoFieldTwoHourFourTeams_vue_vue_type_style_index_0_id_b585f1d2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=b585f1d2&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=b585f1d2&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_twoFieldTwoHourFourTeams_vue_vue_type_style_index_0_id_b585f1d2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_twoFieldTwoHourFourTeams_vue_vue_type_style_index_0_id_b585f1d2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_twoFieldTwoHourFourTeams_vue_vue_type_style_index_0_id_b585f1d2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_twoFieldTwoHourFourTeams_vue_vue_type_style_index_0_id_b585f1d2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+
+
+/***/ }),
+
+/***/ "./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue?vue&type=template&id=b585f1d2&scoped=true&":
+/*!*****************************************************************************************************************!*\
+  !*** ./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue?vue&type=template&id=b585f1d2&scoped=true& ***!
+  \*****************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_twoFieldTwoHourFourTeams_vue_vue_type_template_id_b585f1d2_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./twoFieldTwoHourFourTeams.vue?vue&type=template&id=b585f1d2&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/CalendarPage/twoFieldTwoHourFourTeams.vue?vue&type=template&id=b585f1d2&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_twoFieldTwoHourFourTeams_vue_vue_type_template_id_b585f1d2_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_twoFieldTwoHourFourTeams_vue_vue_type_template_id_b585f1d2_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -85154,6 +87701,180 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_navBar_vue_vue_type_template_id_e7a45472_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_navBar_vue_vue_type_template_id_e7a45472_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue":
+/*!***************************************************************************!*\
+  !*** ./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _singleFieldOneHourTwoTeams_vue_vue_type_template_id_79135cd4_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./singleFieldOneHourTwoTeams.vue?vue&type=template&id=79135cd4&scoped=true& */ "./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue?vue&type=template&id=79135cd4&scoped=true&");
+/* harmony import */ var _singleFieldOneHourTwoTeams_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./singleFieldOneHourTwoTeams.vue?vue&type=script&lang=js& */ "./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _singleFieldOneHourTwoTeams_vue_vue_type_style_index_0_id_79135cd4_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=79135cd4&scoped=true&lang=css& */ "./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=79135cd4&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _singleFieldOneHourTwoTeams_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _singleFieldOneHourTwoTeams_vue_vue_type_template_id_79135cd4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _singleFieldOneHourTwoTeams_vue_vue_type_template_id_79135cd4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "79135cd4",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************!*\
+  !*** ./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_singleFieldOneHourTwoTeams_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./singleFieldOneHourTwoTeams.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_singleFieldOneHourTwoTeams_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=79135cd4&scoped=true&lang=css&":
+/*!************************************************************************************************************************************!*\
+  !*** ./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=79135cd4&scoped=true&lang=css& ***!
+  \************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_singleFieldOneHourTwoTeams_vue_vue_type_style_index_0_id_79135cd4_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=79135cd4&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue?vue&type=style&index=0&id=79135cd4&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_singleFieldOneHourTwoTeams_vue_vue_type_style_index_0_id_79135cd4_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_singleFieldOneHourTwoTeams_vue_vue_type_style_index_0_id_79135cd4_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_singleFieldOneHourTwoTeams_vue_vue_type_style_index_0_id_79135cd4_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_singleFieldOneHourTwoTeams_vue_vue_type_style_index_0_id_79135cd4_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+
+
+/***/ }),
+
+/***/ "./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue?vue&type=template&id=79135cd4&scoped=true&":
+/*!**********************************************************************************************************************!*\
+  !*** ./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue?vue&type=template&id=79135cd4&scoped=true& ***!
+  \**********************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_singleFieldOneHourTwoTeams_vue_vue_type_template_id_79135cd4_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./singleFieldOneHourTwoTeams.vue?vue&type=template&id=79135cd4&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/NextPlayDayPage/singleFieldOneHourTwoTeams.vue?vue&type=template&id=79135cd4&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_singleFieldOneHourTwoTeams_vue_vue_type_template_id_79135cd4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_singleFieldOneHourTwoTeams_vue_vue_type_template_id_79135cd4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue":
+/*!*************************************************************************!*\
+  !*** ./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue ***!
+  \*************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _twoFieldTwoHourFourTeams_vue_vue_type_template_id_383b1bbc_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./twoFieldTwoHourFourTeams.vue?vue&type=template&id=383b1bbc&scoped=true& */ "./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue?vue&type=template&id=383b1bbc&scoped=true&");
+/* harmony import */ var _twoFieldTwoHourFourTeams_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./twoFieldTwoHourFourTeams.vue?vue&type=script&lang=js& */ "./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _twoFieldTwoHourFourTeams_vue_vue_type_style_index_0_id_383b1bbc_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=383b1bbc&scoped=true&lang=css& */ "./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=383b1bbc&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _twoFieldTwoHourFourTeams_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _twoFieldTwoHourFourTeams_vue_vue_type_template_id_383b1bbc_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _twoFieldTwoHourFourTeams_vue_vue_type_template_id_383b1bbc_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "383b1bbc",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************!*\
+  !*** ./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_twoFieldTwoHourFourTeams_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./twoFieldTwoHourFourTeams.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_twoFieldTwoHourFourTeams_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=383b1bbc&scoped=true&lang=css&":
+/*!**********************************************************************************************************************************!*\
+  !*** ./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=383b1bbc&scoped=true&lang=css& ***!
+  \**********************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_twoFieldTwoHourFourTeams_vue_vue_type_style_index_0_id_383b1bbc_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=383b1bbc&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue?vue&type=style&index=0&id=383b1bbc&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_twoFieldTwoHourFourTeams_vue_vue_type_style_index_0_id_383b1bbc_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_twoFieldTwoHourFourTeams_vue_vue_type_style_index_0_id_383b1bbc_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_twoFieldTwoHourFourTeams_vue_vue_type_style_index_0_id_383b1bbc_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_twoFieldTwoHourFourTeams_vue_vue_type_style_index_0_id_383b1bbc_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+
+
+/***/ }),
+
+/***/ "./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue?vue&type=template&id=383b1bbc&scoped=true&":
+/*!********************************************************************************************************************!*\
+  !*** ./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue?vue&type=template&id=383b1bbc&scoped=true& ***!
+  \********************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_twoFieldTwoHourFourTeams_vue_vue_type_template_id_383b1bbc_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./twoFieldTwoHourFourTeams.vue?vue&type=template&id=383b1bbc&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/NextPlayDayPage/twoFieldTwoHourFourTeams.vue?vue&type=template&id=383b1bbc&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_twoFieldTwoHourFourTeams_vue_vue_type_template_id_383b1bbc_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_twoFieldTwoHourFourTeams_vue_vue_type_template_id_383b1bbc_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

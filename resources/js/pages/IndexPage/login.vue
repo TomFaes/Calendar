@@ -70,10 +70,15 @@
             },
 
             submit(){
+                var baseUrl = "https://tenniskalender.000webhostapp.com";
+                if(this.envirement == "development"){
+                    baseUrl = "http://localhost/tenniscalendar/public_html"
+                }
+                
                 this.setFormData();
-                axios.post('http://localhost/tenniscalendar/public_html/login/standard', this.formData).
+                axios.post( baseUrl + '/login/standard', this.formData).
                 then(function(result){
-                    window.location.href = "http://localhost/tenniscalendar/public_html/"
+                    window.location.href = baseUrl;
                 }).catch(error => {
                     this.errors = "Gebruikers naam of wachtwoord is fout";
                 });

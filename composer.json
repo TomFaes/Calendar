@@ -14,7 +14,8 @@
         "laravel/tinker": "*",
         "laravel/ui": "2.0",
         "spatie/calendar-links": "*",
-        "spatie/laravel-cookie-consent": "*"
+        "spatie/laravel-cookie-consent": "*",
+        "lcobucci/jwt": "3.3.3"
     },
     "require-dev": {
         "filp/whoops": "*",

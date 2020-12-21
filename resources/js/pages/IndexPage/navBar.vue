@@ -26,7 +26,7 @@
                     </li>
 
                     <li class="nav-item"  data-toggle="collapse" data-target=".navbar-collapse.show" v-if="user.id > 0">
-                          <a class="nav-link js-scroll-trigger" href="logout">Logout</a>
+                          <a class="nav-link js-scroll-trigger nav-link js-scroll-trigger item-link" @click.prevent="logout">Logout</a>
                     </li>
                     <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" v-else>
                          <router-link :to="{ name: 'login'}" class=".nav-link js-scroll-trigger">Login</i></router-link>
@@ -43,6 +43,7 @@
     export default {
         data (){
             return {
+                envirement: "",
                 
             }
         },
@@ -55,9 +56,18 @@
             displayIndex(){
                 this.$bus.$emit('displayNav', '');
             },
+
+            logout(){                
+                if(this.envirement == "development"){
+                    return window.location.href = "http://localhost/tenniscalendar/public_html/logout";
+                }
+                return window.location.href = "https://tenniskalender.000webhostapp.com/logout";
+            }
         },
 
         mounted () {
+            this.envirement = process.env.NODE_ENV;
+            
 
         }
     }

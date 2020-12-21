@@ -65,9 +65,6 @@
 
          <div v-if="calendarData['stats'] != undefined">
             <global-layout sizeForm="xlarge">
-                <span>1: 1E UUR ENKEL / 2E UUR DUBBEL</span><br>
-                <span>2: 2E UUR ENKEL / 1E UUR DUBBEL</span><br>
-                <span>3: 2 UUR DUBBEL</span><br>
                 <span class="absence">Kan niet spelen</span><br>
                 <span class="free" style="color: white">Beschikbaar voor eventuele vervanging</span><br>
                 <span class="replacement">Zoekt naar vervanging</span><br>
@@ -80,20 +77,20 @@
                         <thead >
                             <tr>
                                 <th scope="col" style="position:absolute; width:3em; left:0;">Naam</th>
-                                <th scope="col" style="text-align: center;">Tegen</th>
                                 <th scope="col" style="text-align: center;">Ploeg 1</th>
                                 <th scope="col" style="text-align: center;">Ploeg 2</th>
                                 <th scope="col" style="text-align: center;">Ploeg 3</th>
+                                <th scope="col" style="text-align: center;">Ploeg 4</th>
                                 <th scope="col" style="text-align: center;">Totaal</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="user in userData" :key="user.id">
                                 <td style="position:absolute; width:3em; left:0;">{{ user.firstname }}</td>
-                                <td><center>{{ calendarData['stats'][user.id]['countAgainst'] }}</center></td>
                                 <td><center>{{ calendarData['stats'][user.id]['team1'] }}</center></td>
                                 <td><center>{{ calendarData['stats'][user.id]['team2'] }}</center></td>
                                 <td><center>{{ calendarData['stats'][user.id]['team3'] }}</center></td>
+                                <td><center>{{ calendarData['stats'][user.id]['team4'] }}</center></td>
                                 <td><center>{{ calendarData['stats'][user.id]['total'] }}</center></td>
                             </tr>
                         </tbody>
@@ -106,7 +103,7 @@
 
 <script>
     import doubleHourMixin from '../../components/mixins/generator/doubleHour.js';
-
+    
     export default {
         components: {
 
@@ -119,19 +116,19 @@
 
 
 <style scoped>
-.absence{
-    background-color: red;
-}
+    .absence{
+        background-color: red;
+    }
 
-.free{
-    background-color: #343a40;
-}
+    .free{
+        background-color: #343a40;
+    }
 
-.replacement {
-    background-color: yellow;
-}
+    .replacement {
+        background-color: yellow;
+    }
 
-td:hover {
-    background-color: lightgray;
-}
+    td:hover {
+        background-color: lightgray;
+    }
 </style>
