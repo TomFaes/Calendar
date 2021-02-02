@@ -8,7 +8,7 @@
         "php": "*",
         "barryvdh/laravel-ide-helper": "*",
         "fideloper/proxy": "*",
-        "laravel/framework": "7.0.*",
+        "laravel/framework": "7.30.*",
         "laravel/passport": "^8.5",
         "laravel/socialite": "^4.1",
         "laravel/tinker": "*",
