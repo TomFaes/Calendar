@@ -13,6 +13,9 @@
                 <div v-else-if="calendar['seasonData']['type'] == 'SingleFieldOneHourTwoTeams'">
                     <single-field-one-hour-two-teams :calendarData="calendar" :userData="calendar['groupUserData']"></single-field-one-hour-two-teams>    
                 </div>
+                <div v-else-if="calendar['seasonData']['type'] == 'TestGenerator'">
+                    <test-generator :calendarData="calendar" :userData="calendar['groupUserData']"></test-generator>    
+                </div>
                 <div v-else>
                     onbekende calendar view
                 </div>
@@ -28,13 +31,15 @@
     import twoFieldTwoHourThreeTeams from '../NextPlayDayPage/twoFieldTwoHourThreeTeams.vue';
     import twoFieldTwoHourFourTeams from '../NextPlayDayPage/twoFieldTwoHourFourTeams.vue';
     import singleFieldOneHourTwoTeams from '../NextPlayDayPage/singleFieldOneHourTwoTeams.vue';
+    import testGenerator from '../NextPlayDayPage/testGenerator.vue';
 
     export default {
         components: {
             Moment,
             twoFieldTwoHourThreeTeams,
             twoFieldTwoHourFourTeams,
-            singleFieldOneHourTwoTeams
+            singleFieldOneHourTwoTeams,
+            testGenerator
         },
 
         data () {

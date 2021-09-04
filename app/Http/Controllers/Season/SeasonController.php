@@ -80,6 +80,11 @@ class SeasonController extends Controller
         $season = $this->season->update($request->all(), $id);
         return response()->json($season, 200);
     }
+
+    public function seasonIsGenerated($seasonId){
+        $season = $this->season->seasonIsGenerated($seasonId);
+        return response()->json($season, 200);
+    }
     
     /**
      * Remove the specified resource from storage.
@@ -92,5 +97,5 @@ class SeasonController extends Controller
         $this->absence->deleteSeasonAbsence($id);
         $this->season->delete($id);
         return response()->json("Season is deleted", 204);
-    }    
+    }
 }

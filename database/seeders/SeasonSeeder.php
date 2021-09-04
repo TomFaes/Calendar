@@ -1,9 +1,11 @@
 <?php
+namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\GroupUser;
+use Illuminate\Support\Facades\DB;
+use App\Models\Season;
 
-class GroupUserSeeder extends Seeder
+class SeasonSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,12 +14,15 @@ class GroupUserSeeder extends Seeder
      */
     public function run()
     {
-        Eloquent::unguard();
+        //Eloquent::unguard();
 
         // Disable Foreign key check for this connection before running seeders
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-        factory(GroupUser::class, 10)->create();
+        Season::factory()
+            ->count(10)
+            ->create();
+        //factory(Season::class, 10)->create();
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }

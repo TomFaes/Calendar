@@ -39,7 +39,6 @@ class TwoFieldTwoHourThreeTeamsTest extends TestCase
         $this->assertArrayHasKey('seasonData', $generatedSeason);
         $this->assertArrayHasKey('absenceData', $generatedSeason);
         $this->assertArrayHasKey('groupUserData', $generatedSeason);
-        $this->assertArrayHasKey('generateGroupUserData', $generatedSeason);
         $this->assertArrayHasKey('data', $generatedSeason);      
         
         echo PHP_EOL.'[42m OK  [0m test generate season';

@@ -11,7 +11,7 @@ class SeasonValidation extends Validation
         return $this->validate(
             $request,
             [
-                'name' => 'required|string|max:255',
+                'name' => 'required|string|max:50',
                 'group_id' => 'required|',
                 'begin' => 'required|date|',
                 'end' => 'required|date|',

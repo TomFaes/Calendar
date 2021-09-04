@@ -1,27 +1,33 @@
 <?php
+namespace Database\Factories;
 
 use Carbon\Carbon;
-use App\Models\Season;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 use App\Models\Absence;
+use App\Models\Season;
 use App\Models\GroupUser;
-use Faker\Generator as Faker;
 
-/*
-|--------------------------------------------------------------------------
-| Model Factories
-|--------------------------------------------------------------------------
-|
-| This directory should contain each of the model factory definitions for
-| your application. Factories provide a convenient way to generate new
-| model instances for testing / seeding your application's database.
-|
-*/
+class AbsenceFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Absence::class;
 
-$factory->define(Absence::class, function (Faker $faker) {
-    return [
-        'season_id' =>  Season::first()->id,
-        'date' => Carbon::now()->addMonths(1)->format('Y-m-d'),
-        'group_user_id' => GroupUser::first(),
-    ];
-});
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'season_id' =>  Season::all()->random()->id,
+            'date' => Carbon::now()->addMonths(1)->format('Y-m-d'),
+            'group_user_id' => GroupUser::all()->random()->id,
+        ];
+    }
+}

@@ -26,9 +26,23 @@
                         <td>
                             <button v-if="user.id == data.admin_id" class="btn btn-primary" @click.prevent="editSeason(data.id)"><i class="fa fa-edit" style="heigth:14px; width:14px"></i></button>
                             <button v-if="user.id == data.admin_id" class="btn btn-danger" @click.prevent="deleteSeason(data)"><i class="fa fa-trash" style="heigth:14px; width:14px"></i></button>
-                            <button v-if="data.seasonDraw == 0"  class="btn btn-secondary" @click.prevent="absences(data)">Afwezigheden</button>
-                            <router-link v-if="data.seasonDraw == 0 && user.id == data.admin_id" :to="{ name: 'generate', params: { id: data.id }}" class="btn btn-secondary">Generate</router-link>
-                            <router-link v-if="data.seasonDraw > 0" :to="{ name: 'calendar', params: { id: data.id }}" class="btn btn-secondary"><i class="far fa-calendar-alt"></i></router-link>
+                            <button v-if="data.is_generated == 0"  class="btn btn-secondary" @click.prevent="absences(data)">Afwezigheden</button>
+                            <router-link v-if="data.is_generated == 0 && user.id == data.admin_id" :to="{ name: 'generate', params: { id: data.id }}" class="btn btn-secondary">Generate</router-link>
+                            <!-- For now only the new types will have a create empty season -->
+                            <button  v-if="data.type == 'TestGenerator' && data.seasonDraw == 0" @click.prevent="generateEmptySeason(data, 2)" class="btn btn-secondary">Create empty season</button>
+                            <button  v-if="data.type == 'SingleFieldOneHourTwoTeams' && data.seasonDraw == 0" @click.prevent="generateEmptySeason(data, 2)" class="btn btn-secondary">Create empty season</button>
+                            <button  v-if="data.type == 'TwoFieldTwoHourThreeTeams' && data.seasonDraw == 0" @click.prevent="generateEmptySeason(data, 3)" class="btn btn-secondary">Create empty season</button>
+                            <button  v-if="data.type == 'TwoFieldTwoHourFourTeams' && data.seasonDraw == 0" @click.prevent="generateEmptySeason(data, 4)" class="btn btn-secondary">Create empty season</button>
+                            
+
+                            <button  v-if="data.seasonDraw > 0 && data.is_generated == 0" @click.prevent="seasonIsGenerated(data.id)" class="btn btn-secondary">Season is generated</button>
+
+                            <!-- 'multiType': ['None', 'TwoFieldTwoHourThreeTeams', 'SingleFieldOneHourTwoTeams', 'TwoFieldTwoHourFourTeams', 'TestGenerator'], -->
+
+                            <!--
+                            <router-link v-if="data.is_generated == 1" :to="{ name: 'calendar', params: { id: data.id }}" class="btn btn-secondary"><i class="far fa-calendar-alt"></i></router-link>
+                            -->
+                            <router-link  :to="{ name: 'calendar', params: { id: data.id }}" class="btn btn-secondary"><i class="far fa-calendar-alt"></i></router-link>
                         </td>
                     </tr>
                     <tr v-if="updateField == data.id">
@@ -110,6 +124,25 @@
                         console.log('handle server error from here');
                     });
                 }
+            },
+
+            generateEmptySeason(data, teams = 0){
+                apiCall.getData('season/' +  data.id + '/generator/create_empty_season?teams=' + teams )
+                .then(response =>{
+                    this.loadList();
+                }).catch(() => {
+                    console.log('handle server error from here');
+                });
+            },
+
+            seasonIsGenerated(id){
+                apiCall.getData('season/' +  id + '/is_generated' )
+                .then(response =>{
+                    this.loadList();
+                }).catch(() => {
+                    console.log('handle server error from here');
+                });
+
             },
 
             absences(data){

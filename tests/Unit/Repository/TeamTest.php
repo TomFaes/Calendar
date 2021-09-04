@@ -14,6 +14,7 @@ use App\Repositories\TeamRepo;
 class TeamTest extends TestCase
 {
     protected $testData;
+    protected $recordCount;
     protected $data;
     protected $repo;
     protected $allGroupUsers;
@@ -26,6 +27,7 @@ class TeamTest extends TestCase
 
         $this->repo =  new TeamRepo();
         $this->testData = Team::with(['group_user', 'season'])->get();
+        $this->recordCount = count($this->testData);
 
         $this->getAllGroupUsers = GroupUser::all();
         $this->getAllSeasons = Season::all();
@@ -56,7 +58,7 @@ class TeamTest extends TestCase
         echo PHP_EOL.PHP_EOL.'[44m Team Repository Test:   [0m';
         
         $found = $this->repo->getAllTeams();
-        $this->assertEquals(10, count($found));
+        $this->assertEquals($this->recordCount, count($found));
         echo PHP_EOL.'[42m OK  [0m get all teams';
     }
 
@@ -81,7 +83,7 @@ class TeamTest extends TestCase
         $this->assertEquals($testSeasonId, $found);
 
         $found = $this->repo->getAllTeams();
-        $this->assertEquals(9, count($found));
+        $this->assertEquals(($this->recordCount - 1), count($found));
        
         echo PHP_EOL.'[42m OK  [0m delete team';
     }

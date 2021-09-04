@@ -1,26 +1,36 @@
 <?php
 
+namespace Database\Factories;
+
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
 use App\Models\GroupUser;
-use Faker\Generator as Faker;
+use App\Models\Group;
 
-/*
-|--------------------------------------------------------------------------
-| Model Factories
-|--------------------------------------------------------------------------
-|
-| This directory should contain each of the model factory definitions for
-| your application. Factories provide a convenient way to generate new
-| model instances for testing / seeding your application's database.
-|
-*/
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(GroupUser::class, function (Faker $faker) {
-    return [
-        'name' => $faker->name,
-        'firstname' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'group_id' =>  App\Models\Group::first(),
-        'user_id' => Null,
-        'verified' => 0
-    ];
-});
+class GroupUserFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = GroupUser::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'firstname' => $this->faker->name,
+            'name' => $this->faker->name,
+            'email' => $this->faker->unique()->safeEmail,
+            'group_id' => Group::all()->random()->id,
+            'user_id' => null,
+            'verified' => 0
+        ];
+    }
+}

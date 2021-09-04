@@ -60,7 +60,6 @@ class SeasonRepo extends Repository implements ISeason
         isset($data['end']) === true ? $season->end = $data['end'] : "";
         isset($data['admin_id']) === true ? $season->admin_id = $data['admin_id'] : "";
         isset($data['group_id']) === true ? $season->group_id = $data['group_id'] : "";
-        isset($data['name']) === true ? $season->name = $data['name'] : "";
         isset($data['begin']) != "" ? $season->day = \Carbon\Carbon::parse($data['begin'] )->format('l') : "";
         
         switch ($season->day) {
@@ -103,7 +102,21 @@ class SeasonRepo extends Repository implements ISeason
     public function update(Array $data, $seasonId)
     {
         $season = $this->getSeason($seasonId);
-        $season = $this->setSeason($season, $data);
+        if($season->SeasonDraw > 0){
+            isset($data['name']) === true ? $season->name = $data['name'] : "";
+            isset($data['public']) === true ? $season->public = $data['public'] : "";
+            isset($data['allow_replacement']) === true ? $season->allow_replacement = $data['allow_replacement'] : "";
+            isset($data['start_hour']) === true ? $season->start_hour = $data['start_hour'] : "";
+        }else{
+            $season = $this->setSeason($season, $data);
+        }
+        $season->save();
+        return $season;
+    }
+
+    public function seasonIsGenerated($seasonId){
+        $season = $this->getSeason($seasonId);
+        $season->is_generated = 1;
         $season->save();
         return $season;
     }

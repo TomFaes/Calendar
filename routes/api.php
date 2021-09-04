@@ -43,14 +43,17 @@ Route::post('/unverified-group-user/{id}', [UnverifiedGroupUsersController::clas
 Route::get('/season', [SeasonController::class, 'index']);
 Route::post('/season', [SeasonController::class, 'store']);
 Route::post('/season/{id}', [SeasonController::class, 'update']);
+Route::get('/season/{id}/is_generated', [SeasonController::class, 'seasonIsGenerated']);
 
 Route::get('/active_seasons', [ActiveSeasonController::class, 'index']);
 
 Route::get('/season/{id}/generator', [SeasonGeneratorController::class, 'index']);
 Route::post('/season/{id}/generator', [SeasonGeneratorController::class, 'store']);
-Route::post('/season/{id}/generator/{generator_id}', [SeasonGeneratorController::class, 'update']);
+Route::post('/season/{id}/generator/{season_id}', [SeasonGeneratorController::class, 'update']);
 Route::get('/season/{id}/generator/play_dates', [SeasonGeneratorController::class, 'playDates']);
 Route::get('/season/{id}/generator/new', [SeasonGeneratorController::class, 'generateSeason']);
+Route::get('/season/{id}/generator/create_empty_season', [SeasonGeneratorController::class, 'createEmptySeason']);
+
 
 Route::get('season/{season_id}/absence/', [AbsenceController::class, 'index']);
 Route::post('season/{season_id}/absence', [AbsenceController::class, 'store']);

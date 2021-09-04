@@ -3,9 +3,9 @@
         <form @submit.prevent="submit" method="POST" enctype="multipart/form-data">
             <!-- the form items -->
             <global-input type='text' inputName="name" inputId="name" tekstLabel="Naam: " v-model="fields.name" :errors="errors.name" :value='fields.name'></global-input>
-            <global-input type='date' inputName="begin" inputId="begin" tekstLabel="Begin: " v-model="fields.begin" :errors="errors.begin" :value='fields.begin'></global-input>
-            <global-input type='date' inputName="end" inputId="end" tekstLabel="End: " v-model="fields.end" :errors="errors.end" :value='fields.end'></global-input>
-            <global-input type='time' inputName="start_hour" inputId="start_hour" tekstLabel="Start uur: " v-model="fields.start_hour" :errors="errors.start_hour" :value='fields.start_hour'></global-input>
+            <global-input type='date' inputName="begin" inputId="begin" tekstLabel="Begin: " v-model="fields.begin" :errors="errors.begin" :value='fields.begin' :disabled="disabled"></global-input>
+            <global-input type='date' inputName="end" inputId="end" tekstLabel="End: " v-model="fields.end" :errors="errors.end" :value='fields.end' :disabled="disabled"></global-input>
+            <global-input type='time' inputName="start_hour" inputId="start_hour" tekstLabel="Start uur: " v-model="fields.start_hour" :errors="errors.start_hour" :value='fields.start_hour' :disabled="disabled"></global-input>
             <global-input type='switchButton' inputName="public" inputId="public" tekstLabel="Public: " v-model="fields.public" :errors="errors.public" :value='fields.public'></global-input>
             <global-input type='switchButton' inputName="allow_replacement" inputId="allow_replacement" tekstLabel="Allow replacements: " v-model="fields.allow_replacement" :errors="errors.allow_replacement" :value='fields.allow_replacement'></global-input>
             <!-- Admin multiselect -->
@@ -34,12 +34,13 @@
                     :close-on-select="true"
                     :clear-on-select="true"
                     placeholder="Selecteer een seizoens generator"
+                    :disabled="disabled"
                 >
                 </multiselect>
             </global-layout>
 
             <!-- Group multiselect -->
-           <global-layout v-if="submitOption == 'Create'">
+           <global-layout>
                 <label>Group: </label>
                 <multiselect
                     v-model="selectedGroup"
@@ -50,6 +51,7 @@
                     placeholder="Selecteer een groep"
                     label="name"
                     track-by="fullName"
+                    :disabled="disabled"
                 >
                 </multiselect>
            </global-layout>
@@ -88,7 +90,9 @@
                      'type': '',
                      'public': false,
                      'allow_replacement' : false,
+                     'disabled': false,
                 },
+                'disabled': false,
                 'errors' : {},
                 'action': '',
                 'response': {},
@@ -97,7 +101,7 @@
                 'selectedGroup': [],
                 'multiGroups': [],
                 'selectedType': '',
-                'multiType': ['None', 'TwoFieldTwoHourThreeTeams', 'SingleFieldOneHourTwoTeams', 'TwoFieldTwoHourFourTeams'],
+                'multiType': ['None', 'TwoFieldTwoHourThreeTeams', 'SingleFieldOneHourTwoTeams', 'TwoFieldTwoHourFourTeams', 'TestGenerator'],
                 'formData': new FormData(),
                 'message': '',
                 'seasonDraw': 0
@@ -198,8 +202,6 @@
             update(){
                 this.setFormData();
                 this.action =  'season/' + this.season.id;
-
-
                 apiCall.updateData(this.action, this.formData)
                 .then(response =>{
                    this.$bus.$emit('reloadSeasons');
@@ -231,6 +233,9 @@
             this.loadGroup();
             if(this.season != undefined){
                 this.setData();
+            }
+            if(this.submitOption == 'Update' && this.season.seasonDraw > 0){
+                this.disabled = true;
             }
         }
     }

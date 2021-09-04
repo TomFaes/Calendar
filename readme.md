@@ -73,7 +73,7 @@ This version isn't completly finished. Next things are still in development:
     - bug: 
         - unverified users wasn't always working   
 
-# Version 2.07: Current live version
+# Version 2.07: 21/12/2020
     - rework generators
         - create abstract class for the double generators, only the methods that are different are in the generator classes
     - rework generator views
@@ -86,10 +86,23 @@ This version isn't completly finished. Next things are still in development:
         - when a day had to few teams the day disappeared
         - if a an absent player was added to a team the player stayed red
 
+# Version 2.08: 04/09/2021 - Current live version
+    - add option to setup teams before the season is generated
+        - convert all seasons so they can use prefilled teams
+    - rework generators
+    - update & add phpunit testing
+
+
         
 
 # Future
+Version 3.00:
+    - implement API Resources & Collections
+        - rework the front-ends.
+    - implement Validation Requests
+    - rework phpUnit testing methods
+    ? replace groupusers email with code validation (with email link)
 Version 3.XX: 
-    - update to Laravel 8
+    - make option to reopen the season and generate not filled teams. 
     - create calendars for small teams. 
     

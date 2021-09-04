@@ -12,6 +12,10 @@
                 <div v-else-if="calendarData['seasonData']['type'] == 'TwoFieldTwoHourFourTeams'">   
                     <two-field-two-hour-four-teams-page :calendarData="calendarData" :userData="calendarData['groupUserData']" :loggedInUser="$attrs.user"></two-field-two-hour-four-teams-page>              
                 </div>
+
+                <div v-else-if="calendarData['seasonData']['type'] == 'TestGenerator'">  
+                    <test-generator-page :calendarData="calendarData" :userData="calendarData['groupUserData']" :loggedInUser="$attrs.user"></test-generator-page>
+                </div>
                 
                 <div v-else>
                     onbekende calendar view
@@ -33,12 +37,14 @@
     import TwoFieldTwoHourThreeTeamsPage from '../CalendarPage/twoFieldTwoHourThreeTeams.vue';
     import SingleFieldOneHourTwoTeamsPage from '../CalendarPage/singleFieldOneHourTwoTeams.vue';
     import TwoFieldTwoHourFourTeamsPage from '../CalendarPage/twoFieldTwoHourFourTeams.vue';
+    import TestGeneratorPage from '../CalendarPage/testGenerator.vue';
     
     export default {
         components: {
             TwoFieldTwoHourThreeTeamsPage,
             SingleFieldOneHourTwoTeamsPage,
-            TwoFieldTwoHourFourTeamsPage
+            TwoFieldTwoHourFourTeamsPage,
+            TestGeneratorPage
         },
 
         data () {

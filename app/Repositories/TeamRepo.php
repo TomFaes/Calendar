@@ -48,7 +48,11 @@ class TeamRepo extends Repository implements ITeam
 
     public function getTeamsOnDate($seasonId, $date)
     {
-        return Team::where('season_id', $seasonId)->where('date', $date) ->get();
+        return Team::where('season_id', $seasonId)->where('date', $date)->get();
+    }
+
+    public function getFilledDatesInSeason($seasonId){
+        return Team::where('season_id', $seasonId)->whereNotNull('group_user_id')->get();
     }
 
     /***************************************************************************

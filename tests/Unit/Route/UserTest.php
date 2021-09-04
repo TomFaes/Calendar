@@ -11,6 +11,7 @@ use Laravel\Passport\Passport;
 class UserTest extends TestCase
 {
     protected $allUsers;
+    protected $recordCount;
 
     public function setUp() : void
     {
@@ -18,6 +19,7 @@ class UserTest extends TestCase
         $this->seed();
         $repo = new UserRepo();
         $this->allUsers = $repo->getAllUsers();
+        $this->recordCount = count($this->allUsers);
     }
 
     /**
@@ -59,7 +61,7 @@ class UserTest extends TestCase
         $this->assertEquals(200, $response->status());
 
         $response_data = $response->decodeResponseJson(); 
-        $this->assertEquals(count($response_data['data']), 10);
+        $this->assertEquals(count($response_data['data']), $this->recordCount);
 
         echo PHP_EOL.'[42m OK  [0m test index in the UserController';
     }
@@ -175,4 +177,5 @@ class UserTest extends TestCase
 
         echo PHP_EOL.'[42m OK  [0m test destroy method in the ProfileController';
     }
+    
 }

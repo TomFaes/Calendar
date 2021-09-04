@@ -15,5 +15,6 @@ interface ISeason
     
     public function create(Array $request, $userId = "");
     public function update(Array $request, $seasonId);
+    public function seasonIsGenerated($seasonId);
     public function delete($seasonId);
 }

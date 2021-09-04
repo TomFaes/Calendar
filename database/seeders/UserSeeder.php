@@ -1,6 +1,8 @@
 <?php
+namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 
 class UserSeeder extends Seeder
@@ -12,12 +14,12 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        factory(User::class, 10)->create();
-        /*
-        Laravel 8???
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        
         User::factory()
-            ->times(10)
+            ->count(10)
             ->create();
-            */
+        
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

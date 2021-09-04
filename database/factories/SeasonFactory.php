@@ -1,34 +1,42 @@
 <?php
+namespace Database\Factories;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Carbon\Carbon;
 use App\Models\Season;
-use Illuminate\Support\Str;
-use Faker\Generator as Faker;
+use App\Models\User;
+use App\Models\Group;
 
-/*
-|--------------------------------------------------------------------------
-| Model Factories
-|--------------------------------------------------------------------------
-|
-| This directory should contain each of the model factory definitions for
-| your application. Factories provide a convenient way to generate new
-| model instances for testing / seeding your application's database.
-|
-*/
+class SeasonFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Season::class;
 
-$factory->define(Season::class, function (Faker $faker) {
-    return [
-        'name' => $faker->name,
-        'begin' => Carbon::now()->subDays(1)->format('Y-m-d'),
-        'end' =>  Carbon::now()->addMonths(1)->format('Y-m-d'),
-        'active' => 1,
-        'group_id' =>  App\Models\Group::first(),
-        'admin_id' => App\Models\User::first(),
-        'day' => 'do',
-        'start_hour' => "20:00",
-        'type' => 'TwoFieldTwoHourThreeTeams',
-        'public' => 0,
-        'allow_replacement' => 0,
-
-    ];
-});
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'name' => $this->faker->name,
+            'begin' => Carbon::now()->subDays(1)->format('Y-m-d'),
+            'end' =>  Carbon::now()->addMonths(1)->format('Y-m-d'),
+            'public' => 0,
+            'is_generated' => 0,
+            'active' => 1,
+            'group_id' =>  Group::all()->random()->id,
+            'admin_id' => User::all()->random()->id,
+            'day' => 'do',
+            'start_hour' => "20:00",
+            'type' => 'TwoFieldTwoHourThreeTeams',
+            'public' => 0,
+            'allow_replacement' => 0,
+        ];
+    }
+}

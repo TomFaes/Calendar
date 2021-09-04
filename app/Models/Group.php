@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Auth;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Group extends Model
 {
     use SoftDeletes;
+    use HasFactory;
     
     protected $fillable = [
         'name','admin_id',

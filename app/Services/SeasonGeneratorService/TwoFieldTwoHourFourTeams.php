@@ -48,8 +48,14 @@ class TwoFieldTwoHourFourTeams extends AbstractDoubleGenerator implements IGener
             //prepare the draw error to see which teams will be available for the draw
             $drawTeamArray = $this->removeAbsenceTeams($date, $gamesArray['person'], $gamesArray['allTeams']);
             $drawTeamArray = $this->removeAllPlayedGames($drawTeamArray, $gamesArray['season'], $teamnumber);
+             //method to have the active players in the right teams
+             if(isset($gamesArray['teamsSetup']) == true){
+                $drawTeamArray = $this->removeNonSetTeams($drawTeamArray, $gamesArray['seasonTeams'], $teamnumber, $date);
+             }
+            
             //prepare the backup array that allows players to be with previous played persons
             $backupTeamArray = $this->removeAbsenceTeams($date, $gamesArray['person'], $gamesArray['allTeams']);
+            $backupTeamArray = $this->removeNonSetTeams($backupTeamArray, $gamesArray['seasonTeams'], $teamnumber, $date);
 
             //choose a random team from the drawArray
             if (count($drawTeamArray) > 0) {
@@ -60,7 +66,7 @@ class TwoFieldTwoHourFourTeams extends AbstractDoubleGenerator implements IGener
 
             //choose a random team from the backup
             if (($player1 == "" OR $player2 == "") AND count($backupTeamArray) > 0) {
-                $random = $this->createRandomTeam($backupTeamArray, $gamesArray['season'], $gamesArray['person'], $teamnumber);
+                $random = $this->createRandomTeam($backupTeamArray, $gamesArray['person'], $teamnumber);
                 $player1 = isset($drawTeamArray[$random]['player1']) === true ? $drawTeamArray[$random]['player1'] : "";
                 $player2 = isset($drawTeamArray[$random]['player2']) === true ? $drawTeamArray[$random]['player2'] : "";
             }
@@ -69,6 +75,22 @@ class TwoFieldTwoHourFourTeams extends AbstractDoubleGenerator implements IGener
             if ($player1 == "" OR $player2 == "") {
                 continue;
             }
+
+             //adds the team id and player id to the game array (needed for saving the data)
+             if(isset($gamesArray['teamsSetup']) == true){
+                foreach($gamesArray['teamsSetup'][$date] as $key => $team){
+                   $gamesArray['season'][$date][$teamnumber][$player1]['teamId'] = $key;
+                   $gamesArray['season'][$date][$teamnumber][$player1]['groupUser'] = $player1;
+                   unset($gamesArray['teamsSetup'][$date][$key]);
+                   break;
+               }
+               foreach($gamesArray['teamsSetup'][$date] as $key => $team){
+                   $gamesArray['season'][$date][$teamnumber][$player2]['teamId'] = $key;
+                   $gamesArray['season'][$date][$teamnumber][$player2]['groupUser'] = $player1;
+                   unset($gamesArray['teamsSetup'][$date][$key]);
+                   break;
+               }
+           }
 
             //remove the team to exclude it from the next draw for the other teams
             $gamesArray['allTeams'] = $this->RemoveTeam($player1, $gamesArray['allTeams']);
@@ -175,6 +197,7 @@ class TwoFieldTwoHourFourTeams extends AbstractDoubleGenerator implements IGener
                 $this->saveTeam($jsonArray->seasonData->id, $day->day, 'team4');
             }
         }
+        $this->season->seasonIsGenerated($jsonArray->seasonData->id);
     }
 
     

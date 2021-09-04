@@ -69,6 +69,8 @@ class SeasonGeneratorController extends Controller
     
     /**
      * Update the specified resource in storage.
+     * 
+     * !!!! As long as not all generators are update to use this function keep the $request[updateRange] active.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -76,12 +78,20 @@ class SeasonGeneratorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return response()->json("to be made update", 200);
-        /*
-        $this->seasonValidator->validateCreateSeason($request);
-        $season = $this->season->update($request->all(), $id);
-        return response()->json($season, 200);
-        */
+        $updateVersion = $request['updateRange'] ?? "";
+        if($updateVersion != "pregeneratedseason"){
+            return response()->json("season couldn't be generated", 200);
+        }
+
+        $season = $this->season->getSeason($id);
+        $seasonGenerator = GeneratorFactory::generate($season->type);
+
+        if($updateVersion == 'pregeneratedseason'){
+            $seasonGenerator->savePrefilledSeason($request['teamRange']);
+            $this->season->seasonIsGenerated($id);
+            return response()->json("season is made", 200);
+        }
+        return response()->json("season couldn't be generated", 200);
     }
     
     /**
@@ -112,7 +122,18 @@ class SeasonGeneratorController extends Controller
     {
         $season = $this->season->getSeason($seasonId);
         $seasonGenerator = GeneratorFactory::generate($season->type);
+
         $calendar = $seasonGenerator->generateSeason($season);
+        return response()->json($calendar, 200);
+    }
+
+    public function createEmptySeason($seasonId, Request $request){
+        if($request->teams == 0){
+            return response()->json("Teams must be bigger then 0 to create an empty season", 412);
+        }
+        $season = $this->season->getSeason($seasonId);
+        $seasonGenerator = GeneratorFactory::generate($season->type);
+        $calendar = $seasonGenerator->generateEmptySeason($season, $request->teams);
         return response()->json($calendar, 200);
     }
 }

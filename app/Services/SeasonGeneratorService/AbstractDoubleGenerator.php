@@ -2,8 +2,6 @@
 
 namespace App\Services\SeasonGeneratorService;
 
-
-
 use App\Models\Group;
 use App\Models\Season;
 use App\Models\Team;
@@ -11,7 +9,6 @@ use App\Models\Team;
 use App\Repositories\Contracts\ITeam;
 use App\Repositories\Contracts\ISeason;
 use App\Repositories\Contracts\IAbsence;
-
 
 class AbstractDoubleGenerator
 {
@@ -35,8 +32,7 @@ class AbstractDoubleGenerator
      * @param  int  $seasonId
      * @return json
      */
-    public function generateSeason(Season $season)
-    {
+    public function generateSeason(Season $season){
         //create all possible teams
         $allPossibleTeamArray = $this->createAllPossibleTeams($season->group);
 
@@ -44,9 +40,21 @@ class AbstractDoubleGenerator
 
         //create the personArray to store data for the season
         $gamesArray['person'] = $this->createPersonStats($season);
+        $gamesArray['seasonTeams'] = $this->team->getFilledDatesInSeason($season->id)->toArray();
 
         //get all date for the season
         $seasonDates = $this->getPlayDates($season->begin, $season->end);
+
+        if(count($season->teams) > 0){
+            foreach ($seasonDates as $seasonDate) {
+                $key = $seasonDate['date'];
+                foreach($season->teams as $team){
+                    if($key == $team->date){
+                        $gamesArray['teamsSetup'][$key][$team->id] = $team->id;
+                    }
+                }
+            }
+        }
 
         foreach ($seasonDates as $seasonDate) {
             $key = $seasonDate['date'];
@@ -56,10 +64,24 @@ class AbstractDoubleGenerator
             //this team array will be used to remove played teams and absence teams
             $gamesArray['allTeams'] = $allPossibleTeamArray;
             $gamesArray['person'] = $this->addOneNonPlayDay($gamesArray['person']);
-
             $gamesArray = $this->createDayTeams($seasonDate, $gamesArray);
         }
         return $this->createJsonSeason($gamesArray['season'], $season);
+    }
+
+    public function generateEmptySeason(Season $season, $teams = 0){
+        if($teams == 0){
+            return;
+        }
+        $seasonDates = $this->getPlayDates($season->begin, $season->end);
+
+        foreach ($seasonDates as $seasonDate) {
+            for($x = 1; $x <= $teams; $x++){
+                $this->saveTeam($season->id, $seasonDate['date'], 'team'.$x);
+                $this->saveTeam($season->id, $seasonDate['date'], 'team'.$x);
+            }
+        }
+        return $this->getSeasonCalendar($season);
     }
 
     /**
@@ -177,6 +199,46 @@ class AbstractDoubleGenerator
             $teamArray = $this->RemoveTeam($person['id'], $teamArray);
         }
         return array_values($teamArray);
+    }
+
+    /**
+     * Removes all teams if there is no connection with the player
+     * @param $drawTeamArray
+     * @param $filledTeams
+     * @param $teamnumber
+     * @param $date
+     * @return array
+     */
+    protected function removeNonSetTeams($drawTeamArray, $filledTeams, $teamnumber, $date)
+    {
+        foreach ($filledTeams as $key=>$team) {
+            if($date != $team['date']){
+                continue;
+            }
+
+            if($team['team'] != $teamnumber){
+                //remove the teams that are already in another team on the date
+                foreach ($drawTeamArray AS $key2=>$drawTeam) {
+                    $player1 = isset($drawTeam['player1']) === true ? $drawTeam['player1'] : "";
+                    $player2 = isset($drawTeam['player2']) === true ? $drawTeam['player2'] : "";
+                    if($team['group_user_id'] == $player1 || $team['group_user_id'] == $player2){
+                        unset($drawTeamArray[$key2]);
+                    }
+                }
+                continue;
+            }
+
+            //remove all combinations that are matched with the prefilled user(s)
+            foreach ($drawTeamArray AS $key2=>$drawTeam) {
+                $player1 = isset($drawTeam['player1']) === true ? $drawTeam['player1'] : "";
+                $player2 = isset($drawTeam['player2']) === true ? $drawTeam['player2'] : "";
+                if($team['group_user_id'] == $player1 || $team['group_user_id'] == $player2){
+                    continue;
+                }
+                unset($drawTeamArray[$key2]);
+            }
+        }
+        return array_values($drawTeamArray);
     }
 
     /**
@@ -317,18 +379,17 @@ class AbstractDoubleGenerator
         $arrayJson = array();
         $arrayJson['seasonData']  = $season;
         $arrayJson['absenceData'] = $this->absence->getSeasonAbsenceArray($season->id);
-        $arrayJson['groupUserData'] = $this->team->getSeasonUsers($season->id);
-        $arrayJson['generateGroupUserData'] =  $season->group->groupUsers;
 
-        $x=0;
+        foreach($season->group->groupUsers as $object)
+        {
+            $arrayJson['groupUserData'] [$object->id] = $object;
+        }
+
+        //$x=0;
         $y=0;
         foreach ($gamesArray as $game) {
             $datum =  $game['datum'];
-
-            $prepareGroupUser = $arrayJson['generateGroupUserData'] ;
-            if(count($arrayJson['groupUserData']) > 0){
-                $prepareGroupUser = $arrayJson['groupUserData'];
-            }
+            $prepareGroupUser = $arrayJson['groupUserData'];
             
             foreach($prepareGroupUser AS $groupUser){
                 $arrayJson['data'][$y]['user'][$groupUser['id']]['groupUser'] = $groupUser['id'];
@@ -352,7 +413,7 @@ class AbstractDoubleGenerator
                 isset($arrayJson['stats'][$teamplayerOne]['total']) === true ? $arrayJson['stats'][$teamplayerOne]['total']++ : $arrayJson['stats'][$teamplayerOne]['total'] = 1;
                 isset($arrayJson['stats'][$teamplayerTwo]['total']) === true ? $arrayJson['stats'][$teamplayerTwo]['total']++ : $arrayJson['stats'][$teamplayerTwo]['total'] = 1;
                 
-                $x++;
+                //$x++;
                 $teamId = 0;
                 $arrayJson['data'][$y]['day'] = $datum;
                 if($teamplayerOne > 0){
@@ -376,6 +437,20 @@ class AbstractDoubleGenerator
                         $arrayJson['data'][$y]['user'][$teamplayerTwo]['replacement']  = $game['teamIds'][$teamId]['replacement'];
                     }
                 }
+
+                //Only for 
+                if ($team != "team3" && $season->type == "TwoFieldTwoHourThreeTeams" && $teamplayerTwo > 0 && $teamplayerOne > 0) {
+                    if (isset($arrayJson['stats'][$teamplayerOne]['against'][$teamplayerTwo]) === false) {
+                        isset($arrayJson['stats'][$teamplayerOne]['countAgainst']) === true ? $arrayJson['stats'][$teamplayerOne]['countAgainst']++ : $arrayJson['stats'][$teamplayerOne]['countAgainst'] = 1;
+                    }
+                    if (isset($arrayJson['stats'][$teamplayerTwo]['against'][$teamplayerOne]) === false) {
+                        isset($arrayJson['stats'][$teamplayerTwo]['countAgainst']) === true ? $arrayJson['stats'][$teamplayerTwo]['countAgainst']++ : $arrayJson['stats'][$teamplayerTwo]['countAgainst'] = 1;
+                    }
+
+                    $arrayJson['stats'][$teamplayerOne]['against'][$teamplayerTwo] = $teamplayerTwo;
+                    $arrayJson['stats'][$teamplayerTwo]['against'][$teamplayerOne] = $teamplayerOne;
+                }
+
                 /** end new array to build the calendar */
 
             }
@@ -394,7 +469,20 @@ class AbstractDoubleGenerator
         }
         return $arrayJson;
     }
-    
 
-    
+    public function savePrefilledSeason($jsonTeam){
+        $jsonTeam = json_decode($jsonTeam, true);
+        foreach($jsonTeam AS $day){
+            foreach($day['user'] AS $groupUser){
+                if($groupUser['teamId'] == ""){
+                    continue;
+                }
+
+                $team = $this->team->getTeam($groupUser['teamId']);
+                $team->group_user_id = $groupUser['groupUser'];
+                $team->team = $groupUser['team'];
+                $this->team->saveTeam($team);                
+            }
+        }
+    }
 }

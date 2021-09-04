@@ -1,9 +1,11 @@
 <?php
+namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Absence;
+use Illuminate\Support\Facades\DB;
+use App\Models\Group;
 
-class AbsenceSeeder extends Seeder
+class GroupSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,12 +14,14 @@ class AbsenceSeeder extends Seeder
      */
     public function run()
     {
-        Eloquent::unguard();
+        //Eloquent::unguard();
 
         // Disable Foreign key check for this connection before running seeders
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-        factory(Absence::class, 10)->create();
+        Group::factory()
+            ->count(10)
+            ->create();
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }

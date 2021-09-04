@@ -13,6 +13,7 @@ class UserTest extends TestCase
     protected $testData;
     protected $data;
     protected $repo;
+    protected $countGroupUsers;
 
     public function setUp() : void
     {
@@ -20,6 +21,7 @@ class UserTest extends TestCase
         $this->seed();
         $this->repo =  new UserRepo();
         $this->testData = $this->repo->getAllUsers();
+        $this->recordCount = count($this->testData);
 
         
      
@@ -50,13 +52,12 @@ class UserTest extends TestCase
         echo PHP_EOL.PHP_EOL.'[44m User Repository Test:   [0m';
       
         $found = $this->repo->getAllUsers();
-        $this->assertEquals(10, count($found));
+        $this->assertEquals($this->recordCount, count($found));
         echo PHP_EOL.'[42m OK  [0m get all  users';
     }
 
     public function test_get_user()
     {
-
         $found = $this->repo->getUser($this->testData[0]->id);
 
         $this->dataTests($found, $this->testData[0]);
@@ -83,7 +84,7 @@ class UserTest extends TestCase
         $this->dataTests($data, $user);
         echo PHP_EOL.'[42m OK  [0m create user';
     }
-    
+
     public function test_create_social_user()
     {
         $socialUser = [
@@ -104,7 +105,7 @@ class UserTest extends TestCase
         $this->dataTests($data, $user);
         echo PHP_EOL.'[42m OK  [0m create user';
     }
-    
+  
     public function test_update_user()
     {
         $data = [

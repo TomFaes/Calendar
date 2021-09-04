@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Season extends Model
 {
     use SoftDeletes;
+    use HasFactory;
     
     protected $fillable = [
         'name','admin_id', 'group_id', 'begin', 'end', 'public', 'allow_replacement'

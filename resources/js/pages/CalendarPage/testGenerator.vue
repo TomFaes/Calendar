@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="testGenerator">
         <div v-if="editCalendarData['data'] != undefined">
             <h1 v-if= "generate == false">
                 {{  calendarData['seasonData']['name'] }}
@@ -85,6 +85,7 @@
                         <tbody>
                             <tr v-for="user in userData" :key="user.id">
                                 <td style="position:absolute; width:3em; left:0;">{{ user.firstname }}</td>
+                                
                                 <td><center v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['team1'] }}</center></td>
                                 <td><center v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['team2'] }}</center></td>
                                 <td><center v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['total'] }}</center></td>
@@ -112,6 +113,7 @@
 
 
 <style scoped>
+
     .absence{
         background-color: red;
     }

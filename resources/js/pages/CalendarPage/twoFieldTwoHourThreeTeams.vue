@@ -90,11 +90,11 @@
                         <tbody>
                             <tr v-for="user in userData" :key="user.id">
                                 <td style="position:absolute; width:3em; left:0;">{{ user.firstname }}</td>
-                                <td><center>{{ calendarData['stats'][user.id]['countAgainst'] }}</center></td>
-                                <td><center>{{ calendarData['stats'][user.id]['team1'] }}</center></td>
-                                <td><center>{{ calendarData['stats'][user.id]['team2'] }}</center></td>
-                                <td><center>{{ calendarData['stats'][user.id]['team3'] }}</center></td>
-                                <td><center>{{ calendarData['stats'][user.id]['total'] }}</center></td>
+                                <td><center v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['countAgainst'] }}</center></td>
+                                <td><center v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['team1'] }}</center></td>
+                                <td><center v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['team2'] }}</center></td>
+                                <td><center v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['team3'] }}</center></td>
+                                <td><center v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['total'] }}</center></td>
                             </tr>
                         </tbody>
                     </table>

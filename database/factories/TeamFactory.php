@@ -1,28 +1,36 @@
 <?php
 
-use Carbon\Carbon;
+namespace Database\Factories;
+
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
+
 use App\Models\GroupUser;
 use App\Models\Season;
-
 use App\Models\Team;
-use Faker\Generator as Faker;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-/*
-|--------------------------------------------------------------------------
-| Model Factories
-|--------------------------------------------------------------------------
-|
-| This directory should contain each of the model factory definitions for
-| your application. Factories provide a convenient way to generate new
-| model instances for testing / seeding your application's database.
-|
-*/
+class TeamFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Team::class;
 
-$factory->define(Team::class, function (Faker $faker) {
-    return [
-        'season_id' =>  Season::first()->id,
-        'date' => Carbon::now()->addMonths(1)->format('Y-m-d'),
-        'team' =>$faker->randomElement(['team1', 'team2', 'team3', 'free']),
-        'group_user_id' => GroupUser::inRandomOrder()->first(),
-    ];
-});
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'season_id' =>  Season::first()->id,
+            'date' => Carbon::now()->addMonths(1)->format('Y-m-d'),
+            'team' =>$this->faker->randomElement(['team1', 'team2', 'team3', 'free']),
+            'group_user_id' => GroupUser::inRandomOrder()->first(),
+        ];
+    }
+}

@@ -29,7 +29,7 @@ class Absence
         $seasonRepo = app('App\Repositories\Contracts\ISeason');
         $season = $seasonRepo->getSeason($request->route('season_id'));
 
-        if ($season->teams->count() == 0) {
+        if ($season->is_generated == 0) {
             return $next($request);
         }
         
