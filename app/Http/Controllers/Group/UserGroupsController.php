@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Group;
 use App\Http\Controllers\Controller;
 
 use App\Group;
+use App\Http\Resources\GroupCollection;
 use Illuminate\Http\Request;
 
 use App\Repositories\Contracts\IGroup;
-use App\Validators\GroupValidation;
 
 use Auth;
 
@@ -15,15 +15,11 @@ class UserGroupsController extends Controller
 {
     /** App\Repositories\Contracts\IGroup */
     protected $group;
-    /** App\Validators\GroupValidation */
-    protected $groupValidation;
 
-
-    public function __construct(GroupValidation $groupValidation, IGroup $group) 
+    public function __construct(IGroup $group) 
     {
         $this->middleware('auth:api');
 
-        $this->groupValidation = $groupValidation;
         $this->group = $group;
     }
 
@@ -35,6 +31,6 @@ class UserGroupsController extends Controller
     public function index()
     {
         $userId = auth()->user()->id;
-        return response()->json($this->group->getUserGroups($userId), 200);
+        return response()->json(new GroupCollection($this->group->getUserGroups($userId)), 200);
     }
 }

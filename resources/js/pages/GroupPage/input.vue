@@ -1,29 +1,29 @@
 <template>
     <div class="container">
+        
         <form @submit.prevent="submit" method="POST" enctype="multipart/form-data">
             <!-- the form items -->
             <global-input type='text' inputName="name" inputId="name" tekstLabel="Naam: " v-model="fields.name" :errors="errors.name" :value='fields.name'></global-input>
-            <!-- Admin multiselect -->
-            <!--
-            <div class="row" v-if="submitOption != 'Create'">
+            <!-- Admin multiselect -->            
+            <div class="row" v-if="multiGroupUsers">
                 <div class="col-lg-2 col-md-2 col-sm-0"></div>
                 <div class="col-lg-8 col-md-8 col-sm-12">
                     <label>Admin: </label>
                     <multiselect
                         v-model="selectedUser"
                         :multiple="false"
-                        :options="multigroupUsers"
+                        :options="multiGroupUsers"
                         :close-on-select="true"
                         :clear-on-select="true"
                         placeholder="Select admin"
-                        label="fullName"
-                        track-by="fullName"
+                        label="full_name"
+                        track-by="full_name"
                     >
                     </multiselect>
                 </div>
                 <div class="col-lg-2 col-md-2 col-sm-0"></div>
             </div>
-            -->
+            
             <br>
             <global-layout>
                  <center>
@@ -56,12 +56,9 @@
                     admin_id: '',
                 },
                 'errors' : {},
-                'action': '',
-                'response': {},
                 'selectedUser': [],
                 'multigroupUsers': [],
                 'formData': new FormData(),
-                'message': '',
                 'buttonText': "Save group"
             }
         },
@@ -71,27 +68,55 @@
             'submitOption': ""
          },
 
+         watch:{
+            group(){
+                this.setData();
+            },
+         },
+
+        computed: {
+            groupUsers(){
+                if(this.group === undefined){
+                    return;
+                }
+
+                if(this.$store.state.selectedGroupUsers.data == undefined){
+                    this.$store.dispatch('getSelectedGroupUsers', {groupId: this.group.id});
+                }
+                return this.$store.state.selectedGroupUsers.data;
+            },
+
+            multiGroupUsers(){
+                if(this.groupUsers === undefined){
+                    return;
+                }
+
+                if(this.group.id != this.groupUsers[0].group_id){
+                    this.$store.dispatch('getSelectedGroupUsers', {groupId: this.group.id});
+                }
+
+                var users = [];
+                for(var item in this.groupUsers){
+                    if(this.groupUsers[item]['user_id'] > 0){
+                         users.push(this.groupUsers[item]);
+                    }
+                }  
+                return users;
+            }
+        },
+
         methods: {
             setFormData(){
-                if(this.fields.name != undefined){
-                    this.formData.set('name', this.fields.name);
-                }
-                if(this.fields.description != undefined){
-                    this.formData.append('description', this.fields.description);
-                }
-                if(this.selectedUser != undefined){
-                    this.formData.set('admin_id', this.selectedUser.id);
-                }
+                this.formData.set('name', this.fields.name ?? null);
+                this.formData.append('description', this.fields.description ?? null);
+                this.formData.set('admin_id', this.selectedUser.id ?? null);
             },
 
             submit(){
                 if(this.submitOption == 'Create'){
-                    this.create();
-                }else if(this.submitOption == 'Update'){
-                    this.update();
-                }else{
-                    this.$bus.$emit('showMessage', "No valid save option given",  'red', '2000' );
+                    return this.create();
                 }
+                this.update();
             },
 
             resetFormData(){
@@ -102,14 +127,15 @@
 
             create(){
                 this.setFormData();
-                this.action = "group";
 
-                apiCall.postData(this.action, this.formData)
+                apiCall.postData('group', this.formData)
                 .then(response =>{
                     this.$bus.$emit('reloadGroupList');
+                    this.$bus.$emit('resetGroupDisplay');
+                    
                     this.resetFormData();
-                    this.message = "Your group " + response.name + " has been created";
-                    this.$bus.$emit('showMessage', this.message,  'green', '2000' );
+                    var message = "Your group " + response.data.name + " has been created";
+                    this.$bus.$emit('showMessage', message,  'green', '2000' );
                 }).catch(error => {
                     this.errors = error;
                 });
@@ -117,19 +143,17 @@
 
             update(){
                 this.setFormData();
-                this.action =  'group/' + this.group.id;
 
-                apiCall.updateData(this.action, this.formData)
+                apiCall.updateData('group/' + this.group.id, this.formData)
                 .then(response =>{
-                    this.$bus.$emit('reloadGroupList');
-                    if(response.name == undefined){
-                        this.message = response;
-                        this.$bus.$emit('showMessage', this.message,  'red', '2000' );
+                    this.$bus.$emit('reloadGroup');
+                    if(response.data.name == undefined){
+                        this.$bus.$emit('showMessage', response.data,  'red', '2000' );
                     }else{
-                        this.message = "Your group " + response.name + " has been changed";
-                        this.$bus.$emit('showMessage', this.message,  'green', '2000' );
+                        var message = "Your group " + response.data.name + " has been changed";
+                        this.$bus.$emit('showMessage', message,  'green', '2000' );
                     }
-                    this.$bus.$emit('display', 'groupStats');
+                    this.$router.push({name: "groupDetail", params: { id: this.group.id },})
                 }).catch(error => {
                         this.errors = error;
                 });
@@ -137,16 +161,7 @@
 
             setData(){
                 this.fields.name = this.group.name;
-                this.fields.description = this.group.description;
-
-                var adminUser = "";
-                var adminId = this.group.admin.id;
-                this.group.group_users.forEach(function(item, index){
-                    if(adminId == item.id){
-                        adminUser = index;
-                    }
-                });
-                this.selectedUser = this.group.group_users[adminUser];
+                this.selectedUser = this.group.admin;
             }
         },
 
@@ -155,14 +170,9 @@
                 this.buttonText = "Create group";
             }
             if(this.group != undefined){
-                for(var item in this.group.group_users){
-                    if(this.group.group_users[item]['user_id'] > 0){
-                         this.multigroupUsers.push(this.group.group_users[item]);
-                    }
-                }
                 this.setData();
             }
-        }
+        },
     }
 </script>
 

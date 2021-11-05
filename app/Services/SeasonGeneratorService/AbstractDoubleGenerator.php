@@ -19,6 +19,8 @@ class AbstractDoubleGenerator
     /** @var App\Repositories\Contracts\ITeam */
     protected $team;
 
+    protected $totalTeams = 0;
+
     public function __construct(ISeason $seasonRepo, IAbsence $absenceRepo, ITeam $teamRepo) 
     {
         $this->season = $seasonRepo;
@@ -32,7 +34,8 @@ class AbstractDoubleGenerator
      * @param  int  $seasonId
      * @return json
      */
-    public function generateSeason(Season $season){
+    public function generateSeason(Season $season)
+    {
         //create all possible teams
         $allPossibleTeamArray = $this->createAllPossibleTeams($season->group);
 
@@ -69,14 +72,12 @@ class AbstractDoubleGenerator
         return $this->createJsonSeason($gamesArray['season'], $season);
     }
 
-    public function generateEmptySeason(Season $season, $teams = 0){
-        if($teams == 0){
-            return;
-        }
+    public function generateEmptySeason(Season $season)
+    {
         $seasonDates = $this->getPlayDates($season->begin, $season->end);
 
         foreach ($seasonDates as $seasonDate) {
-            for($x = 1; $x <= $teams; $x++){
+            for($x = 1; $x <= $this->totalTeams; $x++){
                 $this->saveTeam($season->id, $seasonDate['date'], 'team'.$x);
                 $this->saveTeam($season->id, $seasonDate['date'], 'team'.$x);
             }
@@ -377,20 +378,20 @@ class AbstractDoubleGenerator
         $nextDate->addDay(14);
 
         $arrayJson = array();
+        //$arrayJson['currentPlayDay']  = 0;
         $arrayJson['seasonData']  = $season;
         $arrayJson['absenceData'] = $this->absence->getSeasonAbsenceArray($season->id);
 
         foreach($season->group->groupUsers as $object)
         {
             $arrayJson['groupUserData'] [$object->id] = $object;
-        }
+        }        
 
         //$x=0;
         $y=0;
         foreach ($gamesArray as $game) {
             $datum =  $game['datum'];
             $prepareGroupUser = $arrayJson['groupUserData'];
-            
             foreach($prepareGroupUser AS $groupUser){
                 $arrayJson['data'][$y]['user'][$groupUser['id']]['groupUser'] = $groupUser['id'];
                 $arrayJson['data'][$y]['user'][$groupUser['id']]['team'] = "";
@@ -403,7 +404,7 @@ class AbstractDoubleGenerator
                 $nextDate->addDay(-14);
             }
 
-            for ($z=1;$z<=4;$z++) {
+            for ($z=1;$z<=$this->totalTeams;$z++) {
                 $team = 'team'.$z;
                 $teamplayerOne = isset($game[$team]['player1']) === true ? $game[$team]['player1'] : "";
                 $teamplayerTwo = isset($game[$team]['player2']) === true ? $game[$team]['player2'] : "";
@@ -463,14 +464,16 @@ class AbstractDoubleGenerator
                     $arrayJson['data'][$y]['teams'][$teamId]['team'] = $teamIds['team'];
                     $arrayJson['data'][$y]['teams'][$teamId]['groupUserId'] = $teamIds['groupUserId'];
                 }
-            }            
+            }
+            
              /** end new array to build the calendar */
             $y++;
         }
         return $arrayJson;
     }
 
-    public function savePrefilledSeason($jsonTeam){
+    public function savePrefilledSeason($jsonTeam)
+    {
         $jsonTeam = json_decode($jsonTeam, true);
         foreach($jsonTeam AS $day){
             foreach($day['user'] AS $groupUser){

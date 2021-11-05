@@ -7,22 +7,7 @@ if(process.env.NODE_ENV == 'development'){
 }
 
 export default {
-    
     getData(action) {
-        return axios({
-            method: 'get',
-            url : localPath +  '/api/' + action
-        })
-        .then(function (response) {
-            return response.data;
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-    },
-
-    //return all the data with response codes
-    getDataAdv(action) {
         return axios({
             method: 'get',
             url : localPath +  '/api/' + action
@@ -45,7 +30,7 @@ export default {
             },
         })
         .then(function (response) {
-            return response.data;
+            return response;
         })
         .catch(error => {
             if (error.response.status === 422) {
@@ -64,7 +49,7 @@ export default {
             },
         })
         .then(function (response) {
-            return response.data;
+            return response;
         })
         .catch(error => {
             if (error.response.status === 422) {
@@ -80,7 +65,7 @@ export default {
             data: id,
         })
         .then(function (response) {
-           return response.data;
+           return response;
         })
         .catch(error => {
             if (error.response.status === 403) {

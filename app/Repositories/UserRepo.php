@@ -24,16 +24,6 @@ class UserRepo extends Repository implements Contracts\IUser {
     }
 
     /**
-     * check if a user exist when he logs in with a socialite account
-     */
-    /*
-    public function existingUser($socialUser)
-    {
-        return User::where('email', $socialUser->getEmail())->first();
-    }
-    */
-
-    /**
      * needed when logged in with password and email
      */
     public function checkEmail($email)
@@ -125,8 +115,7 @@ class UserRepo extends Repository implements Contracts\IUser {
      */
     public function delete($userId)
     {
-        $this->user->forgetUser($userId);
-        return $user;
+        return $this->forgetUser($userId);
         //return response()->json("User is deleted", 204);
     }
 }

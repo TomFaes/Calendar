@@ -2,7 +2,6 @@
     <div>
         <div v-if="editCalendarData['data'] != undefined">
             <h1 v-if= "generate == false">
-                {{  calendarData['seasonData']['name'] }}
                 <button class="btn btn-primary" @click.prevent="editCalendar" v-if="showEditCalenderButton()"><i class="fa fa-edit" style="heigth:14px; width:14px"></i></button>
                 <button v-if="calendarData['seasonData']['allow_replacement'] == 1" class="btn btn-warning" @click.prevent="askReplacement"><i class="fas fa-exchange-alt" style="heigth:14px; width:14px"></i></button>
             </h1>
@@ -12,7 +11,7 @@
                     <table class="table">
                         <thead >
                             <tr>
-                                <th scope="col" style="position:absolute; width:3em; left:0;">Player</th>
+                                <th scope="col" style="width:3em; left:0;">Player</th>
                                 <th v-for="date in editCalendarData['data']"  :key="date.id" scope="col" style="text-align: center;">
                                     {{convertDate(date.day)}}
                                 </th>
@@ -20,7 +19,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="groupUser in userData" :key="groupUser.id">
-                                <td style="position:absolute; width:3em; left:0;">{{  groupUser.user_id != null ? groupUser.user.firstname : groupUser.firstname }}</td>
+                                <td style="width:3em; left:0;">{{  groupUser.user_id != null ? groupUser.user.firstname : groupUser.firstname }}</td>
                                  <template v-for="(data, index) in editCalendarData['data']" >
                                       <!-- view when editing a season -->
                                     <td :class="getBackground(groupUser.id, data.day, data['user'][groupUser.id]['team'])" :key="data.id" @click.prevent="editTeam(index, groupUser.id)" v-if="edit == true">
@@ -76,7 +75,7 @@
                     <table class="table">
                         <thead >
                             <tr>
-                                <th scope="col" style="position:absolute; width:3em; left:0;">Naam</th>
+                                <th scope="col" style="width:3em; left:0;">Naam</th>
                                 <th scope="col" style="text-align: center;">Ploeg 1</th>
                                 <th scope="col" style="text-align: center;">Ploeg 2</th>
                                 <th scope="col" style="text-align: center;">Ploeg 3</th>
@@ -86,7 +85,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="user in userData" :key="user.id">
-                                <td style="position:absolute; width:3em; left:0;">{{ user.firstname }}</td>
+                                <td style="width:3em; left:0;">{{ user.firstname }}</td>
                                 <td><center v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['team1'] }}</center></td>
                                 <td><center v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['team2'] }}</center></td>
                                 <td><center v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['team3'] }}</center></td>

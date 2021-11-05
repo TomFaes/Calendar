@@ -5,6 +5,8 @@ namespace App\Repositories;
 use App\Models\GroupUser;
 
 use App\Repositories\Contracts\IGroupUser;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 
 class GroupUserRepo extends Repository implements IGroupUser
@@ -29,24 +31,7 @@ class GroupUserRepo extends Repository implements IGroupUser
 
     public function getGroupsOfUser($userId)
     {
-        return GroupUser::with(['group', 'user'])->where('user_id', $userId)->where('verified',1)->get();
-    }
-
-    public function getUnverifiedGroupUsers($userId)
-    {
-        return GroupUser::with(['group', 'user'])
-        ->whereHas('group', function ($query)  {
-            $query->where('deleted_at', '=', null);
-        })
-        ->where('user_id', $userId)
-        ->where('verified',0)
-        ->OrderBy('firstname', 'asc', 'name', 'asc')
-        ->get();
-    }
-
-    public function getGroupsBasedOnEmail($email)
-    {
-        return GroupUser::with(['group', 'user'])->where('email', $email)->where('verified',0)->where('user_id', null)->OrderBy('name', 'asc', 'firstname', 'asc')->get();
+        return GroupUser::with(['group', 'user'])->where('user_id', $userId)->get();
     }
 
      /***************************************************************************
@@ -61,7 +46,6 @@ class GroupUserRepo extends Repository implements IGroupUser
     {
         isset($data['firstname']) === true ? $groupUser->firstname = $data['firstname'] : "";
         isset($data['name']) === true ? $groupUser->name = $data['name'] : "";
-        isset($data['email']) === true ? $groupUser->email = $data['email'] : "";
         isset($data['group_id']) === true ? $groupUser->group_id = $data['group_id'] : "";
         isset($data['user_id']) === true ? $groupUser->user_id = $data['user_id'] : "";
         return $groupUser;
@@ -71,7 +55,7 @@ class GroupUserRepo extends Repository implements IGroupUser
     {
         $groupUser = new GroupUser();
         $groupUser = $this->setGroupUser($groupUser, $data);
-        $groupUser->verified = 0;
+        $groupUser->code = $this->createCode();
         $groupUser->save();
         return $groupUser;
     }
@@ -84,29 +68,56 @@ class GroupUserRepo extends Repository implements IGroupUser
         return $groupUser;
     }
 
+    //a group user is delete from the group but not removed from the database
     public function delete($id)
     {
         $groupUser = $this->getGroupUser($id);
         $groupUser->group_id = Null;
-        $groupUser->save();
-        return "User is removed from group";
+        return $groupUser->save();
+        //return "User is removed from group";
         //return $groupUser->delete();
     }
 
-    public function verifyUser($id)
+    /**
+     * create a unique code for a group user to join a group
+     */
+    public function createCode()
     {
-        $groupUser = $this->getGroupUser($id);
-        $groupUser->verified = 1;
+        $createCodeString = "";
+        for($x=0; $x < 5; $x++){
+            $createCodeString = microtime().Str::random(20);
+            $createCodeString = Hash::make($createCodeString);
+
+            $checkIfCodeExist = GroupUser::where('code', $createCodeString)->first();
+            if($checkIfCodeExist == null){
+                return $createCodeString;
+            }
+        }
+        return false;
+    }
+
+    public function joinGroup($code, $userId)
+    {
+        if(strlen($code) <= 0){
+            return false;
+        }
+        $groupUser = GroupUser::where('code', $code)->first();
+
+        if($groupUser == null){
+            return false;
+        }
+        $groupUser->code = Null;
+        $groupUser->user_id = $userId;
         $groupUser->save();
         return $groupUser;
     }
 
-    public function unverifyUser($id)
-    {
+    public function regenerateGroupUserCode($id){
         $groupUser = $this->getGroupUser($id);
-        $groupUser->user_id = null;
-        $groupUser->email = null;
-        $groupUser->verified = 0;
+        if($groupUser->user_id != null){
+            return false;
+        }
+        $groupUser->code = $this->createCode();
         $groupUser->save();
         return $groupUser;
     }

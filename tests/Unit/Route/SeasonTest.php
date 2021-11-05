@@ -2,40 +2,46 @@
 
 namespace Tests\Unit\Route;
 
-use App\Models\Absence;
 use App\Models\Group;
 use App\Models\GroupUser;
 use App\Models\Season;
-use App\Models\Team;
 
 use Carbon\Carbon;
 
 use Tests\TestCase;
 
 use App\Models\User;
+use App\Repositories\AbsenceRepo;
+use App\Repositories\GroupUserRepo;
+use App\Repositories\SeasonRepo;
 use App\Repositories\TeamRepo;
 use Laravel\Passport\Passport;
 use App\Services\SeasonGeneratorService\GeneratorFactory;
+use Auth;
+use Database\Seeders\GeneratorSeeder;
 
 class SeasonTest extends TestCase
 {
     protected $allUsers;
     protected $allSeasons;
-    protected $allAbsences;
+    protected $allGroups;
     protected $allGroupUsers;
-    protected $allTeams;
+
+    protected $newSeason;
+
+    protected $seasonCount;
 
     public function setUp() : void
     {
         parent::setUp();
-        $this->seed();
+        $this->seed(GeneratorSeeder::class);
 
-         $this->allUsers = User::all();
+        $this->allUsers = User::all();
         $this->allSeasons = Season::all();
         $this->allGroups = Group::all();
         $this->allGroupUsers = GroupUser::all();
-        $this->allAbsences = Absence::all();
-        $this->allTeams = Team::all();
+
+        $this->seasonCount = count($this->allSeasons);
     }
 
     /**
@@ -50,92 +56,128 @@ class SeasonTest extends TestCase
         return $user;
     }
 
+    protected function createGeneratedSeason(){
+        //create new season
+        $seasonData = Season::factory()->make(['begin' => Carbon::now()->addDays(1)->format('Y-m-d')])->toArray();
+        $seasonRepo = new SeasonRepo();
+        $this->newSeason = $seasonRepo->create($seasonData, $this->allUsers[0]->id);
+
+        //add a registered user to a group
+        if($this->allGroupUsers[0]->user_id == null){
+            $groupUserRepo = new GroupUserRepo();
+            $groupUser = $groupUserRepo->regenerateGroupUserCode($this->allGroupUsers[0]->id);
+            $groupUser = $groupUserRepo->joinGroup($groupUser->code, Auth::user()->id);
+        }
+        $this->allGroupUsers = GroupUser::all();
+        
+
+        //set some absences
+        $absenceRepo = new AbsenceRepo();
+        for($x = 1; $x <= 20;  $x++){
+            $randomDay = rand(1, 30);
+            $randomGroupUser = rand(0, 9);
+            $data = [
+                'season_id' => $this->newSeason->id,
+                'date' => Carbon::now()->addDays(7*$randomDay)->format('Y-m-d'),
+                'group_user_id' => $this->allGroupUsers[$randomGroupUser]->id,
+            ];
+            $absenceRepo->create($data,  $this->newSeason->id);
+        }
+
+        $seasonGenerator = GeneratorFactory::generate($this->newSeason->type);
+        $generatedSeason = $seasonGenerator->generateSeason($this->newSeason);
+        $seasonGenerator->saveSeason(json_encode($generatedSeason));
+    }
+
      /**
      * Default data test
      */
     protected function SeasonDataTests($data, $testData) : void
     {
-        $this->assertEquals($data['name'], $testData['name']);
-        $this->assertEquals($data['begin'], $testData['begin']);
-        $this->assertEquals($data['end'], $testData['end']);
-        $this->assertEquals($data['group_id'], $testData['group_id']);
-        $this->assertEquals($data['admin_id'], $testData['admin_id']);
-        $this->assertEquals($data['start_hour'], $testData['start_hour']);
-        $this->assertEquals($data['type'], $testData['type']);
+        $this->assertEquals($data['name'], $testData->name);
+        $this->assertEquals($data['begin'], $testData->begin);
+        $this->assertEquals($data['end'], $testData->end);
+        $this->assertEquals($data['group_id'], $testData->group_id);
+        $this->assertEquals($data['admin_id'], $testData->admin_id);
+        $this->assertEquals($data['start_hour'], $testData->start_hour);
+        $this->assertEquals($data['type'], $testData->type);
+        $this->assertEquals($data['typeMember'], $testData->type_member);
+        
+        $this->assertEquals($data['public'], $testData->public);
+        $this->assertEquals($data['is_generated'], $testData->is_generated);
+        $this->assertEquals($data['allow_replacement'], $testData->allow_replacement);
+    }
+
+    protected function GeneratedSeasonTests($generatedSeason){
+        $this->assertObjectHasAttribute('absenceData', $generatedSeason);
+        $this->assertObjectHasAttribute('currentPlayDay', $generatedSeason);
+
+        $this->assertObjectHasAttribute('data', $generatedSeason);
+        $this->assertObjectHasAttribute('day', $generatedSeason->data[0]);
+        $this->assertObjectHasAttribute('user', $generatedSeason->data[0]);
+        $this->assertEquals(count(json_decode(json_encode($generatedSeason->data[0]->user), true)), 10);
+
+        $this->assertObjectHasAttribute('groupUserData', $generatedSeason);
+        $this->assertEquals(count(json_decode(json_encode($generatedSeason->groupUserData), true)), 10);
+
+        $this->assertObjectHasAttribute('seasonData', $generatedSeason);
+
+        $this->assertObjectHasAttribute('stats', $generatedSeason);
+        $groupUserId = $this->allGroupUsers[0]->id;
+        $stats = json_decode(json_encode($generatedSeason->stats), true);
+        $this->assertArrayHasKey('team1', $stats[$groupUserId]);
+        $this->assertArrayHasKey('team2', $stats[$groupUserId]);
+        $this->assertArrayHasKey('team3', $stats[$groupUserId]);
+        $this->assertArrayHasKey('total', $stats[$groupUserId]);
     }
     
     public function test_test_season(){
         $this->assertEquals(1, 1);
-        echo PHP_EOL.'[41m Rewrite  [0m Rewrite all season test';
     }
-/*
-    public function test_SeasonController_index()
-    {
-        echo "\n\n---------------------------------------------------------------------------------";
-        echo PHP_EOL.PHP_EOL.'[44m Season api routest:   [0m';
 
+    public function test_season_controller_index()
+    {
         $this->be($this->authenticatedUser());
 
         $response = $this->get('/api/season');
         $response->assertStatus(200);
         $this->assertEquals(200, $response->status());
 
-        $response_data = $response->decodeResponseJson(); 
-        $this->assertEquals(count($response_data), 10);
+        $response_data = $response->getData();
+        $this->assertEquals(count($response_data->data), $this->seasonCount);
 
-        echo PHP_EOL.'[42m OK  [0m test index in the SeasonController';
+        $this->SeasonDataTests($this->allSeasons[0], $response_data->data[0]);
     }
 
-    
-    public function test_SeasonController_store()
+    public function test_season_controller_store()
     {
         $this->be($this->authenticatedUser());
 
-        $data = [
-            'name' => 'a season name',
-            'begin' => Carbon::now()->subDays(1)->format('Y-m-d'),
-            'end' =>  Carbon::now()->addMonths(1)->format('Y-m-d'),
-            'group_id' =>  $this->allGroups[0]->id,
-            'admin_id' => $this->allUsers[0]->id,
-            'start_hour' => "20:00",
-            'type' => 'TwoFieldTwoHourThreeTeams'
-        ];
+        $data = Season::factory()->make()->toArray();      
 
         $response = $this->postJson('/api/season', $data);
-        $response_data = $response->decodeResponseJson(); 
+        $response_data = $response->getData();
        
         $response->assertStatus(200);
         $this->assertEquals(200, $response->status());
         $this->seasonDataTests($data, $response_data);
-
-        echo PHP_EOL.'[42m OK  [0m test store method in the SeasonController';
     }
 
-    public function test_SeasonController_update()
+    public function test_season_controller_update()
     {
         $this->be($this->authenticatedUser());
 
-        $data = [
-            'name' => 'update a season name',
-            'begin' => Carbon::now()->subDays(1)->format('Y-m-d'),
-            'end' =>  Carbon::now()->addMonths(1)->format('Y-m-d'),
-            'group_id' =>  $this->allGroups[0]->id,
-            'admin_id' => $this->allUsers[0]->id,
-            'start_hour' => "20:00",
-            'type' => 'TwoFieldTwoHourThreeTeams'
-        ];
+        $data = Season::factory()->make()->toArray();      
 
         $response = $this->postJson('/api/season/'.$this->allSeasons[0]->id, $data);
-        $response_data = $response->decodeResponseJson(); 
+        $response_data = $response->getData();
        
         $response->assertStatus(200);
         $this->assertEquals(200, $response->status());
         $this->seasonDataTests($data, $response_data);
-
-        echo PHP_EOL.'[42m OK  [0m test update method in the SeasonController';
     }
 
-    public function test_SeasonController_destroy()
+    public function test_season_controller_destroy()
     {
         $this->be($this->authenticatedUser());
 
@@ -147,137 +189,82 @@ class SeasonTest extends TestCase
         $response->assertStatus(200);
         $this->assertEquals(200, $response->status());
 
-        $response_data = $response->decodeResponseJson(); 
-        $this->assertEquals(count($response_data), 9);
-
-        echo PHP_EOL.'[42m OK  [0m test destroy method in the SeasonController';
+        $response_data = $response->getData();
+        $this->assertEquals(count($response_data->data), ($this->seasonCount - 1));
     }
 
-    public function test_ActiveSeasonController_index()
+    //Route: Route::get('/season/{id}/is_generated', [SeasonController::class, 'seasonIsGenerated']);
+    public function test_season_controller_season_is_generated()
     {
-        echo "\n\n---------------------------------------------------------------------------------";
-        echo PHP_EOL.PHP_EOL.'[44m active Season api routest:   [0m';
-
         $this->be($this->authenticatedUser());
 
-        $data = [
-            'firstname' => 'firstname',
-            'name' => 'name',
-            'email' => 'test@test.be',
-            'group_id' => $this->allSeasons[0]->group_id,
-            'user_id' => $this->allUsers[0]->id,
-        ];
+        $response = $this->get('/api/season/'.$this->allSeasons[0]->id.'/is_generated');
+        $response_data = $response->getData();
 
-        //generate a season
-        $response = $this->postJson('/api/group/'.$this->allSeasons[0]->group_id.'/user', $data);
-        $seasonGenerator = GeneratorFactory::generate($this->allSeasons[0]->type);
-        $generatedSeason = $seasonGenerator->generateSeason($this->allSeasons[0]);
-        $jsonSeason = json_encode($generatedSeason);
-        $seasonGenerator->saveSeason($jsonSeason);
+        $response->assertStatus(200);
+        $this->assertEquals(200, $response->status());
+        $this->assertEquals(1, $response_data->is_generated);
+    }
 
-        //generate a second season
-        $response = $this->postJson('/api/group/'.$this->allSeasons[1]->group_id.'/user', $data);
-        $seasonGenerator = GeneratorFactory::generate($this->allSeasons[1]->type);
-        $generatedSeason = $seasonGenerator->generateSeason($this->allSeasons[1]);
-        $jsonSeason = json_encode($generatedSeason);
-        $seasonGenerator->saveSeason($jsonSeason);
-       
+    public function test_active_season_controller_index()
+    {
+        $this->be($this->authenticatedUser());
+
+        $this->createGeneratedSeason();
+        $this->assertEquals(count(Season::all()), ($this->seasonCount + 1));
+
         $response = $this->get('/api/active_seasons');
         $response->assertStatus(200);
         $this->assertEquals(200, $response->status());
 
-        $response_data = $response->decodeResponseJson(); 
-        $this->assertEquals(count($response_data['season']), 2);
-
-        echo PHP_EOL.'[42m OK  [0m test index in the ActiveSeasonController';
+        $response_data = $response->getData();
+        $this->assertEquals(1, count($response_data->data));
     }
 
-    public function test_SeasonGeneratorController_index()
+public function test_absence_controller_index()
     {
-        echo "\n\n---------------------------------------------------------------------------------";
-        echo PHP_EOL.PHP_EOL.'[44m Season generator api routest:   [0m';
-
         $this->be($this->authenticatedUser());
 
-        $data = [
-            'firstname' => 'firstname',
-            'name' => 'name',
-            'email' => 'test@test.be',
-            'group_id' => $this->allSeasons[0]->group_id,
-            'user_id' => $this->allUsers[0]->id,
-        ];
-
-        //generate a season
-        $response = $this->postJson('/api/group/'.$this->allSeasons[0]->group_id.'/user', $data);
-        $seasonGenerator = GeneratorFactory::generate($this->allSeasons[0]->type);
-        $generatedSeason = $seasonGenerator->generateSeason($this->allSeasons[0]);
-        $jsonSeason = json_encode($generatedSeason);
-        $seasonGenerator->saveSeason($jsonSeason);
-       
-        $response = $this->get('/api/season/'.$this->allSeasons[0]->id.'/generator');
+        $response = $this->get('/api/season/'.$this->allSeasons[0]->id.'/absence');
         $response->assertStatus(200);
         $this->assertEquals(200, $response->status());
-
-        echo PHP_EOL.'[42m OK  [0m test index in the SeasonGeneratorController';
     }
 
-    public function test_SeasonGeneratorController_store()
+    public function test_AbsenceController_store()
     {
         $this->be($this->authenticatedUser());
 
         $data = [
-            'firstname' => 'firstname',
-            'name' => 'name',
-            'email' => 'test@test.be',
-            'group_id' => $this->allSeasons[0]->group_id,
-            'user_id' => $this->allUsers[0]->id,
+            'date' => Carbon::now()->addDays(8)->format('Y-m-d'),
+            'group_user_id' => $this->allGroupUsers[0]->id,
         ];
 
-        //generate a season
-        $response = $this->postJson('/api/group/'.$this->allSeasons[0]->group_id.'/user', $data);
-        $seasonGenerator = GeneratorFactory::generate($this->allSeasons[0]->type);
-        $generatedSeason = $seasonGenerator->generateSeason($this->allSeasons[0]);
+        $response = $this->postJson('/api/season/'.$this->allSeasons[0]->id.'/absence', $data);
+        $response_data = $response->getData();
 
-        $generatedSeason['jsonSeason'] = json_encode($generatedSeason);
-        $response = $this->postJson('/api/season/'.$this->allSeasons[0]->id.'/generator', $generatedSeason);
-        
-        $response_data = $response->decodeResponseJson(); 
         $response->assertStatus(200);
         $this->assertEquals(200, $response->status());
-        $this->assertEquals('season is made', $response_data);
-
-        echo PHP_EOL.'[42m OK  [0m test store in the SeasonGeneratorController';
+        $this->assertEquals($data['date'], $response_data->date);
+        $this->assertEquals($this->allGroupUsers[0]->id, $response_data->group_user_id);
+        $this->assertEquals($this->allSeasons[0]->id, $response_data->season_id);
     }
 
-    public function test_SeasonGeneratorController_update()
+    public function test_season_generator_controller_index()
     {
         $this->be($this->authenticatedUser());
-        $data['test'] = "leeg";
-        $response = $this->postJson('/api/season/'.$this->allSeasons[0]->id.'/generator/1', $data);
-        
-        $response_data = $response->decodeResponseJson(); 
+
+        $this->createGeneratedSeason();
+
+        $response = $this->get('/api/season/'.$this->newSeason->id.'/generator');
         $response->assertStatus(200);
         $this->assertEquals(200, $response->status());
-        $this->assertEquals('to be made update', $response_data);
 
-        echo PHP_EOL.'[42m OK  [0m test update in the SeasonGeneratorController';
+        $response_data = $response->getData();
+
+        $this->GeneratedSeasonTests($response_data);
     }
 
-    public function test_SeasonGeneratorController_destroy()
-    {
-        $this->be($this->authenticatedUser());
-        $data['test'] = "leeg";
-        $response = $this->postJson('/api/season/'.$this->allSeasons[0]->id.'/generator/'.$this->allSeasons[0]->id.'/delete');
-        
-        $response_data = $response->decodeResponseJson(); 
-        $response->assertStatus(200);
-        $this->assertEquals(200, $response->status());
-        $this->assertEquals('to be made destroy', $response_data);
-
-        echo PHP_EOL.'[42m OK  [0m test delete in the SeasonGeneratorController';
-    }
-
-    public function test_SeasonController_playDates()
+    public function test_season_generator_controller_generate_season()
     {
         $this->be($this->authenticatedUser());
 
@@ -286,191 +273,252 @@ class SeasonTest extends TestCase
         $response->assertStatus(200);
         $this->assertEquals(200, $response->status());
 
-        echo PHP_EOL.'[42m OK  [0m test generate new season in the SeasonController';
+        $response_data = $response->getData();
+        $this->GeneratedSeasonTests($response_data);
     }
 
-    public function test_AbsenceController_index()
+    public function test_season_generator_controller_store()
     {
-        echo "\n\n---------------------------------------------------------------------------------";
-        echo PHP_EOL.PHP_EOL.'[44m absence api routest:   [0m';
-
         $this->be($this->authenticatedUser());
 
-        $response = $this->get('/api/season/'.$this->allSeasons[0]->id.'/absence');
+        //generate a new season
+        $response = $this->get('/api/season/'.$this->allSeasons[0]->id.'/generator/new');
 
+        //store the generated season
+        $response_data['jsonSeason'] = json_encode($response->getData());
+        $response = $this->postJson('/api/season/'.$this->allSeasons[0]->id.'/generator', $response_data);
+
+        $response_data = $response->getData();
+        $response->assertStatus(200);
+        $this->assertEquals(200, $response->status());
+        $this->assertEquals('season is made', $response_data);
+
+        //test the saved season
+        $response = $this->get('/api/season/'.$this->allSeasons[0]->id.'/generator');
         $response->assertStatus(200);
         $this->assertEquals(200, $response->status());
 
-        echo PHP_EOL.'[42m OK  [0m test index in the AbsenceController';
+        $response_data = $response->getData();
+        $this->GeneratedSeasonTests($response_data);
     }
-
-    public function test_AbsenceController_store()
+    
+    //Create 2 new seasons and safe the second season to the first season
+    public function test_season_generator_controller_update()
     {
         $this->be($this->authenticatedUser());
+        $this->createGeneratedSeason();
+        $season1 = $this->newSeason;
 
-        $data = [
-            'firstname' => 'new firstname',
-            'name' => 'new name',
-            'email' => 'newtest@test.be',
-            'group_id' => $this->allGroupUsers[0]->group_id,
-            //'user_id' => $this->allUsers[0]->id,
-            'group_user_id' => $this->allGroupUsers[0]->id,
-        ];
+        $this->createGeneratedSeason();
+        $season2 = $this->newSeason;
 
-        $this->postJson('/api/group/'.$this->allGroupUsers[0]->group_id.'/user/'.$this->allGroupUsers[0]->id, $data);
-        $this->allGroupUsers = GroupUser::All();
+        //first season
+        $this->get('/api/season/'.$season1->id.'/generator');
 
-        $data = [
-            'name' => 'a season name',
-            'begin' => Carbon::now()->addDays(1)->format('Y-m-d'),
-            'end' =>  Carbon::now()->addMonths(1)->format('Y-m-d'),
-            'group_id' =>  $this->allGroupUsers[0]->group_id,
-            'admin_id' => $this->allUsers[0]->id,
-            'start_hour' => "20:00",
-            'type' => 'TwoFieldTwoHourThreeTeams'
-        ];
+        //test the second season
+        $response = $this->get('/api/season/'.$season2->id.'/generator');
+        $response_data = $response->getData();
 
-        $newSeason = $this->postJson('/api/season', $data);
-        $newSeason = $newSeason->decodeResponseJson(); 
-
-        $data = [
-            'date' => Carbon::now()->addDays(8)->format('Y-m-d'),
-            'group_user_id' => $this->allGroupUsers[0]->id,
-        ];
-
-        $response = $this->postJson('/api/season/'.$newSeason['id'].'/absence', $data);
-        $response_data = $response->decodeResponseJson(); 
-
-        $response->assertStatus(200);
-        $this->assertEquals(200, $response->status());
-        $this->assertEquals($data['date'], $response_data['date']);
-
-        $this->assertEquals($this->allGroupUsers[0]->id, $response_data['group_user_id']);
-        $this->assertEquals($newSeason['id'], $response_data['season_id']);
-
-        echo PHP_EOL.'[42m OK  [0m test store method in the AbsenceController';
-    }
-
-    public function test_TeamController_askForReplacement()
-    {
-        $this->be($this->authenticatedUser());
-
-        //set the logged in user as group user
-        foreach($this->allGroupUsers AS $key => $groupUser){
-            if($groupUser->id == $this->allTeams[0]->group_user_id){
-                $data = [
-                    'firstname' => 'new firstname',
-                    'name' => 'new name',
-                    'email' => 'newtest@test.be',
-                    'group_id' => $this->allGroupUsers[0]->group_id,
-                    'user_id' =>  $this->allUsers[0]->id,
-                ];
-                
-                $this->postJson('/api/group/'.$groupUser->group_id.'/user/'.$groupUser->id, $data);
-                $this->allGroupUsers = GroupUser::All();
-                 break;
-            }
-        }
+        //save the second season to the first season
+        $response_data = $response_data->data;
+        $response_data['teamRange'] = json_encode($response_data);
+        $response = $this->postJson('/api/season/'.$season1->id.'/generator/'.$season1->id, $response_data);
         
-        $response = $this->postJson('/api/team/'.$this->allTeams[0]->id.'/askForReplacement');
-        $response_data = $response->decodeResponseJson(); 
-
+        $response_data = $response->getData();
         $response->assertStatus(200);
         $this->assertEquals(200, $response->status());
-        $this->assertEquals($response_data, "Ask for replacement is set to true");
+        $this->assertEquals('season is updated', $response_data);
+        
+        //test the saved season
+        $response = $this->get('/api/season/'.$season1->id.'/generator');
+        $response->assertStatus(200);
+        $this->assertEquals(200, $response->status());
 
-        echo PHP_EOL.'[42m OK  [0m test ask for replacement method in the TeamController';
+        $response_data = $response->getData();
+        $this->GeneratedSeasonTests($response_data);
     }
 
-    public function test_TeamController_cancelRequestForReplacement()
+    public function test_season_generator_controller_destroy()
     {
         $this->be($this->authenticatedUser());
+        $this->createGeneratedSeason();
 
-        //set a request for replacement to true
-        foreach($this->allGroupUsers AS $key => $groupUser){
-            if($groupUser->id == $this->allTeams[0]->group_user_id){
-                $data = [
-                    'firstname' => 'new firstname',
-                    'name' => 'new name',
-                    'email' => 'newtest@test.be',
-                    'group_id' => $this->allGroupUsers[0]->group_id,
-                    'user_id' =>  $this->allUsers[0]->id,
-                ];
-                
-                $this->postJson('/api/group/'.$groupUser->group_id.'/user/'.$groupUser->id, $data);
-                $this->allGroupUsers = GroupUser::All();
-                 break;
-            }
-        }
-        $response = $this->postJson('/api/team/'.$this->allTeams[0]->id.'/askForReplacement');
-        $response_data = $response->decodeResponseJson(); 
+        $response = $this->postJson('/api/season/'.$this->newSeason->id.'/generator/'.$this->newSeason->id.'/delete');
+        $response_data = $response->getData();
+
+        $this->assertEquals(200, $response->status());
+        $this->assertEquals('Calendar is deleted', $response_data);
+    }
+
+    public function test_season_generator_controller_play_dates()
+    {
+        $this->be($this->authenticatedUser());
+        $this->createGeneratedSeason();
+
+        $response = $this->get('/api/season/'.$this->newSeason->id.'/generator/play_dates');
+        $response_data = $response->getData();
 
         $response->assertStatus(200);
         $this->assertEquals(200, $response->status());
-        $this->assertEquals($response_data, "Ask for replacement is set to true");
+        $this->assertObjectHasAttribute('data', $response_data);
 
-        //Cancel the request for replacement
-        $response = $this->postJson('/api/team/'.$this->allTeams[0]->id.'/cancelRequestForReplacement');
-        $response_data = $response->decodeResponseJson(); 
+        $beginDate = new Carbon($this->newSeason->begin);
+        foreach($response_data->data AS $date){
+            $this->assertEquals($date->date, $beginDate->format('Y-m-d'));
+            $beginDate->add(new \DateInterval('P7D'));
+        }
+    }
+
+    public function test_season_generator_controler_create_empty_season(){
+        $this->be($this->authenticatedUser());
+
+        $response = $this->get('/api/season/'.$this->allSeasons[0]->id.'/generator/create_empty_season');
+        $response_data = $response->getData();
+
+        $this->assertObjectHasAttribute('absenceData', $response_data);
+        $this->assertObjectHasAttribute('currentPlayDay', $response_data);
+        $this->assertObjectHasAttribute('data', $response_data);
+        $this->assertObjectHasAttribute('day', $response_data->data[0]);
+        $this->assertObjectHasAttribute('user', $response_data->data[0]);
+        $this->assertEquals(count(json_decode(json_encode($response_data->data[0]->user), true)), 10);
+        $this->assertObjectHasAttribute('groupUserData', $response_data);
+        $this->assertEquals(count(json_decode(json_encode($response_data->groupUserData), true)), 10);
+        $this->assertObjectHasAttribute('seasonData', $response_data);
+        $this->assertObjectHasAttribute('stats', $response_data);
+    }
+
+    public function test_team_controller_update_range()
+    {
+        $this->be($this->authenticatedUser());
+        $this->createGeneratedSeason();
+
+        $response = $this->get('/api/season/'.$this->newSeason->id.'/generator');
+        $response_data = $response->getData();
+
+        //update the season range
+        $updateRange = array();
+        $x=0;
+        foreach($response_data->data[0]->teams AS $key=>$team){
+            $updateRange[$key] = $this->allGroupUsers[$x]->id;
+            $x++;
+        }
+        $data['teamRange'] = json_encode($updateRange);
+        $this->post('/api/team/range', $data);
+        
+
+        //get the updated season
+        $response = $this->get('/api/season/'.$this->newSeason->id.'/generator');
+        $response->assertStatus(200);
+        $this->assertEquals(200, $response->status());
+
+        $response_data = $response->getData();
+        $this->GeneratedSeasonTests($response_data);
+
+        //test the updated data
+        $x=0;
+        foreach($response_data->data[0]->teams AS $key=>$team){
+            $this->assertEquals($team->groupUserId, $this->allGroupUsers[$x]->id);
+            $x++;
+        }
+    }
+
+    public function test_team_controller_ask_for_replacement()
+    {
+        $this->be($this->authenticatedUser());
+        $this->createGeneratedSeason();
+
+        $teamRepo = new TeamRepo();
+        $teams = $teamRepo->getAllSeasonTeams($this->newSeason->id);
+
+        //make sure the first team has the logged in user
+        $updateRange = array();
+        $updateRange[$teams[0]->id] = $this->allGroupUsers[0]->id;
+        $data['teamRange'] = json_encode($updateRange);
+        $this->post('/api/team/range', $data);
+        
+        //ask for the replacement
+        $response = $this->postJson('/api/team/'.$teams[0]->id.'/ask_for_replacement');
+        $response_data = $response->getData();
+
+        $response->assertStatus(200);
+        $this->assertEquals(200, $response->status());
+        $this->assertEquals('Ask for replacement is set to true', $response_data);
+
+        //check if the ask for replacement succeeded
+        $teams = $teamRepo->getAllSeasonTeams($this->newSeason->id);
+        $this->assertEquals($this->allGroupUsers[0]->id, $teams[0]->group_user_id);
+        $this->assertEquals(1, $teams[0]->ask_for_replacement);
+    }
+
+    public function test_team_controller_cancel_request_for_replacement()
+    {
+        $this->be($this->authenticatedUser());
+        $this->createGeneratedSeason();
+
+        $teamRepo = new TeamRepo();
+        $teams = $teamRepo->getAllSeasonTeams($this->newSeason->id);
+
+        //make sure the first team has the logged in user
+        $updateRange = array();
+        $updateRange[$teams[0]->id] = $this->allGroupUsers[0]->id;
+        $data['teamRange'] = json_encode($updateRange);
+        $response = $this->post('/api/team/range', $data);
+        
+        //ask for the replacement
+        $response = $this->postJson('/api/team/'.$teams[0]->id.'/ask_for_replacement');
+        $response_data = $response->getData();
+
+        //cancel replacement
+        $response = $this->postJson('/api/team/'.$teams[0]->id.'/cancel_request_for_replacement');
+        $response_data = $response->getData();
 
         $response->assertStatus(200);
         $this->assertEquals(200, $response->status());
         $this->assertEquals($response_data, "Replacement is set to false");
-        echo PHP_EOL.'[42m OK  [0m test cancel request for replacement method in the TeamController';
     }
 
-    public function test_TeamController_confirmReplacement()
+    public function test_team_controller_confirm_replacement()
     {
         $this->be($this->authenticatedUser());
+        $this->createGeneratedSeason();
 
-        //set a request for replacement to true
-        foreach($this->allGroupUsers AS $key => $groupUser){
-            if($groupUser->id == $this->allTeams[0]->group_user_id){
-                $data = [
-                    'firstname' => 'new firstname',
-                    'name' => 'new name',
-                    'email' => 'newtest@test.be',
-                    'group_id' => $this->allGroupUsers[0]->group_id,
-                    'user_id' =>  $this->allUsers[0]->id,
-                ];
-                
-                $this->postJson('/api/group/'.$groupUser->group_id.'/user/'.$groupUser->id, $data);
-                $this->allGroupUsers = GroupUser::All();
-                 break;
-            }
-        }
-        $response = $this->postJson('/api/team/'.$this->allTeams[0]->id.'/askForReplacement');
-        $response_data = $response->decodeResponseJson(); 
+        $teamRepo = new TeamRepo();
+        $teams = $teamRepo->getAllSeasonTeams($this->newSeason->id);
 
-        $response->assertStatus(200);
-        $this->assertEquals(200, $response->status());
-        $this->assertEquals($response_data, "Ask for replacement is set to true");
-
-        //add a new user to a group user to test replacement
-        $data = [
-            'firstname' => 'new firstname',
-            'name' => 'new name',
-            'email' => 'newtest@test.be',
-            'group_id' => $this->allGroupUsers[1]->group_id,
-            'user_id' =>  $this->allUsers[1]->id,
-        ];
-        $this->postJson('/api/group/'.$this->allGroupUsers[1]->group_id.'/user/'.$this->allGroupUsers[1]->id, $data);
+        //make sure the first team has the logged in user
+        $updateRange = array();
+        $updateRange[$teams[0]->id] = $this->allGroupUsers[0]->id;
+        $data['teamRange'] = json_encode($updateRange);
+        $this->post('/api/team/range', $data);
         
-        //change logged in user
-        $user = Passport::actingAs(
-            $this->allUsers[1],
-            ['create-servers']
-        );
-        $user->role = "Admin";
-        $this->be($user);
+        //ask for the replacement
+        $this->postJson('/api/team/'.$teams[0]->id.'/ask_for_replacement');
 
-        $response = $this->postJson('/api/team/'.$this->allTeams[0]->id.'/confirmReplacement');
-        $response_data = $response->decodeResponseJson(); 
+        //update teams so another user is in the replacement place
+        $response = $this->get('/api/season/'.$this->newSeason->id.'/generator');
+        $response_data = $response->getData();
+
+        $updateRange = array();
+
+        $x=1;
+        foreach($response_data->data[0]->teams AS $key=>$team){
+            $updateRange[$key] = $this->allGroupUsers[$x]->id;
+            $x++;
+        }
+        $data['teamRange'] = json_encode($updateRange);
+        $this->post('/api/team/range', $data);
+
+        //confirm replacement
+        $response = $this->postJson('/api/team/'.$teams[0]->id.'/confirm_replacement');
+        $response_data = $response->getData();
 
         $response->assertStatus(200);
         $this->assertEquals(200, $response->status());
         $this->assertEquals($response_data, "Confirm replacement");
-        echo PHP_EOL.'[42m OK  [0m test confirm replacement method in the TeamController';
+
+        $teams = $teamRepo->getAllSeasonTeams($this->newSeason->id);
+        $this->assertEquals($this->allGroupUsers[0]->id, $teams[0]->group_user_id);
+        $this->assertEquals(0, $teams[0]->ask_for_replacement);
     }
-*/
+
 }

@@ -24,6 +24,7 @@ class TeamController extends Controller
     public function updateRange(Request $request) 
     {
         $userId = auth()->user()->id;
+
         $updateTeams = json_decode($request['teamRange'], true);
         foreach($updateTeams AS $index=>$groupUser){
             $team = $this->team->getTeam($index);

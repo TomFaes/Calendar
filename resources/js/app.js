@@ -6,6 +6,7 @@
  */
 
 require('./bootstrap');
+require('vue-multiselect/dist/vue-multiselect.min.css');
 
 import Vue from 'vue';
 import router from './services/router';

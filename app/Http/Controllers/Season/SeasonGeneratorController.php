@@ -78,20 +78,12 @@ class SeasonGeneratorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $updateVersion = $request['updateRange'] ?? "";
-        if($updateVersion != "pregeneratedseason"){
-            return response()->json("season couldn't be generated", 200);
-        }
-
         $season = $this->season->getSeason($id);
         $seasonGenerator = GeneratorFactory::generate($season->type);
 
-        if($updateVersion == 'pregeneratedseason'){
-            $seasonGenerator->savePrefilledSeason($request['teamRange']);
-            $this->season->seasonIsGenerated($id);
-            return response()->json("season is made", 200);
-        }
-        return response()->json("season couldn't be generated", 200);
+        $seasonGenerator->savePrefilledSeason($request['teamRange']);
+        $this->season->seasonIsGenerated($id);
+        return response()->json("season is updated", 200);
     }
     
     /**
@@ -102,19 +94,20 @@ class SeasonGeneratorController extends Controller
      */
     public function destroy($id)
     {
-        return response()->json("to be made destroy", 200);
-        /*
-        $this->absence->deleteSeasonAbsence($id);
-        $this->season->delete($id);
-        return response()->json("Season is deleted", 204);
-        */
+        $season = $this->season->checkIfSeasonIsStarted($id);
+        if(count($season) == 0){
+            return response()->json(false, 200);
+        }
+        $this->team->deleteTeamsFromSeason($id);
+        $this->season->seasonIsNotGenerated($id);
+        return response()->json('Calendar is deleted', 200); 
     }
 
     public function playDates($seasonId)
     {
         $season = $this->season->getseason($seasonId);
         $seasonGenerator = GeneratorFactory::generate($season->type);
-        $daysSeason = $seasonGenerator->getPlayDates($season->begin, $season->end);
+        $daysSeason['data'] = $seasonGenerator->getPlayDates($season->begin, $season->end);
         return response()->json($daysSeason, 200);
     }
 
@@ -122,18 +115,46 @@ class SeasonGeneratorController extends Controller
     {
         $season = $this->season->getSeason($seasonId);
         $seasonGenerator = GeneratorFactory::generate($season->type);
-
         $calendar = $seasonGenerator->generateSeason($season);
         return response()->json($calendar, 200);
+
+        /*
+        //only for testing
+        //used for getting a season with equeal total & team3 stats
+        for($x=0; $x<20;$x++){ 
+            $calendar = $seasonGenerator->generateSeason($season);
+            $testStats = 0;
+            $testTeam3 = 0;
+            $test = true;
+            foreach($calendar['stats'] AS $key => $stats){
+                if($key == ""){
+                    continue;
+                }
+
+                if($testStats != $stats['total'] && $testStats > 0){
+                    $test = false;
+                }
+                if($testTeam3 != $stats['team3'] && $testTeam3 > 0){
+                    $test = false;
+                }
+                if($test == false){
+                    break;
+                }
+                $testStats = $stats['total'];
+                $testTeam3 = $stats['team3'];
+            }
+            if($test == true){
+                break;
+            }
+        }
+        return response()->json($calendar, 200);
+        */
     }
 
-    public function createEmptySeason($seasonId, Request $request){
-        if($request->teams == 0){
-            return response()->json("Teams must be bigger then 0 to create an empty season", 412);
-        }
+    public function createEmptySeason($seasonId){
         $season = $this->season->getSeason($seasonId);
         $seasonGenerator = GeneratorFactory::generate($season->type);
-        $calendar = $seasonGenerator->generateEmptySeason($season, $request->teams);
+        $calendar = $seasonGenerator->generateEmptySeason($season);
         return response()->json($calendar, 200);
     }
 }

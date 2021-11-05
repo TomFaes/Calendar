@@ -1,65 +1,86 @@
 <template>
     <div>
         <div class="row">
-            <h2>Seizoenen</h2>
+            <h2>Seasons</h2>
         </div>
-            <button class="btn btn-primary" @click.prevent="CreateShow"><i class="fas fa-plus fa-1x" ></i></button><br>
 
-        <div class="row" v-show="display == 'Create'">
-            <div class="container">
-                <inputForm  v-if="display == 'Create'" :submitOption="'Create'" :userGroups=userGroups ></inputForm>
-            </div>
+        <button class="btn btn-primary" @click.prevent="displayCreate" ><i class="fa fa-plus"></i></button>
+        <div v-show="display == 'Create'">
+            <input-form  v-if="display == 'Create'" :submitOption="'Create'" ></input-form>
         </div>
+         
         <list></list>
     </div>
 </template>
 
 <script>
     import apiCall from '../../services/ApiCall.js';
-    import list from '../SeasonPage/list.vue';
     import inputForm from '../SeasonPage/input.vue';
+    import list from '../SeasonPage/list.vue';
+    import Moment from 'moment';
 
     export default {
-        components: {
-            list,
-            inputForm,
-        },
-
         data () {
             return {
-                display: "",
-                userGroups: {},
+                'display': '',
             }
         },
 
+        components: {
+            Moment,
+            list,
+            inputForm
+
+        },
+
+        computed: {
+            user(){
+                return this.$store.state.loggedInUser;
+            },
+            
+            seasons(){
+                return this.$store.state.userSeasons;
+            },
+        },
+
         methods: {
-            CreateShow(){
-                if(this.display == 'Create'){
-                    this.display = "";
-                }else{
-                    this.display = 'Create';
-                }
+            loadList(){
+                this.$store.dispatch('getUserSeasons');
             },
 
-            loadGroupList(){
-                apiCall.getData('user-group')
-                .then(response =>{
-                    this.userGroups = response;
-                }).catch(() => {
-                    console.log('handle server error from here');
-                });
+            displayCreate(){
+                if(this.display == 'Create'){
+                    this.display = '';
+                    return;
+                }
+                this.display = 'Create';
+            },
+            
+            convertDate(value){
+                return Moment(value, "YYYY-MM-DD").format('DD/MM/YYYY');
+            },
+
+            convertTime(value){
+                return Moment(value, "HH:mm:ss").format('HH:mm');
             },
         },
 
         mounted(){
-            this.loadGroupList();
-            this.$bus.$on('resetSeasonDisplay', () => {
-                    this.display = '';
+            this.loadList();
+            /*
+            this.loadList();
+            this.$bus.$on('reloadSeasons', () => {
+                this.loadList();
             });
+            this.user =  this.$store.state.LoggedInUser;
+            */
         }
     }
 </script>
 
-<style scoped>
 
+<style scoped>
+.absenceButton {
+    margin: 2px;
+}
 </style>

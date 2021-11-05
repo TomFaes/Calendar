@@ -8,13 +8,13 @@
         "php": "^7.4.11 || ^8",
         "barryvdh/laravel-ide-helper": "*",
         "fideloper/proxy": "^4.0",
-        "laravel/framework": "8.40.*",
+        "laravel/framework": "8.*.*",
         "laravel/passport": "^10.0",
         "laravel/socialite": "^5.0",
         "laravel/tinker": "^2.0",
         "spatie/calendar-links": "*",
         "spatie/laravel-cookie-consent": "*",
-        "lcobucci/jwt": "4.1.4"
+        "lcobucci/jwt": "4.1.*"
     },
     "require-dev": {
         "filp/whoops": "*",

@@ -10,27 +10,15 @@
                     <th>Opties</th>
                 </tr>
             </thead>
-            <tbody  v-for="data in dataList"  :key="data.id" >
+            <tbody  v-for="data in dataList.data"  :key="data.id" >
                     <tr>
                         <td>{{ data.name }}</td>
                         <td  class="d-none d-sm-table-cell">{{ data.descritpion }}</td>
-                        <td  class="d-none d-sm-table-cell">{{ data.admin.fullName }}</td>
+                        <td  class="d-none d-sm-table-cell">{{ data.admin.full_name }}</td>
                         <td nowrap>
-                            <button v-if="user.id == data.admin_id" class="btn btn-primary" @click.prevent="editGroup(data.id)"><i class="fa fa-edit" style="heigth:14px; width:14px"></i></button>
-                            <button v-if="user.id == data.admin_id" class="btn btn-danger" @click.prevent="deleteGroup(data)"><i class="fas fa-trash fa-1x" ></i></button>
-                            <button class="btn btn-secondary" @click.prevent="listUsers(data)"><i class="fas fa-users  fa-1x"></i></button>
+                            <button class="btn btn-primary" @click="navigation('groupUsers', data.id)"><i class="fas fa-info-circle fa-1x"></i></button>
                         </td>
                     </tr>
-                    <tr v-if="updateField == data.id">
-                        <td colspan="100%">
-                            <inputForm  v-if="updateField == data.id" :group=data :submitOption="'Update'"></inputForm>
-                        </td>
-                    </tr>
-                     <tr v-if="selectedGroup.id == data.id">
-                        <td colspan="100%">
-                            <user-list :group=selectedGroup></user-list>
-                        </td>
-                    </tr> 
             </tbody>
         </table>
     </div>
@@ -41,13 +29,10 @@
     import VuePagination from '../../components/ui/pagination.vue';
 
     import ButtonInput from '../../components/ui/form/ButtonInput.vue';
-    import inputForm from '../GroupPage/input';
-    import userList from '../GroupUserPage/list.vue';
 
     export default {
         data () {
             return {
-                'dataList' : { },
                 fields: [
                     { 'field': 'id'},
                     { 'field': 'name'},
@@ -55,26 +40,27 @@
                     { 'field': 'admin_id'},
                 ],
                 'updateField' : 0,
-                'selectedGroup': 0,
             }
         },
 
         components: {
             VuePagination,
-            inputForm,
             ButtonInput,
-            userList
+        },
+
+        computed: {
+            user(){
+                return this.$store.state.loggedInUser;
+            },
+            dataList(){
+                return this.$store.state.userGroups;
+            },
         },
 
         methods: {
             loadList(){
-                apiCall.getData('user-group')
-                .then(response =>{
-                    this.dataList = response;
-                    this.updateField = '';
-                }).catch(() => {
-                    console.log('handle server error from here');
-                });
+                this.$store.dispatch('getUserGroups');
+                this.editGroup(0);
             },
 
             editGroup(id){
@@ -85,25 +71,15 @@
                 }
             },
 
-            listUsers(group){
-                if(this.selectedGroup.id == group.id){
-                    this.selectedGroup = 0;
-                }else{
-                    this.selectedGroup = group;
+            navigation(name, id){
+                if(this.$route.name == name){
+                    return;
                 }
-            },
-
-            deleteGroup(group){
-                if(confirm('are you sure you want to delete this group ' + group.name + '?')){
-                    apiCall.postData('group/' + group.id + '/delete')
-                    .then(response =>{
-                        this.$bus.$emit('showMessage', response,  'red', '2000' );
-                        this.loadList();
-                    }).catch(() => {
-                        console.log('handle server error from here');
-                    });
+                if(name == 'home'){
+                    this.$store.dispatch('resetToDefault');
                 }
-            }
+                this.$router.push({name: name, params: { id: id },})
+           },
         },
 
         mounted(){
@@ -111,7 +87,6 @@
             this.$bus.$on('reloadGroupList', () => {
                 this.loadList();
             });
-            this.user =  this.$store.state.LoggedInUser;
         }
     }
 </script>

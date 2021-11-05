@@ -25,8 +25,8 @@ class AbsenceFactory extends Factory
     public function definition()
     {
         return [
-            'season_id' =>  Season::all()->random()->id,
-            'date' => Carbon::now()->addMonths(1)->format('Y-m-d'),
+            'season_id' =>  Season::all()->first()->id,
+            'date' => Carbon::now()->addWeeks(rand(1, 20))->format('Y-m-d'),
             'group_user_id' => GroupUser::all()->random()->id,
         ];
     }

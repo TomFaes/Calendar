@@ -2,13 +2,13 @@
 
 namespace Tests\Unit\Route;
 
+use App\Models\Group;
+use App\Models\GroupUser;
 use Tests\TestCase;
 
-use App\Models\Group;
 use App\Models\User;
 
-use App\Repositories\GroupRepo;
-use App\Repositories\GroupUserRepo;
+use Database\Seeders\GeneratorSeeder;
 use Laravel\Passport\Passport;
 
 class GroupTest extends TestCase
@@ -16,20 +16,18 @@ class GroupTest extends TestCase
     protected $allUsers;
     protected $allGroups;
     protected $allGroupUsers;
+    protected $recordCount;
 
     public function setUp() : void
     {
         parent::setUp();
-        $this->seed();
+        $this->seed(GeneratorSeeder::class);
 
-         $this->allUsers = User::all();
+        $this->allUsers = User::all();
+        $this->allGroups = Group::all();
+        $this->allGroupUsers = GroupUser::all();
 
-        $repo = new GroupRepo();
-        $this->allGroups = $repo->getGroups();
         $this->recordCount = count($this->allGroups);
-
-        $repo = new GroupUserRepo();
-        $this->allGroupUsers = $repo->getAllGroupUsers();
     }
 
     /**
@@ -47,292 +45,207 @@ class GroupTest extends TestCase
      /**
      * Default data test
      */
-    protected function userDataTests($data, $testData) : void
+    
+    protected function GroupDataTests($data, $testData) : void
     {
-        $this->assertEquals($data['name'], $testData['name']);
-        $this->assertEquals($data['admin_id'], $testData['admin_id']);
+        
+        $this->assertEquals($data['name'], $testData->name);
+        $this->assertEquals($data['admin_id'], $testData->admin_id);
     }
 
-    protected function groupUserDataTests($data, $testData) : void 
+    public function GroupUserDataTests($data, $testData) : void
     {
-        $this->assertEquals($data['firstname'], $testData['firstname']);
-        $this->assertEquals($data['name'], $testData['name']);
-        $this->assertEquals($data['email'], $testData['email']);
-        $this->assertEquals($data['group_id'], $testData['group_id']);
-        $this->assertEquals($data['user_id'], $testData['user_id']);
+        $this->assertEquals($data['firstname'], $testData->firstname);
+        $this->assertEquals($data['name'], $testData->name);
+        $this->assertEquals($data['group_id'], $testData->group_id);
     }
 
-    public function test_GroupController_index()
+    public function test_group_controller_store()
     {
-        echo "\n\n---------------------------------------------------------------------------------";
-        echo PHP_EOL.PHP_EOL.'[44m Group api routest:   [0m';
-
         $this->be($this->authenticatedUser());
+        $data = Group::factory()->make(['admin_id' => $this->allUsers[0]->id])->toArray();
+        
+        $response = $this->postJson('/api/group', $data);
+        $response_data = $response->getData();
 
-        $response = $this->get('/api/group');
         $response->assertStatus(200);
         $this->assertEquals(200, $response->status());
-
-        $response_data = $response->decodeResponseJson(); 
-        $this->assertEquals($this->recordCount, count($response_data['data']));
-
-        echo PHP_EOL.'[42m OK  [0m test index in the GroupController';
+        $this->GroupDataTests($data, $response_data);
     }
 
-    public function test_GroupController_store()
+    public function test_group_controller_show()
     {
         $this->be($this->authenticatedUser());
 
-        $data = [
-            'name' => 'A group name',
-            'admin_id' => $this->allUsers[0]->id,
-        ];
-
-        $response = $this->postJson('/api/group', $data);
-        $response_data = $response->decodeResponseJson(); 
+        $response = $this->get('/api/group/'.$this->allGroups[0]->id);
+        $response_data = $response->getData();
        
         $response->assertStatus(200);
         $this->assertEquals(200, $response->status());
-        $this->userDataTests($data, $response_data);
-
-        echo PHP_EOL.'[42m OK  [0m test store method in the GroupController';
+        $this->GroupDataTests($this->allGroups[0], $response_data);
     }
-    
-    public function test_GroupController_update()
+
+   
+    public function test_group_controller_update()
     {
         $this->be($this->authenticatedUser());
 
-        $data = [
-            'name' => 'a updated group name',
-            'admin_id' => $this->allUsers[1]->id
-        ];
+        
+        $data = Group::factory()->make(['admin_id' => $this->allUsers[0]->id])->toArray();
 
         $response = $this->postJson('/api/group/'.$this->allGroups[0]->id, $data);
-        $response_data = $response->decodeResponseJson(); 
+        $response_data = $response->getData();
        
         $response->assertStatus(201);
         $this->assertEquals(201, $response->status());
-        $this->userDataTests($data, $response_data);
-
-        echo PHP_EOL.'[42m OK  [0m test update method in the GroupController';
+        $this->GroupDataTests($data, $response_data);
     }
 
-    public function test_GroupController_destroy()
+    public function test_group_controller_destroy()
     {
-        //$this->be($this->authenticatedUser());
+        $this->be($this->authenticatedUser());
 
-        //$response = $this->postJson('/api/group/'.$this->allGroups[0]->id.'/delete');
-        //$response->assertStatus(204);
-        //$this->assertEquals(204, $response->status());
+        //create group
+        $this->be($this->authenticatedUser());
+        $data = Group::factory()->make(['admin_id' => $this->allUsers[0]->id])->toArray();
+        $group = $this->postJson('/api/group', $data);
 
-        $this->assertEquals(1, 1);
-        echo PHP_EOL.'[41m Rewrite  [0m test destroy method in the GroupController';
+        //delete a group
+        $response = $this->postJson('/api/group/'.$group['id'].'/delete');
+        $response->assertStatus(202);
+        $this->assertEquals(202, $response->status());
+        $this->assertEquals( $this->recordCount,count(Group::all()));
     }
 
-    public function test_UserGroupController_index()
+    public function test_user_groups_controller_index()
     {
-        echo "\n\n---------------------------------------------------------------------------------";
-        echo PHP_EOL.PHP_EOL.'[44m UserGroup api routest:   [0m';
-
         $this->be($this->authenticatedUser());
 
         $response = $this->get('/api/user-group');
         $response->assertStatus(200);
         $this->assertEquals(200, $response->status());
 
-        $response_data = $response->decodeResponseJson(); 
-        //$this->assertEquals(count($response_data), 10);
-
-        echo PHP_EOL.'[41m REWRITE  [0m test index in the UserGroupController';
-    }
-
-    public function test_GroupUsersController_index()
-    {
-        echo "\n\n---------------------------------------------------------------------------------";
-        echo PHP_EOL.PHP_EOL.'[44m GroupUsers api routest:   [0m';
-
-        /*
-        $this->be($this->authenticatedUser());
-
-        $response = $this->get('/api/group/'.$this->allGroupUsers[0]->group_id.'/user');
         $response->assertStatus(200);
         $this->assertEquals(200, $response->status());
 
-        $response_data = $response->decodeResponseJson(); 
-        $this->assertEquals(count($response_data), 10);
-        */
+        $response_data = $response->getData();
 
-        $this->assertEquals(1, 1);
-        echo PHP_EOL.'[41m Rewrite  [0m test index in the GroupUsersController';
+        $this->assertEquals(count($response_data->data), 2);
+        $this->GroupDataTests($this->allGroups[0], $response_data->data[0]);
     }
 
-    public function test_GroupUsersController_store()
+    public function test_group_users_controller_index()
     {
-        /*
         $this->be($this->authenticatedUser());
 
-        $data = [
-            'firstname' => 'firstname',
-            'name' => 'name',
-            'email' => 'test@test.be',
-            'group_id' => $this->allGroupUsers[0]->group_id,
-            'user_id' => $this->allUsers[0]->id,
-        ];
+        $response = $this->get('/api/group/'.$this->allGroups[0]->id."/users");
+        $response->assertStatus(200);
+        $this->assertEquals(200, $response->status());
+
+        $response_data = $response->getData();
+        $this->assertEquals(count($response_data->data), 10);
+
+        $groupUserId = $response_data->data[0]->id;
+        $groupUser = GroupUser::where('id', $groupUserId)->get();
+        $groupUser = json_decode(json_encode($groupUser), true);
+
+        $this->GroupUserDataTests($groupUser[0], $response_data->data[0]);
+    }
+
+    public function test_group_users_controller_store()
+    {
+        $this->be($this->authenticatedUser());
+
+        $data = GroupUser::factory()->make([
+            'group_id' => $this->allGroupUsers[0]->group_id_id, 
+            'user_id' => $this->allUsers[0]->id
+            ])->toArray();
 
         $response = $this->postJson('/api/group/'.$this->allGroupUsers[0]->group_id.'/user', $data);
-        $response_data = $response->decodeResponseJson(); 
+        $response_data = $response->getData();
        
         $response->assertStatus(200);
         $this->assertEquals(200, $response->status());
         $this->groupUserDataTests($data, $response_data);
 
-        echo PHP_EOL.'[42m OK  [0m test store method in the GroupUsersController';
-*/
-        $this->assertEquals(1, 1);
-        echo PHP_EOL.'[41m Rewrite  [0m test store method in the GroupUsersController';
+        $this->assertNotEquals(null, $response_data->code);
     }
 
-    public function test_GroupUsersController_update()
+    public function test_group_users_controller_update()
     {
-        /*
         $this->be($this->authenticatedUser());
 
-        $data = [
-            'firstname' => 'new firstname',
-            'name' => 'new name',
-            'email' => 'newtest@test.be',
-            'group_id' => $this->allGroupUsers[1]->group_id,
-            'user_id' => $this->allUsers[1]->id,
-        ];
+        
+        $data = GroupUser::factory()->make([
+            'group_id' => $this->allGroupUsers[1]->group_id, 
+            'user_id' => $this->allUsers[1]->id
+            ])->toArray();
 
         $response = $this->postJson('/api/group/'.$this->allGroupUsers[0]->group_id.'/user/'.$this->allGroupUsers[0]->id, $data);
-        $response_data = $response->decodeResponseJson(); 
+        $response_data = $response->getData();
        
         $response->assertStatus(201);
         $this->assertEquals(201, $response->status());
         $this->groupUserDataTests($data, $response_data);
-*/
-        $this->assertEquals(1, 1);
-        echo PHP_EOL.'[41m Rewrite  [0m test update method in the GroupUsersController';
+        $this->assertNotEquals(null, $response_data->group_id);
+        $this->assertNotEquals(null, $response_data->user_id);
     }
 
-    public function test_GroupUserController_destroy()
+    public function test_group_users_controller_destroy()
     {
-        /*
         $this->be($this->authenticatedUser());
 
         $response = $this->postJson('/api/group/'.$this->allGroupUsers[0]->group_id.'/user/'.$this->allGroupUsers[0]->id.'/delete');
+
+        $this->assertEquals('Group user is deleted', $response->getData());
         $response->assertStatus(204);
         $this->assertEquals(204, $response->status());
-*/
-        $this->assertEquals(1, 1);
-        echo PHP_EOL.'[41m Rewrite  [0m test destroy method in the GroupUserController';
+
+        $groupUser = GroupUser::where('id', $this->allGroupUsers[0]->id)->get();
+        
+        $groupUser = json_decode(json_encode($groupUser), true);
+
+        $this->assertEquals($this->allGroupUsers[0]->firstname, $groupUser[0]['firstname']);
+        $this->assertEquals($this->allGroupUsers[0]->name, $groupUser[0]['name']);
+        $this->assertEquals(null, $groupUser[0]['group_id']);
     }
 
-    public function test_UnverifiedGroupUsersController_index()
+    public function test_group_users_controller_join_group()
     {
-        echo "\n\n---------------------------------------------------------------------------------";
-        echo PHP_EOL.PHP_EOL.'[44m UnverifiedGroupUsersController api routest:   [0m';
-
-        /*
         $this->be($this->authenticatedUser());
 
+        //preperation
+        $response = $this->postJson('/api/group/'.$this->allGroupUsers[0]->group_id.'/user/'.$this->allGroupUsers[0]->id.'/regenerate_code');
+        $response_data = $response->getData();
+
+        $response->assertStatus(201);
+
+        //join group
         $data = [
-            'firstname' => 'new firstname',
-            'name' => 'new name',
-            'email' => 'newtest@test.be',
-            'group_id' => $this->allGroupUsers[1]->group_id,
-            'user_id' =>  $this->allUsers[0]->id,
+            'code' => $response_data->code,
         ];
+        $response = $this->postJson('/api/join_group', $data);
+        $response_data = $response->getData();
+        
+        $response->assertStatus(201);
+        $this->assertEquals(201, $response->status());
 
-        //setup three unverified users
-        $response = $this->postJson('/api/group/'.$this->allGroupUsers[0]->group_id.'/user/'.$this->allGroupUsers[0]->id, $data);
-        $response = $this->postJson('/api/group/'.$this->allGroupUsers[0]->group_id.'/user/'.$this->allGroupUsers[1]->id, $data);
-        $response = $this->postJson('/api/group/'.$this->allGroupUsers[0]->group_id.'/user/'.$this->allGroupUsers[2]->id, $data);
-
-        $response = $this->get('/api/unverified-group-user/');
-        $response->assertStatus(200);
-        $this->assertEquals(200, $response->status());
-
-        $response_data = $response->decodeResponseJson(); 
-        $this->assertEquals(count($response_data), 3);
-        */
-
-        $this->assertEquals(1, 1);
-        echo PHP_EOL.'[41m Rewrite  [0m test index in the UnverifiedGroupUsersController';
+        $this->assertEquals($response_data->code, null);
+        $this->assertEquals($response_data->user_id, $this->allUsers[0]->id);
     }
 
-    public function test_UnverifiedGroupUsersController_update()
+    public function test_group_users_controller_regenerate_group_user_code()
     {
-        /*
         $this->be($this->authenticatedUser());
 
-        $data = [
-            'firstname' => 'new firstname',
-            'name' => 'new name',
-            'email' => 'newtest@test.be',
-            'group_id' => $this->allGroupUsers[1]->group_id,
-            'user_id' =>  $this->allUsers[0]->id,
-        ];
+        $response = $this->postJson('/api/group/'.$this->allGroupUsers[0]->group_id.'/user/'.$this->allGroupUsers[0]->id.'/regenerate_code');
+        $response_data = $response->getData();
+       
+        $response->assertStatus(201);
+        $this->assertEquals(201, $response->status());
+        $this->groupUserDataTests($this->allGroupUsers[0], $response_data);
 
-        //setup three unverified users
-        $response = $this->postJson('/api/group/'.$this->allGroupUsers[0]->group_id.'/user/'.$this->allGroupUsers[0]->id, $data);
-        $response = $this->postJson('/api/group/'.$this->allGroupUsers[0]->group_id.'/user/'.$this->allGroupUsers[1]->id, $data);
-        $response = $this->postJson('/api/group/'.$this->allGroupUsers[0]->group_id.'/user/'.$this->allGroupUsers[2]->id, $data);
-
-        //check if user is verified after update
-        $response = $this->post('/api/unverified-group-user/'.$this->allGroupUsers[0]->id);
-        $response_data = $response->decodeResponseJson(); 
-        $this->assertEquals( $response_data['verified'], 1);
-        $response->assertStatus(200);
-        $this->assertEquals(200, $response->status());
-
-        //check if there are less unverified users
-        $response = $this->get('/api/unverified-group-user/');
-        $response->assertStatus(200);
-        $this->assertEquals(200, $response->status());
-        $response_data = $response->decodeResponseJson(); 
-        $this->assertEquals(count($response_data), 2);
-        */
-
-        $this->assertEquals(1, 1);
-        echo PHP_EOL.'[41m Rewrite  [0m test update in the UnverifiedGroupUsersController';
-    }
-
-    public function test_UnverifiedGroupUsersController_destory()
-    {
-        /*
-        $this->be($this->authenticatedUser());
-
-        $data = [
-            'firstname' => 'new firstname',
-            'name' => 'new name',
-            'email' => 'newtest@test.be',
-            'group_id' => $this->allGroupUsers[1]->group_id,
-            'user_id' =>  $this->allUsers[0]->id,
-        ];
-
-        //setup three unverified users
-        $response = $this->postJson('/api/group/'.$this->allGroupUsers[0]->group_id.'/user/'.$this->allGroupUsers[0]->id, $data);
-        $response = $this->postJson('/api/group/'.$this->allGroupUsers[0]->group_id.'/user/'.$this->allGroupUsers[1]->id, $data);
-        $response = $this->postJson('/api/group/'.$this->allGroupUsers[0]->group_id.'/user/'.$this->allGroupUsers[2]->id, $data);
-
-        //check if user is verified after update
-        $response = $this->post('/api/unverified-group-user/'.$this->allGroupUsers[0]->id.'/delete');
-        $response_data = $response->decodeResponseJson(); 
-
-        $this->assertEquals($response_data['user_id'], null);
-        $response->assertStatus(200);
-        $this->assertEquals(200, $response->status());
-
-        //check if there are less unverified users
-        $response = $this->get('/api/unverified-group-user/');
-        $response->assertStatus(200);
-        $this->assertEquals(200, $response->status());
-        $response_data = $response->decodeResponseJson(); 
-        $this->assertEquals(count($response_data), 2);
-*/
-        $this->assertEquals(1, 1);
-        echo PHP_EOL.'[41m Rewrite  [0m test destroy in the UnverifiedGroupUsersController';
-    }
+        $this->assertNotEquals(null, $response_data->code);
+        $this->assertNotEquals($this->allGroupUsers[0]['code'], $response_data->code);
+    }    
 }

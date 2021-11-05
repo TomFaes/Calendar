@@ -9,4 +9,6 @@ interface IGenerator {
     public function getPlayDates($beginDate, $endDate);
     public function getSeasonCalendar(Season $season);
     public function saveSeason($jsonSeason);
+    public function generateEmptySeason(Season $season);
+    public function savePrefilledSeason($jsonTeam);
 }

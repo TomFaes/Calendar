@@ -42,7 +42,7 @@ class GroupUser extends Model
      */
     public function getfullNameAttribute()
     {
-        if ($this->user->id > 0 && $this->verified == 1) {
+        if ($this->user->id > 0) {
             return $this->user->firstname." ".$this->user->name;
         }
         return $this->firstname." ".$this->name;

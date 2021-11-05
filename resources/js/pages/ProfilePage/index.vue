@@ -43,7 +43,6 @@
                 },
                 'user': {},
                 'errors' : [],
-                'action': '',
                 'formData': new FormData()
             }
         },
@@ -52,7 +51,7 @@
             loadProfile(){
                 apiCall.getData('profile')
                 .then(response =>{
-                    this.user = response;
+                    this.user = response.data;
                     this.setData();
                 }).catch(() => {
                     console.log('handle server error from here');
@@ -60,27 +59,21 @@
             },
 
             setFormData(){
-                if(this.fields.firstname != undefined){
-                    this.formData.set('firstname', this.fields.firstname);
-                }
-                if(this.fields.name != undefined){
-                    this.formData.append('name', this.fields.name);
-                }
-                if(this.fields.email != undefined){
-                    this.formData.set('email', this.fields.email);
-                }
+                this.formData.set('firstname', this.fields.firstname ?? null);
+                this.formData.append('name', this.fields.name ?? null);
+                this.formData.set('email', this.fields.email ?? null);
             },
 
             update(){
                 this.setFormData();
-                this.action =  'profile';
 
-                apiCall.postData(this.action, this.formData)
+                apiCall.postData('profile', this.formData)
                 .then(response =>{
                     this.message = "You've updated your profile ";
                     this.$bus.$emit('showMessage', this.message,  'green', '2000' );
                     this.formData =  new FormData();
-                    window.location.href = "./";
+                    this.$bus.$emit('reloadProfile');
+                    this.$router.push({name: "home"});
                 }).catch(error => {
                     this.errors = error;
                 });
@@ -113,4 +106,3 @@
 <style scoped>
 
 </style>
-

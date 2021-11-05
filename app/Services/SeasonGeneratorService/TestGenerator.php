@@ -24,6 +24,7 @@ use App\Models\Season;
     */
 class TestGenerator extends AbstractDoubleGenerator implements IGenerator
 {
+    protected $totalTeams = 2;
 
     /**
      * create the season day

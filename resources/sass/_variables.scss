@@ -7,12 +7,17 @@ $font-family-sans-serif: "Raleway", sans-serif;
 $font-size-base: 0.8rem;
 $line-height-base: 1.6;
 
-
-.item-link{
-    cursor: pointer;
-}
-
-
+// Colors
+$blue: #3490dc;
+$indigo: #6574cd;
+$purple: #9561e2;
+$pink: #f66d9b;
+$red: #e3342f;
+$orange: #f6993f;
+$yellow: #ffed4a;
+$green: #38c172;
+$teal: #4dc0b5;
+$cyan: #6cb2eb;
 
 h1, h2, h3{
     width: 100%;
@@ -75,3 +80,20 @@ h1, h2, h3{
 .testGenerator{
     background-color: lightblue;
 }
+
+.navbar-laravel {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  }
+
+  .fas, .fa, .btn-primary{
+    color: whitesmoke !important;
+}
+
+.form-control {
+    background-color: white !important;
+
+  }
+
+
+

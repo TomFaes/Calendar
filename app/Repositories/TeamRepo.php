@@ -11,11 +11,6 @@ use App\Models\Team;
 
 class TeamRepo extends Repository implements ITeam
 {
-    public function getAllTeams()
-    {
-        return Team::all();
-    }
-
     public function getTeam($id)
     {
         return Team::find($id);
@@ -24,26 +19,6 @@ class TeamRepo extends Repository implements ITeam
     public function getAllSeasonTeams($seasonId)
     {
         return Team::where('season_id', $seasonId)->get();
-    }
-
-     /**
-     * will get all users in a season
-     *
-     * @param  int SeasonId
-     * @return array of users
-     */
-    public function getSeasonUsers($seasonId)
-    {
-        $arrayUsers = array();
-
-        $teamUsers = team::select('group_user_id')->where('season_id', $seasonId)->groupby('group_user_id')->get();
-
-        foreach ($teamUsers as $team) {
-            if(isset($team->group_user->id ) === true){
-                $arrayUsers[$team->group_user->id] = $team->group_user;
-            }
-        }
-        return $arrayUsers;
     }
 
     public function getTeamsOnDate($seasonId, $date)
@@ -73,6 +48,11 @@ class TeamRepo extends Repository implements ITeam
         $seasonId = $team->season_id;
         $team->delete();
         return $seasonId;
+    }
+
+    public function deleteTeamsFromSeason($seasonId)
+    {
+        return Team::where('season_id' , $seasonId)->delete();
     }
 
     /**

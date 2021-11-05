@@ -10,11 +10,13 @@ interface ISeason
     public function getSeason($seasonId);
 
     public function getActiveSeasons($userId);
+    public function checkIfSeasonIsStarted($seasonId);
     public function getGroupOfSeason($groupId);
     public function getSeasonsOfUser($userId);
     
     public function create(Array $request, $userId = "");
     public function update(Array $request, $seasonId);
     public function seasonIsGenerated($seasonId);
+    public function seasonIsNotGenerated($seasonId);
     public function delete($seasonId);
 }

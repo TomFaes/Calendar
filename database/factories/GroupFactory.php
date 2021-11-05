@@ -26,7 +26,7 @@ class GroupFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'admin_id' => User::all()->random()->id,
+            'admin_id' => User::all()->first()->id,
         ];
     }
 }

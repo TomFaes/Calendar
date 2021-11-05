@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use Database\Seeders\GeneratorSeeder;
 use Tests\TestCase;
 
 class DatabaseTest extends TestCase
@@ -13,7 +14,7 @@ class DatabaseTest extends TestCase
     public function setUp() : void
     {
         parent::setUp();
-        $this->seed();
+        $this->seed(GeneratorSeeder::class);
     }
 
 
@@ -25,6 +26,10 @@ class DatabaseTest extends TestCase
     public function test_get_all_users()
     {
         $this->assertEquals(10, 10);
-        echo PHP_EOL.'[42m OK  [0m get all  users';
+        /*
+        $this->markTestIncomplete(
+            'This test has not been implemented yet.'
+        );
+        */
     }
 }

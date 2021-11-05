@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Season;
 
 use App\Http\Controllers\Controller;
-
+use App\Http\Requests\SeasonRequest;
+use App\Http\Resources\SeasonCollection;
+use App\Http\Resources\SeasonResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Repositories\Contracts\ISeason;
 use App\Repositories\Contracts\IAbsence;
-
-use App\Validators\SeasonValidation;
 
 class SeasonController extends Controller
 {
@@ -20,15 +20,11 @@ class SeasonController extends Controller
     /** @var App\Repositories\Contracts\IAbsence */
     protected $absence;
     
-    /** @var App\Validators\SeasonValidation */
-    protected $seasonValidator;
-    
-    public function __construct(ISeason $seasonRepo, SeasonValidation $seasonValidation,  IAbsence $absenceRepo)
+    public function __construct(ISeason $seasonRepo, IAbsence $absenceRepo)
     {
         $this->middleware('auth:api');
         $this->middleware('season')->except('store', 'index', 'show');
         $this->season = $seasonRepo;
-        $this->seasonValidator = $seasonValidation;
         $this->absence = $absenceRepo;
     }
     
@@ -39,7 +35,7 @@ class SeasonController extends Controller
      */
     public function index()
     {
-        return response()->json($this->season->getSeasonsOfUser(Auth::user()->id), 200);
+        return response()->json(new SeasonCollection($this->season->getSeasonsOfUser(Auth::user()->id)), 200);
     }
     
      /**
@@ -48,12 +44,11 @@ class SeasonController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SeasonRequest $request)
     {
-        $this->seasonValidator->validateCreateSeason($request);
         $userId = auth()->user()->id;
         $season = $this->season->create($request->all(), $userId);
-        return response()->json($season, 200);
+        return response()->json(new SeasonResource($season), 200);
     }
 
      /**
@@ -64,7 +59,7 @@ class SeasonController extends Controller
      */
     public function show($id)
     {
-        return response()->json($this->season->getSeason($id), 200);
+        return response()->json(new SeasonResource($this->season->getSeason($id)), 200);
     }
     
     /**
@@ -74,16 +69,15 @@ class SeasonController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(SeasonRequest $request, $id)
     {
-        $this->seasonValidator->validateCreateSeason($request);
         $season = $this->season->update($request->all(), $id);
-        return response()->json($season, 200);
+        return response()->json(new SeasonResource($season), 200);
     }
 
     public function seasonIsGenerated($seasonId){
         $season = $this->season->seasonIsGenerated($seasonId);
-        return response()->json($season, 200);
+        return response()->json(new SeasonResource($season), 200);
     }
     
     /**
@@ -94,6 +88,10 @@ class SeasonController extends Controller
      */
     public function destroy($id)
     {
+        $season = $this->season->getSeason($id);
+        if($season->is_generated != 0){
+            return response()->json($season->name." is a generated season and cannot be deleted", 200);
+        }
         $this->absence->deleteSeasonAbsence($id);
         $this->season->delete($id);
         return response()->json("Season is deleted", 204);

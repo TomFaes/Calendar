@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Season;
 
 use App\Http\Controllers\Controller;
-
+use App\Http\Requests\AbsenceRequest;
+use App\Http\Resources\AbsenceCollection;
+use App\Http\Resources\AbsenceResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 use App\Repositories\Contracts\IAbsence;
 use App\Repositories\Contracts\ISeason;
 use App\Repositories\Contracts\IUser;
-
-use App\Validators\AbsenceValidation;
 
 class AbsenceController extends Controller
 {
@@ -22,16 +22,12 @@ class AbsenceController extends Controller
     /** @var App\Repositories\Contracts\IUser */
     protected $user;
     
-    /** @var App\Validators\AbsenceValidation */
-    protected $absenceValidator;
-    
-    public function __construct(IAbsence $absenceRepo, AbsenceValidation $absenceValidator, ISeason $seasonRepo, IUser $userRepo) 
+    public function __construct(IAbsence $absenceRepo, ISeason $seasonRepo, IUser $userRepo) 
     {
         $this->middleware('auth:api');
         $this->middleware('absence:', ['only' => ['store', 'index']]);
         
         $this->absence = $absenceRepo;
-        $this->absenceValidator = $absenceValidator;
         $this->season = $seasonRepo;
         $this->user = $userRepo;
     }
@@ -59,11 +55,10 @@ class AbsenceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $seasonId) 
+    public function store(AbsenceRequest $request, $seasonId) 
     {
-        $this->absenceValidator->validateCreateAbsence($request);
         $absence = $this->absence->create($request->all(), $seasonId);
-        return response()->json($absence, 200);
+        return response()->json(new AbsenceResource($absence), 200);
     }
     
      /**
@@ -78,6 +73,4 @@ class AbsenceController extends Controller
         $this->absence->delete($id);
         return response()->json("absence is removed", 204);
     }
-    
-   
 }

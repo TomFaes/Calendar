@@ -14,7 +14,7 @@
                         <table class="table">
                             <thead >
                                 <tr>
-                                    <th scope="col" style="position:absolute; left:0;">Player</th>
+                                    <th scope="col" style="left:0;">Player</th>
                                     <th scope="col" style="text-align: center;">
                                         {{convertDate(calendarData['data'][calendarData['currentPlayDay']]['day']) }}
                                     </th>
@@ -22,7 +22,7 @@
                             </thead>
                             <tbody>
                                 <tr v-for="groupUser in userData" :key="groupUser.id"> 
-                                    <td style="position:absolute; left:0;">{{  groupUser.user_id != null ? groupUser.user.firstname : groupUser.firstname }}</td>
+                                    <td style="left:0;">{{  groupUser.user_id != null ? groupUser.user.firstname : groupUser.firstname }}</td>
                                     <td v-if="calendarData['data'][calendarData['currentPlayDay']]['user'][groupUser.id]['team'] != ''">
                                         <center>
                                                 <span v-if="calendarData['data'][calendarData['currentPlayDay']]['user'][groupUser.id]['team'] == 'team1'">1</span>

@@ -86,23 +86,22 @@ This version isn't completly finished. Next things are still in development:
         - when a day had to few teams the day disappeared
         - if a an absent player was added to a team the player stayed red
 
-# Version 2.08: 04/09/2021 - Current live version
+# Version 2.08: 04/09/2021
     - add option to setup teams before the season is generated
         - convert all seasons so they can use prefilled teams
     - rework generators
     - update & add phpunit testing
 
-
+# Version 3.00: 05/11/2021 - Current live version
+    - Replace Validators with request
+    - Add Resource & Collection for all models
+    - Replace groupusers email with code validation
+    - Rework the front-end
+    - update phpunit testing
         
 
 # Future
-Version 3.00:
-    - implement API Resources & Collections
-        - rework the front-ends.
-    - implement Validation Requests
-    - rework phpUnit testing methods
-    ? replace groupusers email with code validation (with email link)
 Version 3.XX: 
-    - make option to reopen the season and generate not filled teams. 
     - create calendars for small teams. 
+    - rework security middleware
     

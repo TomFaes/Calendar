@@ -32,6 +32,12 @@ class SeasonRepo extends Repository implements ISeason
         })->get();
     }
 
+    public function checkIfSeasonIsStarted($seasonId){
+        $today = Carbon::now();
+
+        return Season::where('id', $seasonId)->whereDate('begin' , '>=', $today->format('Y-m-d'))->get();
+    }
+
     public function getGroupOfSeason($groupId)
     {
         return Season::where('group_id', $groupId)->get();
@@ -39,12 +45,11 @@ class SeasonRepo extends Repository implements ISeason
 
     public function getSeasonsOfUser($userId)
     {
-
         return Season::whereHas('teams.group_user', function ($query) use ($userId) {
-            $query->where('user_id', '=', $userId)->where('verified', 1);
+            $query->where('user_id', '=', $userId);
         })
         ->orwhereHas('group.groupUsers', function ($query) use ($userId) {
-            $query->where('user_id', '=', $userId)->where('verified', 1);
+            $query->where('user_id', '=', $userId);
         })
         ->orWhere('admin_id', $userId)->with(['group', 'admin', 'group.groupUsers'])->get();
     }
@@ -117,6 +122,13 @@ class SeasonRepo extends Repository implements ISeason
     public function seasonIsGenerated($seasonId){
         $season = $this->getSeason($seasonId);
         $season->is_generated = 1;
+        $season->save();
+        return $season;
+    }
+
+    public function seasonIsNotGenerated($seasonId){
+        $season = $this->getSeason($seasonId);
+        $season->is_generated = 0;
         $season->save();
         return $season;
     }

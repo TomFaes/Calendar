@@ -1,20 +1,23 @@
 <template>
     <div>
-        <div v-if=" calendarData['season'] != undefined">
-             <h2>Current seasons</h2>
-            <div v-for="(calendar) in calendarData['season']" :key="calendar.id">
-
-                <div v-if="calendar['seasonData']['type'] == 'TwoFieldTwoHourThreeTeams'">
-                    <two-field-two-hour-three-teams :calendarData="calendar" :userData="calendar['groupUserData']"></two-field-two-hour-three-teams>    
+        <div v-if="calendarData != undefined">
+            <div v-if="calendarData['currentPlayDay'] == undefined">
+                <h2 v-if="Date.now() > new Date(season.begin)">Season is over</h2>
+                <h2 v-if="Date.now() < new Date(season.begin)">Season will begin on {{season.begin}}</h2>
+            </div>
+            <div v-else-if="calendarData['seasonData'] != undefined">
+                <h2>day view</h2>
+                <div v-if="calendarData['seasonData']['type'] == 'TwoFieldTwoHourThreeTeams'">
+                    <two-field-two-hour-three-teams :calendarData="calendarData" :userData="calendarData['groupUserData']"></two-field-two-hour-three-teams>    
                 </div>
-                <div v-else-if="calendar['seasonData']['type'] == 'TwoFieldTwoHourFourTeams'">
-                    <two-field-two-hour-four-teams :calendarData="calendar" :userData="calendar['groupUserData']"></two-field-two-hour-four-teams>    
+                <div v-else-if="calendarData['seasonData']['type'] == 'TwoFieldTwoHourFourTeams'">
+                    <two-field-two-hour-four-teams :calendarData="calendarData" :userData="calendarData['groupUserData']"></two-field-two-hour-four-teams>    
                 </div>
-                <div v-else-if="calendar['seasonData']['type'] == 'SingleFieldOneHourTwoTeams'">
-                    <single-field-one-hour-two-teams :calendarData="calendar" :userData="calendar['groupUserData']"></single-field-one-hour-two-teams>    
+                <div v-else-if="calendarData['seasonData']['type'] == 'SingleFieldOneHourTwoTeams'">
+                    <single-field-one-hour-two-teams :calendarData="calendarData" :userData="calendarData['groupUserData']"></single-field-one-hour-two-teams>    
                 </div>
-                <div v-else-if="calendar['seasonData']['type'] == 'TestGenerator'">
-                    <test-generator :calendarData="calendar" :userData="calendar['groupUserData']"></test-generator>    
+                <div v-else-if="calendarData['seasonData']['type'] == 'TestGenerator'">
+                    <test-generator :calendarData="calendarData" :userData="calendarData['groupUserData']"></test-generator>    
                 </div>
                 <div v-else>
                     onbekende calendar view
@@ -28,41 +31,65 @@
     import apiCall from '../../services/ApiCall.js';
     import Moment from 'moment';
 
-    import twoFieldTwoHourThreeTeams from '../NextPlayDayPage/twoFieldTwoHourThreeTeams.vue';
-    import twoFieldTwoHourFourTeams from '../NextPlayDayPage/twoFieldTwoHourFourTeams.vue';
-    import singleFieldOneHourTwoTeams from '../NextPlayDayPage/singleFieldOneHourTwoTeams.vue';
-    import testGenerator from '../NextPlayDayPage/testGenerator.vue';
+    import TwoFieldTwoHourThreeTeams from '../NextPlayDayPage/twoFieldTwoHourThreeTeams.vue';
+    import TwoFieldTwoHourFourTeams from '../NextPlayDayPage/twoFieldTwoHourFourTeams.vue';
+    import SingleFieldOneHourTwoTeams from '../NextPlayDayPage/singleFieldOneHourTwoTeams.vue';
+    import TestGenerator from '../NextPlayDayPage/testGenerator.vue';
 
     export default {
         components: {
             Moment,
-            twoFieldTwoHourThreeTeams,
-            twoFieldTwoHourFourTeams,
-            singleFieldOneHourTwoTeams,
-            testGenerator
+            TwoFieldTwoHourThreeTeams,
+            TwoFieldTwoHourFourTeams,
+            SingleFieldOneHourTwoTeams,
+            TestGenerator
         },
 
         data () {
             return {
-                calendarData: {},
+                //'calendarData': {},
+                'statusCode' : 200,
             }
         },
 
+        watch: {
+            season() {
+                this.loadSeasonCalendar();
+            }
+        },
+
+        computed: {
+            user(){
+                return this.$store.state.loggedInUser;
+            },
+
+            calendarData(){
+                return this.$store.state.selectedCalendar.data;
+            },
+        },
+
+        props: {
+            season: "",
+        },
+
         methods: {
-            loadSeasonCalendars(){
-                apiCall.getData('active_seasons')
-                .then(response =>{
-                    this.calendarData = response;
-                }).catch((error) => {
-                    console.log('loadSeasonCalendars:' + error);
-                });
+            loadSeasonCalendar(){
+                if(this.season.id == undefined){
+                    return;
+                }
+                if(this.calendarData != undefined){
+                    return;
+                }
+                this.$store.dispatch('getSelectedCalendar', {id: this.season.id});
             },
         },
 
         mounted(){
+            /*
             if(this.$store.state.LoggedInUser != ""){
                 this.loadSeasonCalendars();
             }
+            */
         }
     }
 </script>

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Season;
 
 use App\Http\Controllers\Controller;
-
+use App\Http\Resources\SeasonCollection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,9 +19,6 @@ class ActiveSeasonController extends Controller
     /** @var App\Repositories\Contracts\IAbsence */
     protected $absence;
     
-    /** @var App\Validators\SeasonValidation */
-    protected $seasonValidator;
-    
     public function __construct(ISeason $seasonRepo)
     {
         $this->middleware('auth:api');
@@ -35,13 +32,6 @@ class ActiveSeasonController extends Controller
      */
     public function index()
     {
-        $active = $this->season->getActiveSeasons(Auth::user()->id);
-
-        $activeSeasonsArray = array();
-        foreach ($active as $season) {
-            $seasonGenerator = GeneratorFactory::generate($season->type);
-            $activeSeasonsArray['season'][] = $seasonGenerator->getSeasonCalendar($season);
-        }
-        return response()->json($activeSeasonsArray, 200);
+        return response()->json(new SeasonCollection($this->season->getActiveSeasons(Auth::user()->id)), 200);
     }
 }

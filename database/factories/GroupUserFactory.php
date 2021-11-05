@@ -6,6 +6,7 @@ namespace Database\Factories;
 use App\Models\GroupUser;
 use App\Models\Group;
 
+
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class GroupUserFactory extends Factory
@@ -27,10 +28,9 @@ class GroupUserFactory extends Factory
         return [
             'firstname' => $this->faker->name,
             'name' => $this->faker->name,
-            'email' => $this->faker->unique()->safeEmail,
-            'group_id' => Group::all()->random()->id,
+            'group_id' => Group::all()->first()->id,
             'user_id' => null,
-            'verified' => 0
+            'code' => null, 
         ];
     }
 }

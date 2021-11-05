@@ -3,8 +3,7 @@
         <div class="row">
             <h2>Groepen</h2>
         </div>
-        <button class="btn btn-primary" @click.prevent="CreateShow" v-show="display == ''"><i class="fa fa-plus"></i></button>
-        <button class="btn btn-primary" @click.prevent="CreateHide" v-show="display == 'Create'"><i class="fa fa-plus"></i></button><br><br>
+        <button class="btn btn-primary" @click.prevent="displayCreate" ><i class="fa fa-plus"></i></button>
         
         <div v-show="display == 'Create'">
             <inputForm  v-if="display == 'Create'" :submitOption="'Create'" ></inputForm>
@@ -31,12 +30,12 @@
         },
 
         methods: {
-            CreateShow(){
-                this.display = 'Create';
-            },
-
-            CreateHide(){
-                this.display = '';
+            displayCreate(){
+                if(this.display == 'Create'){
+                    this.display = '';
+                }else{
+                    this.display = 'Create';
+                }
             }
         },
 

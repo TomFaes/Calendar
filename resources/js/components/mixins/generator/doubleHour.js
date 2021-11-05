@@ -13,6 +13,7 @@ export default {
             replacement: false,
             editIndex: "",
             editUserId: "",
+            seasonId: "",
             editCalendarData: {}, 
             updateButtons: {},
             updateData: {},
@@ -208,7 +209,7 @@ export default {
             .then(response =>{
                 this.message = "Teams are updated";
                 this.$bus.$emit('showMessage', this.message,  'green', '2000' );
-                this.$bus.$emit('reloadCalendar');
+                this.$store.dispatch('getSelectedCalendar', {id: this.seasonId});
                 this.edit = false;
             }).catch(error => {
                 this.errors = error;
@@ -216,33 +217,34 @@ export default {
          },
 
          askForReplacement(groupUser, teamId){
-            apiCall.postData('team/' + teamId + '/askForReplacement')
+            apiCall.postData('team/' + teamId + '/ask_for_replacement')
             .then(response =>{
                 this.message = "Vervangingsaanvraag is aanvaard";
                 this.$bus.$emit('showMessage', this.message,  'green', '2000' );
-                this.$bus.$emit('reloadCalendar');
+
+                this.$store.dispatch('getSelectedCalendar', {id: this.seasonId});
             }).catch(error => {
                 this.errors = error;
             });
          },
 
          cancelRequestForReplacement(groupUser, teamId){
-            apiCall.postData('team/' + teamId + '/cancelRequestForReplacement')
+            apiCall.postData('team/' + teamId + '/cancel_request_for_replacement')
             .then(response =>{
                 this.message = "Vervanging is geannulleerd";
                 this.$bus.$emit('showMessage', this.message,  'green', '2000' );
-                this.$bus.$emit('reloadCalendar');
+                this.$store.dispatch('getSelectedCalendar', {id: this.seasonId});
             }).catch(error => {
                 this.errors = error;
             });
          }, 
 
          confirmReplacement(groupUser, teamId){
-            apiCall.postData('team/' + teamId + '/confirmReplacement')
+            apiCall.postData('team/' + teamId + '/confirm_replacement')
             .then(response =>{
                 this.message = "Vervanging aanvaard";
                 this.$bus.$emit('showMessage', this.message,  'green', '2000' );
-                this.$bus.$emit('reloadCalendar');
+                this.$store.dispatch('getSelectedCalendar', {id: this.seasonId});
             }).catch(error => {
                 this.errors = error;
             });
@@ -252,5 +254,10 @@ export default {
     mounted(){
         this.editCalendarData = this.calendarData;
         this.getLoggedInGroupUser();
+
+        this.seasonId = this.calendarData.seasonData.id;
+
+        //console.log("aaaa: " +  this.calendarData['seasonData']);
+        //console.log("bbbbb: " +  this.calendarData.seasonData.id);
     },
 }

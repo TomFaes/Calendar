@@ -6,11 +6,12 @@ use App\Models\Team;
 
 interface ITeam
 {
-    public function getAllTeams();
     public function getTeam($id);
-    public function getSeasonUsers($seasonId);
+    public function getAllSeasonTeams($seasonId);
+    public function getTeamsOnDate($seasonId, $date);
     public function getFilledDatesInSeason($seasonId);
     
     public function deleteTeam($teamId);
+    public function deleteTeamsFromSeason($seasonId);
     public function saveTeam(Team $team);
 }

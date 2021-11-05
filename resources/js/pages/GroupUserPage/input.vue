@@ -2,18 +2,21 @@
     <div>
         <hr>
         <form @submit.prevent="submit" method="POST" enctype="multipart/form-data">
-            <!-- the form items -->
             <global-input type='text' inputName="firstname" inputId="firstname" tekstLabel="firstname: " v-model="fields.firstname" :errors="errors.firstname" :value='fields.firstname'></global-input>
             <global-input type='text'  inputName="name" inputId="name" tekstLabel="name: " v-model="fields.name" :errors="errors.name" :value='fields.name'></global-input>
-            <global-input type='text'  inputName="email" inputId="email" tekstLabel="email: " v-model="fields.email" :errors="errors.email" :value='fields.email'></global-input>
-            <button-input btnClass="btn btn-primary">Save user</button-input>
+            <br>
+            <global-layout>
+                <center>
+                    <button-input btnClass="btn btn-primary">Save user</button-input>
+                </center>
+            </global-layout>
         </form>
         <hr>
     </div>
 </template>
 
 <script>
-     import apiCall from '../../services/ApiCall.js';
+    import apiCall from '../../services/ApiCall.js';
 
     import TextInput from '../../components/ui/form/TextInput.vue';
     import ButtonInput from '../../components/ui/form/ButtonInput.vue';
@@ -29,10 +32,8 @@
                 'fields' : {
                     firstname: '',
                     name: '',
-                    email: ''
                 },
                 'errors' : [],
-                'action': '',
                 'formData': new FormData(),
             }
         },
@@ -45,20 +46,9 @@
 
         methods: {
             setFormData(){
-                if(this.fields.firstname != undefined){
-                    this.formData.set('firstname', this.fields.firstname);
-                }
-                if(this.fields.name != undefined){
-                    this.formData.set('name', this.fields.name);
-                }
-                if(this.fields.email != undefined){
-                    this.formData.append('email', this.fields.email);
-                }
-                if(this.fields.group_id > 0){
-                         this.formData.append('group_id', this.fields.group_id);
-                }else{
-                    this.formData.append('group_id', this.group.id);
-                }
+                this.formData.set('firstname', this.fields.firstname ?? null);
+                this.formData.set('name', this.fields.name ?? null);
+                this.formData.set('group_id', this.group.id ?? null);
             },
 
             submit(){
@@ -73,16 +63,16 @@
 
             create(){
                 this.setFormData();
-                this.action = 'group/' + this.group.id + '/user';
+                var action = 'group/' + this.group.id + '/user';
 
-                apiCall.postData(this.action, this.formData)
+                apiCall.postData(action, this.formData)
                 .then(response =>{
-                    this.$bus.$emit('reloadGroupList');
-                    this.$bus.$emit('reloadGroupUserList', this.group.id);
                     this.message = "You've added " + this.fields.firstname + " " + this.fields.name + " to " + this.group.name;
                     this.$bus.$emit('showMessage', this.message,  'green', '2000' );
+                    this.$store.dispatch('getSelectedGroupUsers', {groupId: this.group.id});
                     this.formData =  new FormData();
-                     this.fields = {}; //Clear input fields.
+                    this.$bus.$emit('resetInput');
+                    this.fields = {}; //Clear input fields.
                 }).catch(error => {
                     this.errors = error;
                 });
@@ -90,15 +80,15 @@
 
             update(){
                 this.setFormData();
-                this.action = 'group/' + this.group.id + '/user/' + this.groupUser.id;
+                var action = 'group/' + this.group.id + '/user/' + this.groupUser.id;
 
-                apiCall.updateData(this.action, this.formData)
+                apiCall.updateData(action, this.formData)
                 .then(response =>{
-                    this.$bus.$emit('reloadGroupList');
-                    this.$bus.$emit('reloadGroupUserList', this.group.id);
                     this.message = "You've updated the user " + this.fields.firstname + " " + this.fields.name + " for " + this.group.name;
                     this.$bus.$emit('showMessage', this.message,  'green', '2000' );
+                    this.$store.dispatch('getSelectedGroupUsers', {groupId: this.group.id});
                     this.formData =  new FormData();
+                    this.$bus.$emit('resetInput');
                 }).catch(error => {
                         this.errors = error;
                 });

@@ -27,6 +27,7 @@ use App\Models\Season;
     */
 class TwoFieldTwoHourFourTeams extends AbstractDoubleGenerator implements IGenerator
 {
+    protected $totalTeams = 4;
     /**
      * create the season day
      * @param $seasonDate

@@ -45,6 +45,14 @@ class Group
                 if ($group->admin_id == $user->id) {
                     return $next($request);
                 }
+                if($request->method() == 'GET')
+                {
+                    foreach($group->groupUsers AS $groupUser){
+                        if($groupUser->user_id == $user->id){
+                            return $next($request);
+                        }
+                    }
+                }
             }
         }
 
