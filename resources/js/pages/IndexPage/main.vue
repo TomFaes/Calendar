@@ -42,7 +42,6 @@
             <div class="row" v-for="(season) in activeSeasons['data']"  :key="season.id">
                 <h3>{{ season.name }}</h3>
                 <div class="col-lg-3 col-md-3 col-sm-0"  ></div>
-                
                 <div class="col-lg-3 col-md-3 col-sm-6"  >
                         <router-link :to="{ name: 'calendar', params: { id: season.id }}" >
                             <div class="tile orange">
@@ -63,26 +62,20 @@
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-0"  ></div>
             </div>
-
         </div>
     </div>
 </template>
 
 <script>
 import apiCall from '../../services/ApiCall.js';
-
-
-
     export default {
         components: {
             
-
         },
 
         data () {
             return {
                 'activeSeasons': {},
-
             }
         }, 
 

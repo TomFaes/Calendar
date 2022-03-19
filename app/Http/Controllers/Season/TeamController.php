@@ -17,7 +17,7 @@ class TeamController extends Controller
     
     public function __construct(ITeam $teamRepo) 
     {
-        $this->middleware('auth:api');        
+        //$this->middleware('auth:api');        
         $this->team = $teamRepo;
     }
 

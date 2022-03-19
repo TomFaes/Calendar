@@ -20,7 +20,7 @@ class GroupUsersController extends Controller
 
     public function __construct(IGroupUser $groupUser) 
     {
-        $this->middleware('auth:api');
+        //$this->middleware('auth:api');
 
         $this->middleware('groupuser')->except('joinGroup');
 
@@ -61,6 +61,9 @@ class GroupUsersController extends Controller
         $userId = auth()->user()->id;
 
         $groupUser = $this->groupUser->joinGroup($request->code, $userId);
+        if($groupUser == false){
+            return response()->json("There is no match for this code", 204);
+        }
         return response()->json(new GroupUserResource($groupUser), 201);
     }
 

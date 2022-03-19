@@ -3,7 +3,7 @@
         <h1>{{ season.name }}</h1>
         <hr>
          <div class="button-row">
-             <button class="btn btn-primary" @click="navigation('home')"><i class="fa fa-home fa-1x" ></i></button>
+             <button class="btn btn-primary" @click="navigation('season')"><i class="fa fa-home fa-1x" ></i></button>
             <button class="btn btn-primary" @click="navigation('editSeason')" v-if="season.type_member == 'Admin'"><i class="fas fa-pencil-alt fa-1x" ></i></button>
             <button class="btn btn-primary fa" @click="navigation('absence')" v-if="season.is_generated == 0">Afwezigheden</button>
             <button class="btn btn-primary fa" @click="navigation('calendar')" v-if="season.season_draw > 0"><i class="far fa-calendar-alt"></i></button>
@@ -63,7 +63,7 @@
                     return;
                 }
 
-                if(name == 'home'){
+                if(name == 'season'){
                     this.$store.dispatch('resetToDefault');
                 }
                 this.$router.push({name: name, params: { id: this.id },})
@@ -83,6 +83,7 @@
                 apiCall.getData('season/' +  this.season.id + '/is_generated' )
                 .then(response =>{
                     this.$store.dispatch('getSelectedSeason', {id: this.season.id});
+                    this.$router.push({name: "calendar", params: { id: this.season.id },});
                 }).catch(() => {
                     console.log('seasonIsGenerated: handle server error from here');
                 });
@@ -97,8 +98,7 @@
                     }else{
                         this.$store.dispatch('getSelectedSeason', {id: this.season.id});
                     }
-                    this.$bus.$emit('showMessage', message,  'red', '4000' );
-                    
+                    this.$store.dispatch('getMessage', {message: message, color: 'red', time: 4000});
                 }).catch(() => {
                     console.log('seasonIsGenerated: handle server error from here');
                 });
@@ -108,13 +108,11 @@
                 if(confirm('are you sure you want to delete this season ' + this.season.name + '?')){
                     apiCall.postData('season/' +  this.id + '/delete')
                     .then(response =>{
-                        this.$bus.$emit('showMessage', response.data,  'red', '4000' );
-                        
-                        if(response.status == 204){
+                        this.$store.dispatch('getMessage', {message: response.data, color: 'red', time: 4000});
+                       if(response.status == 202){
                             this.$router.push({name: 'season'})
                             return;
                         }
-                        
                     }).catch(() => {
                         console.log('deleteSeason: handle server error from here');
                     });
@@ -123,7 +121,7 @@
         },
 
         mounted(){
-            this.getSeason();           
+            this.getSeason();
         }
     }
 </script>

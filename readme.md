@@ -92,16 +92,25 @@ This version isn't completly finished. Next things are still in development:
     - rework generators
     - update & add phpunit testing
 
-# Version 3.00: 05/11/2021 - Current live version
+# Version 3.00: 05/11/2021
     - Replace Validators with request
     - Add Resource & Collection for all models
     - Replace groupusers email with code validation
     - Rework the front-end
     - update phpunit testing
-        
+
+# Version 4.00: 
+    - update vue2 to vue3
+    - update laravel 8 to laravel 9
+    - replace passport with sanctum
+    - add updata password option
+    - make page for public season
+    - remove some data from the function createJsonSeason.
+    - return answer if join group code is wrong instead of 500 error
+    - update phpunit testing
 
 # Future
-Version 3.XX: 
+Version 4.XX: 
     - create calendars for small teams. 
     - rework security middleware
     

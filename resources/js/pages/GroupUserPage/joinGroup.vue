@@ -2,11 +2,15 @@
     <div>
         <hr>
         <form @submit.prevent="joinGroup" method="POST" enctype="multipart/form-data">
-            <text-input inputName="code" inputId="code" tekstLabel="Code to join group: " v-model="fields.code" :errors="errors.code" :value='fields.code'></text-input>
+        <global-layout>
+                <label>Code to join group: </label>
+                <input type="text" class="form-control" v-model="fields.code"/>
+                <div class="text-danger" v-if="errors">{{ errors.code }}</div>
+            </global-layout>
                 <br>
-                <center>
+                <global-layout center="center">
                     <button class="btn btn-primary">Add code</button>
-                </center>
+                </global-layout>
         </form>
         <hr>
     </div>
@@ -15,11 +19,9 @@
 <script>
      import apiCall from '../../services/ApiCall.js';
 
-    import TextInput from '../../components/ui/form/TextInput.vue';
-
     export default {
         components: {
-            TextInput,
+            
         },
 
          data () {
@@ -47,13 +49,12 @@
                 .then(response =>{
                     if(response.data == false){
                         this.message = "No group found for that code";
-                        this.$bus.$emit('showMessage', this.message,  'red', '2000' );
+                        this.$store.dispatch('getMessage', {message: this.message, color: 'red', time: 2000});
                         return;
                     }
                     this.$store.dispatch('resetToDefault');
                     this.message = "You have joined the group: ";
-                    this.$bus.$emit('showMessage', this.message,  'green', '2000' );
-
+                    this.$store.dispatch('getMessage', {message: this.message});
                     this.formData =  new FormData();
                     this.$store.dispatch('getUserGroups');
 

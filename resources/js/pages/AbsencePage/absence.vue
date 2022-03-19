@@ -100,11 +100,11 @@
             loadPlayerAbsenceList(groupUserId){        
                 apiCall.getData( 'season/' + this.season.id + "/absence")
                 .then(response =>{
-                    this.absenseList = response.data;                    
-                    if(response.data[groupUserId] != undefined){                        
+                    this.absenseList = response.data; 
+                    if(response.data[groupUserId] != undefined){
                         this.absenseList = response.data[groupUserId];
-                         this.playdateList.data.forEach((playData, index) =>{
-                            this.$set(this.playdateList.data[index], 'absenceId', 0); 
+                        this.playdateList.data.forEach((playData, index) =>{
+                            this.playdateList.data[index]['absenceId'] = 0;
                             this.absenseList.forEach(element => {
                                 if(playData.date == element.date){
                                     this.playdateList.data[index]['absenceId'] = element.id;

@@ -15,10 +15,10 @@ use App\Repositories\AbsenceRepo;
 use App\Repositories\GroupUserRepo;
 use App\Repositories\SeasonRepo;
 use App\Repositories\TeamRepo;
-use Laravel\Passport\Passport;
 use App\Services\SeasonGeneratorService\GeneratorFactory;
 use Auth;
 use Database\Seeders\GeneratorSeeder;
+use Laravel\Sanctum\Sanctum;
 
 class SeasonTest extends TestCase
 {
@@ -48,7 +48,7 @@ class SeasonTest extends TestCase
      *  Get authenticated user
      */
     protected function authenticatedUser($role = "Admin"){
-        $user = Passport::actingAs(
+        $user = Sanctum::actingAs(
             $this->allUsers[0],
             ['create-servers']
         );
@@ -182,8 +182,8 @@ class SeasonTest extends TestCase
         $this->be($this->authenticatedUser());
 
         $response = $this->postJson('/api/season/'.$this->allSeasons[0]->id.'/delete');
-        $response->assertStatus(204);
-        $this->assertEquals(204, $response->status());
+        $response->assertStatus(202);
+        $this->assertEquals(202, $response->status());
 
         $response = $this->get('/api/season');
         $response->assertStatus(200);
@@ -263,6 +263,15 @@ public function test_absence_controller_index()
 
         $this->GeneratedSeasonTests($response_data);
     }
+
+    public function test_season_generator_controller_public()
+    {
+        $this->markTestIncomplete(
+            'This test has not been implemented yet.'
+          );
+    }
+
+
 
     public function test_season_generator_controller_generate_season()
     {

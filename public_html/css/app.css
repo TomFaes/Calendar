@@ -72,6 +72,15 @@ h1, .h1, h2, .h2, h3, .h3 {
   background-color: white !important;
 }
 
+.center {
+  text-align: center;
+}
+
+.toggle-grey {
+  --toggle-bg-on: lightgrey;
+  --toggle-border-on: lightgrey;
+}
+
 /*!
  * Bootstrap v5.1.3 (https://getbootstrap.com/)
  * Copyright 2011-2021 The Bootstrap Authors

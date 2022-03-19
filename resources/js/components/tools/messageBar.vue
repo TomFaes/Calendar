@@ -14,21 +14,29 @@
             return {
                 'displayMessage': '',
                 'displayColor': "green",
-                'displayTime': "5000",
+                'displayTime': "2000",
                 'messageBarVisible': true,
             }
         },
 
         props: {
+            'message': '',
 
          },
 
+         watch: {
+             message(){
+                 this.showMessage();
+             }
+         },
+
         methods: {
-            showMessage(message, color, time){
+            showMessage(){
                 this.messageBarVisible = true;
-                this.displayMessage = message;
-                this.displayColor = color;
-                setTimeout(() => this.messageBarVisible = false, time)
+                this.displayMessage = this.message.message;
+                this.displayColor = this.message.color;
+                this.displayTime = this.message.time;
+                setTimeout(() => this.messageBarVisible = false, this.displayTime);
             }
         },
 
@@ -44,9 +52,7 @@
         },
 
         mounted(){
-            this.$bus.$on('showMessage', (message, color='green', time = '5000') => {
-                this.showMessage(message, color, time);
-            });
+           
         }
     }
 </script>

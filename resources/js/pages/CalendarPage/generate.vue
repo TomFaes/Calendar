@@ -81,7 +81,7 @@
                 .then(response =>{
                     this.calendarData = response.data;
                     this.message = "Your season is ready";
-                    this.$bus.$emit('showMessage', this.message,  'green', '4000' );
+                    this.$store.dispatch('getMessage', {message: this.message});
                 }).catch(() => {
                     console.log('generateSeason: handle server error from here list');
                 });
@@ -92,12 +92,12 @@
                     this.saveGeneratedTeamsSeason();
                     return;
                 }
-
+                
                 this.formData.set('jsonSeason', JSON.stringify(this.calendarData));
                 apiCall.postData('season/' +  this.season.id + '/generator', this.formData)
                 .then(response =>{
                     this.message = "Your season has been created";
-                    this.$bus.$emit('showMessage', this.message,  'green', '2000' );
+                    this.$store.dispatch('getMessage', {message: this.message});
                     this.$store.dispatch('getSelectedSeason', {id: this.season.id});
                     this.$router.push({name: "calendar", params: { id: this.season.id },});
                 }).catch(error => {
@@ -110,7 +110,7 @@
                 apiCall.postData('season/' +  this.season.id + '/generator/' + this.id, this.formData)
                 .then(response =>{
                     this.message = "Your season has been created";
-                    this.$bus.$emit('showMessage', this.message,  'green', '2000' );
+                    this.$store.dispatch('getMessage', {message: this.message});
                     this.$store.dispatch('getSelectedSeason', {id: this.season.id});
                     this.$router.push({name: "calendar", params: { id: this.season.id },});
                 }).catch(error => {

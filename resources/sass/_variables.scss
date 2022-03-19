@@ -92,7 +92,16 @@ h1, h2, h3{
 
 .form-control {
     background-color: white !important;
+}
 
+.center {
+    text-align: center;
+}
+
+
+.toggle-grey {
+    --toggle-bg-on: lightgrey;
+    --toggle-border-on: lightgrey;
   }
 
 

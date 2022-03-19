@@ -14,7 +14,6 @@
 </template>
 
 <script>
-    import apiCall from '../../services/ApiCall.js';
     import inputForm from '../SeasonPage/input.vue';
     import list from '../SeasonPage/list.vue';
     import Moment from 'moment';
@@ -67,13 +66,6 @@
 
         mounted(){
             this.loadList();
-            /*
-            this.loadList();
-            this.$bus.$on('reloadSeasons', () => {
-                this.loadList();
-            });
-            this.user =  this.$store.state.LoggedInUser;
-            */
         }
     }
 </script>

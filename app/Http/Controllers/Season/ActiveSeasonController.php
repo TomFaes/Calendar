@@ -21,7 +21,7 @@ class ActiveSeasonController extends Controller
     
     public function __construct(ISeason $seasonRepo)
     {
-        $this->middleware('auth:api');
+        //$this->middleware('auth:api');
         $this->season = $seasonRepo;
     }
     

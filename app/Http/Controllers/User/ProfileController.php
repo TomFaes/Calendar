@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
+use App\Http\Requests\PasswordRequest;
+//use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
@@ -10,7 +12,7 @@ use Illuminate\Http\Request;
 use App\Repositories\Contracts\IUser;
 use Auth;
 
-class ProfileController extends Controller
+class ProfileController extends BaseController
 {
     /** @var App\Repositories\Contracts\IUser */
     protected $user;
@@ -22,7 +24,7 @@ class ProfileController extends Controller
      */
     public function __construct(Iuser $user) 
     {
-        $this->middleware('auth:api');
+        //$this->middleware('auth:api');
         $this->user = $user;
     }
 
@@ -42,6 +44,13 @@ class ProfileController extends Controller
         $userId = auth()->user()->id;
         $user = $this->user->update($request->all(), $userId);
         return response()->json(new UserResource($user), 201);
+    }
+
+    public function updatePassword(PasswordRequest $request){
+        $userId = auth()->user()->id;
+        $user = $this->user->updatePassword($request->all(), $userId);
+        $user = new UserResource($user);
+        return $this->sendResponse($user, 'Password is changed');
     }
 
     public function destroy()

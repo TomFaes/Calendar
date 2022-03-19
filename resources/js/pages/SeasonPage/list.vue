@@ -40,8 +40,6 @@
     import Moment from 'moment';
     import VuePagination from '../../components/ui/pagination.vue';
 
-    import ButtonInput from '../../components/ui/form/ButtonInput.vue';
-
     export default {
         data () {
             return {
@@ -51,7 +49,6 @@
 
         components: {
             VuePagination,
-            ButtonInput,
             Moment,
         },
 
@@ -90,9 +87,6 @@
 
         mounted(){
             this.loadList();
-            this.$bus.$on('reloadSeasons', () => {
-                this.loadList();
-            });
         }
     }
 </script>

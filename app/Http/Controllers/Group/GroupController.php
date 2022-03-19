@@ -23,7 +23,7 @@ class GroupController extends Controller
     
     public function __construct(IGroup $group, IUser $user, IGroupUser $groupUser)
     {
-        $this->middleware('auth:api');
+        //$this->middleware('auth:api');
         $this->middleware('group')->except('store');
 
         $this->group = $group;

@@ -12,6 +12,7 @@
     export default {
          props: {
             'sizeForm' : "",
+            'center': "",
          },
 
         data() {
@@ -36,6 +37,10 @@
                     this.leftSite = "col-0";
                     this.middleSite = "col-12";
                     this.rightSite = "col-m-0";
+                }
+
+                if(this.center == 'center'){
+                    this.middleSite += " center";
                 }
             },
         },

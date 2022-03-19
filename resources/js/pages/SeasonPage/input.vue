@@ -2,13 +2,37 @@
     <div class="container">
         <form @submit.prevent="submit" method="POST" enctype="multipart/form-data">
             <!-- the form items -->
-            <global-input type='text' inputName="name" inputId="name" tekstLabel="Naam: " v-model="fields.name" :errors="errors.name" :value='fields.name'></global-input>
-            <global-input type='date' inputName="begin" inputId="begin" tekstLabel="Begin: " v-model="fields.begin" :errors="errors.begin" :value='fields.begin' :disabled="disabled"></global-input>
-            <global-input type='date' inputName="end" inputId="end" tekstLabel="End: " v-model="fields.end" :errors="errors.end" :value='fields.end' :disabled="disabled"></global-input>
-            <global-input type='time' inputName="start_hour" inputId="start_hour" tekstLabel="Start uur: " v-model="fields.start_hour" :errors="errors.start_hour" :value='fields.start_hour' :disabled="disabled"></global-input>
-            <global-input type='switchButton' inputName="public" inputId="public" tekstLabel="Public: " v-model="fields.public" :errors="errors.public" :value='fields.public'></global-input>
-            <global-input type='switchButton' inputName="allow_replacement" inputId="allow_replacement" tekstLabel="Allow replacements: " v-model="fields.allow_replacement" :errors="errors.allow_replacement" :value='fields.allow_replacement'></global-input>
-            
+            <global-layout>
+                <label>Naam: </label>
+                <input type="text" class="form-control" v-model="fields.name"/>
+                <div class="text-danger" v-if="errors">{{ errors.name }}</div>
+            </global-layout>
+             <global-layout>
+                <label>Begin: </label>
+                <input type="date" class="form-control" v-model="fields.begin" :disabled="disabled"/>
+                <div class="text-danger" v-if="errors">{{ errors.begin }}</div>
+            </global-layout>
+            <global-layout>
+                <label>Einde: </label>
+                <input type="date" class="form-control" v-model="fields.end" :disabled="disabled"/>
+                <div class="text-danger" v-if="errors">{{ errors.end }}</div>
+            </global-layout>
+            <global-layout>
+                <label>Start: </label>
+                <input type="time" class="form-control" v-model="fields.start_hour"/>
+                <div class="text-danger" v-if="errors">{{ errors.start_hour }}</div>
+            </global-layout>
+            <global-layout>
+                <label>Public: </label><br>
+                <Toggle v-model="fields.public" />
+                <div class="text-danger" v-if="errors">{{ errors.public }}</div>
+            </global-layout>
+            <global-layout>
+                <label>Allow replacements: </label><br>
+                <Toggle v-model="fields.allow_replacement"/>
+                <div class="text-danger" v-if="errors">{{ errors.allow_replacement }}</div>
+            </global-layout>
+
             <!-- Admin multiselect -->
             <div class="row" v-if="multiGroupUsers">
                 <div class="col-lg-2 col-md-2 col-sm-0"></div>
@@ -43,7 +67,6 @@
                 >
                 </multiselect>
             </global-layout>
-
             <!-- Group multiselect -->
            <global-layout v-if="multiGroups.data">
                 <label>Group: </label>
@@ -60,12 +83,9 @@
                 >
                 </multiselect>
            </global-layout>
-
             <br>
-            <global-layout>
-                <center>
-                    <button class="btn btn-primary">Save</button>
-                </center>
+            <global-layout center="center">
+                <button class="btn btn-primary">Save</button>
                 <br>
             </global-layout>
         </form>
@@ -74,13 +94,15 @@
 
 <script>
     import apiCall from '../../services/ApiCall.js';
-    import Multiselect from 'vue-multiselect';
+    import Multiselect from '@suadelabs/vue3-multiselect';
     import Moment from 'moment';
-
+    import Toggle from '@vueform/toggle'
+    
     export default {
         components: {
             Multiselect,
             Moment, 
+            Toggle,
         },
 
          data () {
@@ -192,10 +214,9 @@
                 
                 apiCall.postData(this.action, this.formData)
                 .then(response =>{
-                    this.$bus.$emit('reloadSeasons');
                     this.resetFormData();
                     this.message = "Your season " + response.data.name + " has been created";
-                    this.$bus.$emit('showMessage', this.message,  'green', '2000' );
+                    this.$store.dispatch('getMessage', {message: this.message});
                     this.$router.push({name: "seasonDetail", params: { id: response.data.id },});
                 }).catch(error => {
                     this.errors = error;
@@ -207,9 +228,8 @@
 
                 apiCall.updateData('season/' + this.season.id, this.formData)
                 .then(response =>{
-                    this.$bus.$emit('reloadSeasons');
                     this.message = "Your season " + response.data.name + " has been changed";
-                    this.$bus.$emit('showMessage', this.message,  'green', '2000' );
+                    this.$store.dispatch('getMessage', {message: this.message});
                     this.resetFormData();
                     this.$router.push({name: "calendar", params: { id: this.season.id },});
                 }).catch(error => {
@@ -242,6 +262,7 @@
         }
     }
 </script>
+
 <style scoped>
 
 </style>

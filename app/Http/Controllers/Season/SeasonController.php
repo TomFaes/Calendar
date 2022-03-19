@@ -22,7 +22,7 @@ class SeasonController extends Controller
     
     public function __construct(ISeason $seasonRepo, IAbsence $absenceRepo)
     {
-        $this->middleware('auth:api');
+        //$this->middleware('auth:api');
         $this->middleware('season')->except('store', 'index', 'show');
         $this->season = $seasonRepo;
         $this->absence = $absenceRepo;
@@ -94,6 +94,6 @@ class SeasonController extends Controller
         }
         $this->absence->deleteSeasonAbsence($id);
         $this->season->delete($id);
-        return response()->json("Season is deleted", 204);
+        return response()->json("Season is deleted", 202);
     }
 }

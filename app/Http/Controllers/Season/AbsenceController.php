@@ -24,7 +24,7 @@ class AbsenceController extends Controller
     
     public function __construct(IAbsence $absenceRepo, ISeason $seasonRepo, IUser $userRepo) 
     {
-        $this->middleware('auth:api');
+        //$this->middleware('auth:api');
         $this->middleware('absence:', ['only' => ['store', 'index']]);
         
         $this->absence = $absenceRepo;

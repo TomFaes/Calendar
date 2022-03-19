@@ -5,7 +5,7 @@ namespace Tests\Unit\Route;
 use Tests\TestCase;
 use App\Models\User;
 use Database\Seeders\GeneratorSeeder;
-use Laravel\Passport\Passport;
+use Laravel\Sanctum\Sanctum;
 
 class UserTest extends TestCase
 {
@@ -22,7 +22,7 @@ class UserTest extends TestCase
      *  Get authenticated user
      */
     protected function authenticatedUser($role = "Admin"){
-        $user = Passport::actingAs(
+        $user = Sanctum::actingAs(
             $this->allUsers[0],
             ['create-servers']
         );

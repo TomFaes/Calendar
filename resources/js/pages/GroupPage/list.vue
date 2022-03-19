@@ -25,10 +25,7 @@
 </template>
 
 <script>
-    import apiCall from '../../services/ApiCall.js';
     import VuePagination from '../../components/ui/pagination.vue';
-
-    import ButtonInput from '../../components/ui/form/ButtonInput.vue';
 
     export default {
         data () {
@@ -45,7 +42,6 @@
 
         components: {
             VuePagination,
-            ButtonInput,
         },
 
         computed: {
@@ -84,9 +80,6 @@
 
         mounted(){
             this.loadList();
-            this.$bus.$on('reloadGroupList', () => {
-                this.loadList();
-            });
         }
     }
 </script>

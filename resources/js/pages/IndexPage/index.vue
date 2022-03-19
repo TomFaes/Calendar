@@ -1,9 +1,11 @@
 <template>
     <div style="width: 100%">
+        
         <div class="container-fluid">
+            <nav-bar :user=user ></nav-bar><br>
             <global-layout>
-                <nav-bar :user=user ></nav-bar><br>
-                <message-box></message-box>
+                
+                <message-box :message=message></message-box>
                 <router-view :key="$route.path" :user=user></router-view>
             </global-layout>
         </div>
@@ -24,7 +26,7 @@
         },
 
         props: {
-            'auth': {},
+           // 'auth': {},
          },         
 
         data () {
@@ -33,23 +35,23 @@
             }
         }, 
 
+
         computed: {
             user(){
                 return this.$store.state.loggedInUser;
+            },
+            message(){
+                return this.$store.state.message;
+
             }
         },
 
         methods: {
-            reloadProfile(){
-                this.$store.dispatch('getLoggedInUser');
-            }
+
         },
 
         mounted(){
-            this.$bus.$on('reloadProfile', () => {
-                this.reloadProfile();
-            });
-           //this.$bus.$emit('showMessage', "Test bericht moet verwijderd worden na testen",  'red', '20000' );
+            //this.$store.dispatch('getMessage', {message: "dit is het bericht", color: 'blue', time: 1000});
         }
     }
 </script>

@@ -379,12 +379,26 @@ class AbstractDoubleGenerator
 
         $arrayJson = array();
         //$arrayJson['currentPlayDay']  = 0;
-        $arrayJson['seasonData']  = $season;
+
+        
+        $arrayJson['seasonData']['id']  = $season->id;
+        $arrayJson['seasonData']['type']  = $season->type;
+        $arrayJson['seasonData']['seasonDraw']  = $season->SeasonDraw;
+
+        //$arrayJson['seasonData']  = $season;
+        
+
+        
         $arrayJson['absenceData'] = $this->absence->getSeasonAbsenceArray($season->id);
 
         foreach($season->group->groupUsers as $object)
-        {
-            $arrayJson['groupUserData'] [$object->id] = $object;
+        {        
+            $arrayJson['groupUserData'] [$object->id]['id'] = $object->id;
+            $arrayJson['groupUserData'] [$object->id]['firstname'] = $object->firstname;
+            $arrayJson['groupUserData'] [$object->id]['name'] = $object->name;
+            $arrayJson['groupUserData'] [$object->id]['fullName'] = $object->fullName;
+            $arrayJson['groupUserData'] [$object->id]['user_id'] = $object->user_id;
+            $arrayJson['groupUserData'] [$object->id]['user'] = $object->user;
         }        
 
         //$x=0;

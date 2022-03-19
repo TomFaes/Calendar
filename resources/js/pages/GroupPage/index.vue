@@ -40,9 +40,7 @@
         },
 
         mounted(){
-            this.$bus.$on('resetGroupDisplay', () => {
-                    this.display = '';
-            });
+            
         }
     }
 </script>

@@ -9,8 +9,10 @@
 
             <div class="collapse navbar-collapse" id="navbarResponsive" style="width: 100%">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" v-if="user.role == 'Admin'" >
+                    
                     <!--
+                    <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" v-if="user.role == 'Admin'" >
+                    </li>
                     <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" v-if="user.id > 0" >
                         <span class="nav-link js-scroll-trigger item-link"  >
                             <router-link :to="{ name: 'group' }" class=".nav-link js-scroll-trigger">Group</router-link>
@@ -31,12 +33,12 @@
                           <a class="nav-link js-scroll-trigger nav-link js-scroll-trigger item-link" @click.prevent="logout">Logout</a>
                     </li>
                     <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" v-else>
-                         <router-link :to="{ name: 'login'}" class=".nav-link js-scroll-trigger">Login</i></router-link>
+                         <router-link :to="{ name: 'login'}" class=".nav-link js-scroll-trigger">Login</router-link>
                     </li>
                 </ul>
             </div>
         </nav>
-        <br>
+        <br><br>
     </div>
 </template>
 
@@ -55,10 +57,6 @@
          },
 
         methods: {
-            displayIndex(){
-                this.$bus.$emit('displayNav', '');
-            },
-
             logout(){                
                 if(this.envirement == "development"){
                     return window.location.href = "http://localhost/tenniscalendar/public_html/logout";
@@ -69,8 +67,6 @@
 
         mounted () {
             this.envirement = process.env.NODE_ENV;
-            
-
         }
     }
 

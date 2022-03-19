@@ -154,7 +154,7 @@ return [
          */
 
         Laravel\Socialite\SocialiteServiceProvider::class, 
-        Laravel\Passport\PassportServiceProvider::class,
+        //Laravel\Passport\PassportServiceProvider::class,
 
         /*
          * Application Service Providers...

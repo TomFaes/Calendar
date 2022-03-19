@@ -6,14 +6,16 @@
  */
 
 require('./bootstrap');
-require('vue-multiselect/dist/vue-multiselect.min.css');
+//require('@vueform/multiselect/themes/default.css');
+require('@suadelabs/vue3-multiselect/dist/vue3-multiselect.css');
+require('@vueform/toggle/themes/default.css');
 
-import Vue from 'vue';
+//import Vue from 'vue';
+import { createApp } from "vue";
 import router from './services/router';
 import store from '../js/services/store';
 
 import globalLayout from '../js/components/global/globalLayout.vue';
-import globalInput from '../js/components/global/globalInput.vue'
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -21,14 +23,13 @@ import globalInput from '../js/components/global/globalInput.vue'
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('index-page', require('./pages/IndexPage/index.vue').default);
-Vue.component('global-layout', globalLayout);
-Vue.component('global-input', globalInput);
+import App from './pages/IndexPage/index.vue';
+const app = createApp(App);
 
-Vue.prototype.$bus = new Vue({});
+app.use(router);
+app.use(store);
 
-new Vue({
-    store,
-    router
-  }).$mount('#app')
+app.component("globalLayout", globalLayout);
+
+app.mount('#app');
 

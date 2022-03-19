@@ -18,7 +18,7 @@ class UserGroupsController extends Controller
 
     public function __construct(IGroup $group) 
     {
-        $this->middleware('auth:api');
+        //$this->middleware('auth:api');
 
         $this->group = $group;
     }

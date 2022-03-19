@@ -24,11 +24,9 @@
                                 <tr v-for="groupUser in userData" :key="groupUser.id"> 
                                     <td style="left:0;">{{  groupUser.user_id != null ? groupUser.user.firstname : groupUser.firstname }}</td>
                                     <td v-if="calendarData['data'][calendarData['currentPlayDay']]['user'][groupUser.id]['team'] != ''">
-                                        <center>
-                                                <span v-if="calendarData['data'][calendarData['currentPlayDay']]['user'][groupUser.id]['team'] == 'team1'">1</span>
-                                                <span v-if="calendarData['data'][calendarData['currentPlayDay']]['user'][groupUser.id]['team'] == 'team2'">2</span>
-                                                <span v-if="calendarData['data'][calendarData['currentPlayDay']]['user'][groupUser.id]['team'] == 'team3'">3</span>
-                                        </center>
+                                            <span v-if="calendarData['data'][calendarData['currentPlayDay']]['user'][groupUser.id]['team'] == 'team1'">1</span>
+                                            <span v-if="calendarData['data'][calendarData['currentPlayDay']]['user'][groupUser.id]['team'] == 'team2'">2</span>
+                                            <span v-if="calendarData['data'][calendarData['currentPlayDay']]['user'][groupUser.id]['team'] == 'team3'">3</span>
                                     </td>
                                      <td v-else :class="getBackground(groupUser.id, calendarData['data'][calendarData['currentPlayDay']]['day'])"></td>
                                 </tr>

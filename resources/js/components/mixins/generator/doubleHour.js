@@ -40,6 +40,9 @@ export default {
             if(this.loggedInUser.id != this.editCalendarData['seasonData']['admin_id']){
                 return false;
             }
+            if(this.loggedInUser.id == undefined){
+                return false;
+            }
             return true;
         },
 
@@ -208,7 +211,7 @@ export default {
             apiCall.postData('team/range', this.formData)
             .then(response =>{
                 this.message = "Teams are updated";
-                this.$bus.$emit('showMessage', this.message,  'green', '2000' );
+                this.$store.dispatch('getMessage', {message: this.message});
                 this.$store.dispatch('getSelectedCalendar', {id: this.seasonId});
                 this.edit = false;
             }).catch(error => {
@@ -220,8 +223,7 @@ export default {
             apiCall.postData('team/' + teamId + '/ask_for_replacement')
             .then(response =>{
                 this.message = "Vervangingsaanvraag is aanvaard";
-                this.$bus.$emit('showMessage', this.message,  'green', '2000' );
-
+                this.$store.dispatch('getMessage', {message: this.message});
                 this.$store.dispatch('getSelectedCalendar', {id: this.seasonId});
             }).catch(error => {
                 this.errors = error;
@@ -232,7 +234,7 @@ export default {
             apiCall.postData('team/' + teamId + '/cancel_request_for_replacement')
             .then(response =>{
                 this.message = "Vervanging is geannulleerd";
-                this.$bus.$emit('showMessage', this.message,  'green', '2000' );
+                this.$store.dispatch('getMessage', {message: this.message});
                 this.$store.dispatch('getSelectedCalendar', {id: this.seasonId});
             }).catch(error => {
                 this.errors = error;
@@ -243,7 +245,7 @@ export default {
             apiCall.postData('team/' + teamId + '/confirm_replacement')
             .then(response =>{
                 this.message = "Vervanging aanvaard";
-                this.$bus.$emit('showMessage', this.message,  'green', '2000' );
+                this.$store.dispatch('getMessage', {message: this.message});
                 this.$store.dispatch('getSelectedCalendar', {id: this.seasonId});
             }).catch(error => {
                 this.errors = error;
@@ -254,10 +256,6 @@ export default {
     mounted(){
         this.editCalendarData = this.calendarData;
         this.getLoggedInGroupUser();
-
         this.seasonId = this.calendarData.seasonData.id;
-
-        //console.log("aaaa: " +  this.calendarData['seasonData']);
-        //console.log("bbbbb: " +  this.calendarData.seasonData.id);
     },
 }

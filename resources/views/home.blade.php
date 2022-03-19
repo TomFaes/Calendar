@@ -3,10 +3,7 @@
 @section('content')
     <br>
     <div class="row">
-            @auth
-                <index-page :auth="true"></index-page>
-            @else
-                <index-page :auth="false"></index-page>
-            @endauth
+        <index-page></index-page>
+        
     </div>
 @endsection

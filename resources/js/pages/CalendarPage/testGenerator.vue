@@ -23,9 +23,7 @@
                                  <template v-for="(data, index) in editCalendarData['data']" >
                                       <!-- view when editing a season -->
                                     <td :class="getBackground(groupUser.id, data.day, data['user'][groupUser.id]['team'])" :key="data.id" @click.prevent="editTeam(index, groupUser.id)" v-if="edit == true">
-                                        <center>
-                                            {{ data['user'][groupUser.id]['team'].replace('team', '') }}
-                                        </center>
+                                        {{ data['user'][groupUser.id]['team'].replace('team', '') }}
                                         <span v-if="showUpdateButtons(index, groupUser.id)">
                                             <button v-for="button in updateButtons" :key=button class="btn btn-secondary" style="width:100%" @click.stop="updateTeam(index, groupUser.id, button, data['user'][groupUser.id]['teamId'])">{{button}}</button>
                                         </span>
@@ -34,7 +32,7 @@
                                     <td :class="getBackground(groupUser.id, data.day, '')" :key="data.id" v-else-if="edit == false && data['user'][groupUser.id] == undefined"></td>
                                     <!-- view to replace or cancel replacement -->
                                     <td :class="getBackground(groupUser.id, data.day, '', 'replacement')" :key="data.id" v-if="edit == false && data['user'][groupUser.id]['replacement'] == 1">
-                                        <center>{{ data['user'][groupUser.id]['team'].replace('team', '') }}</center>
+                                        {{ data['user'][groupUser.id]['team'].replace('team', '') }}
                                         <span v-if="groupUser.user_id == loggedInUser.id  && replacement == true">
                                             <button class="btn btn-warning" @click.stop="cancelRequestForReplacement(groupUser.id, data['user'][groupUser.id]['teamId'])">Vervanging annuleren</button>
                                         </span>
@@ -44,9 +42,7 @@
                                     </td>
                                     <!-- default view for the season -->
                                     <td :class="getBackground(groupUser.id, data.day, data['user'][groupUser.id]['team'])" :key="data.id" v-else-if="edit == false">
-                                        <center>
-                                            {{ data['user'][groupUser.id]['team'].replace('team', '') }}
-                                        </center>
+                                        {{ data['user'][groupUser.id]['team'].replace('team', '') }}
                                         <span v-if="groupUser.user_id == loggedInUser.id && data['user'][groupUser.id]['teamId'] != '' && compareDates(data.day) && replacement == true">
                                             <button class="btn btn-warning" @click.stop="askForReplacement(groupUser.id, data['user'][groupUser.id]['teamId'])">Vervanging gezocht</button>
                                         </span>
@@ -76,18 +72,18 @@
                         <thead >
                             <tr>
                                 <th scope="col" style="width:3em; left:0;">Naam</th>
-                                <th scope="col" style="text-align: center;">Ploeg 1</th>
-                                <th scope="col" style="text-align: center;">Ploeg 2</th>
-                                <th scope="col" style="text-align: center;">Totaal</th>
+                                <th scope="col">Ploeg 1</th>
+                                <th scope="col">Ploeg 2</th>
+                                <th scope="col">Totaal</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="user in userData" :key="user.id">
                                 <td style="width:3em; left:0;">{{ user.firstname }}</td>
                                 
-                                <td><center v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['team1'] }}</center></td>
-                                <td><center v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['team2'] }}</center></td>
-                                <td><center v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['total'] }}</center></td>
+                                <td><span v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['team1'] }}</span></td>
+                                <td><span v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['team2'] }}</span></td>
+                                <td><span v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['total'] }}</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -127,5 +123,9 @@
 
     td:hover {
         background-color: lightgray;
+    }
+
+    td, th {
+        text-align: center;
     }
 </style>

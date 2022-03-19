@@ -61,9 +61,10 @@
            deleteGroup(){
                 if(confirm('are you sure you want to delete this group ' + this.group.name + '?')){
                     apiCall.postData('group/' + this.group.id + '/delete')
-                    .then(response =>{
-                        this.$bus.$emit('showMessage', response.data,  'red', '2000' );
+                    .then(response =>{                        
+                        this.$store.dispatch('getMessage', {message: response.data, color: 'red', time: 2000});
                         this.$store.dispatch('resetToDefault');
+                        this.$store.dispatch('getUserGroups');
                         this.$router.push({name: 'group', })
                     }).catch(() => {
                         console.log('handle server error from here');
@@ -74,10 +75,6 @@
 
         mounted(){
             this.getGroup();
-            this.$bus.$on('reloadGroup', () => {
-                this.$store.dispatch('getSelectedGroup', {id: this.id});
-                this.getGroup();
-            });
         }
     }
 </script>

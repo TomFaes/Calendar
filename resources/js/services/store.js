@@ -1,14 +1,16 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+//import Vue from 'vue';
+//import Vuex from 'vuex';
 
-Vue.use(Vuex);
+import { createStore } from 'vuex'
+
+//Vue.use(Vuex);
 
 var localPath = "";
 if(process.env.NODE_ENV == 'development'){
     localPath= "/tenniscalendar/public_html"
 }
 
-export default new Vuex.Store({
+export default new createStore({
   state: {
     loggedInUser: '',
     userGroups: {},
@@ -21,6 +23,7 @@ export default new Vuex.Store({
     authenticated: false,
     role: '',
     errorMessage: '',
+    message: '',
   },
 
  
@@ -63,7 +66,14 @@ export default new Vuex.Store({
 
     setSelectedCalendar(state, calendar){
       state.selectedCalendar = calendar;
-    }
+    },
+
+    setMessage(state, message){
+      state.message = message;
+    },
+
+
+    
 
 
 
@@ -128,6 +138,22 @@ export default new Vuex.Store({
           commit('setSelectedCalendar', response);
         })
         .catch((error) => console.error(error));
+    },
+
+    getSelectedPublicCalendar({commit}, {id}){
+      axios.get( localPath +  '/api/season/' + id + '/public')
+        .then((response) => {
+          commit('setSelectedCalendar', response);
+        })
+        .catch((error) => console.error(error));
+    },
+
+    getMessage({commit}, {message, color = 'green', time = 5000}){
+      var response = {};
+      response['message'] = message;
+      response['color'] = color;
+      response['time'] = time;
+      commit('setMessage', response); 
     },
 
     resetToDefault({commit}){

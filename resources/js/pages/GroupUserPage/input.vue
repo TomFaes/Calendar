@@ -2,13 +2,19 @@
     <div>
         <hr>
         <form @submit.prevent="submit" method="POST" enctype="multipart/form-data">
-            <global-input type='text' inputName="firstname" inputId="firstname" tekstLabel="firstname: " v-model="fields.firstname" :errors="errors.firstname" :value='fields.firstname'></global-input>
-            <global-input type='text'  inputName="name" inputId="name" tekstLabel="name: " v-model="fields.name" :errors="errors.name" :value='fields.name'></global-input>
-            <br>
             <global-layout>
-                <center>
-                    <button-input btnClass="btn btn-primary">Save user</button-input>
-                </center>
+                <label>Firstname: </label>
+                <input type="text" class="form-control" v-model="fields.firstname"/>
+                <div class="text-danger" v-if="errors">{{ errors.firstname }}</div>
+            </global-layout>
+            <global-layout>
+                <label>Name: </label>
+                <input type="text" class="form-control" v-model="fields.name"/>
+                <div class="text-danger" v-if="errors">{{ errors.name }}</div>
+            </global-layout>
+            <br>
+            <global-layout center="center">
+                 <button class="btn btn-primary">Save user</button>
             </global-layout>
         </form>
         <hr>
@@ -18,13 +24,9 @@
 <script>
     import apiCall from '../../services/ApiCall.js';
 
-    import TextInput from '../../components/ui/form/TextInput.vue';
-    import ButtonInput from '../../components/ui/form/ButtonInput.vue';
-
     export default {
         components: {
-            TextInput,
-            ButtonInput,
+            
         },
 
          data () {
@@ -68,10 +70,9 @@
                 apiCall.postData(action, this.formData)
                 .then(response =>{
                     this.message = "You've added " + this.fields.firstname + " " + this.fields.name + " to " + this.group.name;
-                    this.$bus.$emit('showMessage', this.message,  'green', '2000' );
+                    this.$store.dispatch('getMessage', {message: this.message});
                     this.$store.dispatch('getSelectedGroupUsers', {groupId: this.group.id});
                     this.formData =  new FormData();
-                    this.$bus.$emit('resetInput');
                     this.fields = {}; //Clear input fields.
                 }).catch(error => {
                     this.errors = error;
@@ -85,10 +86,9 @@
                 apiCall.updateData(action, this.formData)
                 .then(response =>{
                     this.message = "You've updated the user " + this.fields.firstname + " " + this.fields.name + " for " + this.group.name;
-                    this.$bus.$emit('showMessage', this.message,  'green', '2000' );
+                     this.$store.dispatch('getMessage', {message: this.message});
                     this.$store.dispatch('getSelectedGroupUsers', {groupId: this.group.id});
                     this.formData =  new FormData();
-                    this.$bus.$emit('resetInput');
                 }).catch(error => {
                         this.errors = error;
                 });

@@ -1,9 +1,10 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+//import Vue from 'vue';
+//import VueRouter from 'vue-router';
+import { createWebHistory, createRouter } from "vue-router";
 import store from '../services/store';
 import axios from 'axios';
 
-Vue.use(VueRouter);
+//Vue.use(VueRouter);
 
 //All components that will be used in the router
 import Home from '../pages/IndexPage/main.vue';
@@ -25,6 +26,8 @@ import Calendar from '../pages/CalendarPage/index.vue';
 import DayCalendar from '../pages/NextPlayDayPage/index.vue';
 import Generate from '../pages/CalendarPage/generate.vue';
 
+import PublicSeason from '../pages/SeasonPage/PublicSeason.vue';
+
 
 
 
@@ -35,13 +38,25 @@ if(process.env.NODE_ENV == 'development'){
     localPath= "/tenniscalendar/public_html"
 }
 
-const router = new VueRouter({
+/*
+const routes = new VueRouter({
     //export default new VueRouter({
     mode: 'history', 
     base: process.env.BASE_URL,
     linkActiveClass: 'active',
     transitionOnLoad: true,
     history: true,
+*/
+
+
+//const routes = new VueRouter({
+const router = createRouter({
+    //export default new VueRouter({
+    mode: 'history', 
+    base: process.env.BASE_URL,
+    linkActiveClass: 'active',
+    transitionOnLoad: true,
+    history: createWebHistory(),
     routes:[
         {
             path: localPath + '/',
@@ -204,34 +219,18 @@ const router = new VueRouter({
                         requiresAuth: true
                     },
                 },
-
-                /*
-                //Make a public calendar link
-                {
-                    name: 'calendar',
-                    path: 'calendar',
-                    props: true,
-                    components: {
-                        seasonDetails: calendar
-                    },
-                    meta: {
-                        requiresAuth: true //!!! not needed because there are public seasons
-                    },
-                },
-                */
- /*
-                {
-                    name: 'groupUsers',
-                    path: 'group_users',
-                    props: true,
-                    components: {
-                        groupDetails: groupUsers
-                    }
-                },
-                */
-            ]
-            
+            ],
         },
+
+        {
+            path: localPath + '/public/season/:id',
+            name: 'public',
+            component: PublicSeason,
+            props: true,
+            meta: {
+                requiresAuth: false
+            },
+        }
 
 
 
@@ -252,6 +251,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {    
     //check if authentication is needen for the route
+    
     if(to.meta.requiresAuth == true){
         //get the user: from the database or from the store
         let getUser = new Promise((resolve, reject) => {

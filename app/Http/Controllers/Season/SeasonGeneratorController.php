@@ -26,8 +26,8 @@ class SeasonGeneratorController extends Controller
     
     public function __construct(ISeason $seasonRepo, IAbsence $absenceRepo, Iteam $teamRepo)
     {
-        $this->middleware('auth:api')->except('index');
-        $this->middleware('season')->except('index', 'playDates', 'seasonUsers', 'seasonAbsences');
+        //$this->middleware('auth:api')->except('index');
+        $this->middleware('season')->except('index', 'public', 'playDates', 'seasonUsers', 'seasonAbsences');
         $this->season = $seasonRepo;
         $this->absence = $absenceRepo;
         $this->team = $teamRepo;
@@ -41,9 +41,22 @@ class SeasonGeneratorController extends Controller
     public function index($seasonId)
     {
         $season = $this->season->getSeason($seasonId);
-        if($season->public !== 1 && Auth::guard('api')->check() === false){
+        //if($season->public !== 1 && Auth::guard('api')->check() === false){
+        /*
+        if($season->public !== 1){
              return response()->json("This is not a public season", 203);
         }
+        */
+        $seasonGenerator = GeneratorFactory::generate($season->type);
+        return response()->json($seasonGenerator->getSeasonCalendar($season), 200);
+    }
+
+    public function public($seasonId){
+        $season = $this->season->getSeason($seasonId);       
+        if($season->public == 0){
+            return response()->json($season->name." is not a public season", 203);
+        } 
+        
         $seasonGenerator = GeneratorFactory::generate($season->type);
         return response()->json($seasonGenerator->getSeasonCalendar($season), 200);
     }

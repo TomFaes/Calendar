@@ -2,9 +2,9 @@
     <div class="container">
         <h3>Group users</h3>
 
-        <center>
+        <global-layout center="center">
             <button class="btn btn-primary" v-if="group.type_member == 'Admin'" @click.prevent="addGroupUser" > <i class="fa fa-user-plus"></i></button><br><br>
-        </center>
+        </global-layout>
 
         <div v-show="display == 'showAddUserToGroup'">
             <addUserToGroup :submitOption="'Create'" :group=group></addUserToGroup>
@@ -113,7 +113,7 @@
                 apiCall.postData('group/' + this.group.id + '/user/' + data.id + '/regenerate_code')
                     .then(response =>{
                         this.message = "Code is regenerated for " + data.full_name;
-                        this.$bus.$emit('showMessage', this.message,  'green', '2000' );
+                        this.$store.dispatch('getMessage', {message: this.message});
                         this.$store.dispatch('getSelectedGroupUsers', {groupId: this.group.id});
                     }).catch(() => {
                         console.log('handle server error from here');
@@ -133,7 +133,7 @@
                         else{
                             this.message = data.full_name + " is deleted from this group";
                         }
-                        this.$bus.$emit('showMessage', this.message,  'red', '2000' );
+                        this.$store.dispatch('getMessage', {message: this.message, color: 'red', time: 2000});
                         this.$store.dispatch('getSelectedGroupUsers', {groupId: this.group.id});
                     }).catch(() => {
                         console.log('handle server error from here');
@@ -160,10 +160,7 @@
         },
 
         mounted(){
-            this.$bus.$on('resetInput', () => {
-                this.display = "";
-                this.selectedGroupUser = 0;
-            });
+            
         }
         
     }
