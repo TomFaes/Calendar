@@ -56,14 +56,15 @@ class SeasonTest extends TestCase
         return $user;
     }
 
-    protected function createGeneratedSeason(){
+    protected function createGeneratedSeason($public = 0){
         //create new season
         $seasonData = Season::factory()->make(['begin' => Carbon::now()->addDays(1)->format('Y-m-d')])->toArray();
+        $seasonData['public'] = $public;
         $seasonRepo = new SeasonRepo();
         $this->newSeason = $seasonRepo->create($seasonData, $this->allUsers[0]->id);
 
         //add a registered user to a group
-        if($this->allGroupUsers[0]->user_id == null){
+        if($this->allGroupUsers[0]->user_id == null && $public == 0){
             $groupUserRepo = new GroupUserRepo();
             $groupUser = $groupUserRepo->regenerateGroupUserCode($this->allGroupUsers[0]->id);
             $groupUser = $groupUserRepo->joinGroup($groupUser->code, Auth::user()->id);
@@ -193,7 +194,6 @@ class SeasonTest extends TestCase
         $this->assertEquals(count($response_data->data), ($this->seasonCount - 1));
     }
 
-    //Route: Route::get('/season/{id}/is_generated', [SeasonController::class, 'seasonIsGenerated']);
     public function test_season_controller_season_is_generated()
     {
         $this->be($this->authenticatedUser());
@@ -266,12 +266,17 @@ public function test_absence_controller_index()
 
     public function test_season_generator_controller_public()
     {
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-          );
+        //public season return a code 200
+        $this->createGeneratedSeason(1);
+        $response = $this->get('/api/season/'.$this->newSeason->id.'/public');
+        $response->assertStatus(200);
+        $this->assertEquals(200, $response->status());
+
+        //non public season return a code 203
+        $response = $this->get('/api/season/'.$this->allSeasons[0]->id.'/public');
+        $response->assertStatus(203);
+        $this->assertEquals(203, $response->status());
     }
-
-
 
     public function test_season_generator_controller_generate_season()
     {

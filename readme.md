@@ -99,7 +99,7 @@ This version isn't completly finished. Next things are still in development:
     - Rework the front-end
     - update phpunit testing
 
-# Version 4.00: 
+# Version 4.00: 19/03/2022
     - update vue2 to vue3
     - update laravel 8 to laravel 9
     - replace passport with sanctum
@@ -108,6 +108,10 @@ This version isn't completly finished. Next things are still in development:
     - remove some data from the function createJsonSeason.
     - return answer if join group code is wrong instead of 500 error
     - update phpunit testing
+
+# Version 4.01: 24/03/2022
+    - updata php unit
+    - update packages
 
 # Future
 Version 4.XX: 

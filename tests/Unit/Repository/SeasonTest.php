@@ -8,8 +8,9 @@ use Tests\TestCase;
 use App\Models\Season;
 use App\Models\Group;
 use App\Models\User;
-
+use App\Repositories\GroupUserRepo;
 use App\Repositories\SeasonRepo;
+use App\Services\SeasonGeneratorService\GeneratorFactory;
 use Database\Seeders\GeneratorSeeder;
 
 class SeasonTest extends TestCase
@@ -90,30 +91,65 @@ class SeasonTest extends TestCase
 
     public function test_get_active_seasons_of_user()
     {
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-          );
+        //attach user to a group user
+        $data['user_id'] = $this->getAllUsers[0]->id;
+        $groupUserRepo = new GroupUserRepo();
+        $groupUserRepo->update($data, $this->getAllGroups[0]->groupUsers[0]->id);
+
+        //create an old season and generate it
+        $this->defaultSeason['begin'] = Carbon::now()->subDays(600)->format('Y-m-d');
+        $this->defaultSeason['end'] = Carbon::now()->subDays(500)->format('Y-m-d');
+        $season = $this->repo->create($this->defaultSeason, $this->getAllUsers[0]->id);
+        $seasonGenerator = GeneratorFactory::generate($season->type);
+        $generatedSeason = $seasonGenerator->generateSeason($season);
+        $seasonGenerator->saveSeason(json_encode($generatedSeason));
+
+        //generate all teh other seasons
+        foreach($this->testData AS $test){
+            $seasonGenerator = GeneratorFactory::generate($test->type);
+            $generatedSeason = $seasonGenerator->generateSeason($test);
+            $seasonGenerator->saveSeason(json_encode($generatedSeason));
+        }
+
+        $found = $this->repo->getActiveSeasons($this->testData[0]->admin_id);
+        $this->assertEquals($this->recordCount, count($found));
     }
 
     public function test_check_if_season_is_started()
     {
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-          );
+        //season is started
+        $this->defaultSeason['name'] = "check if season is started";
+        $this->defaultSeason['begin'] = Carbon::now()->subDays(5)->format('Y-m-d');
+        $season = $this->repo->create($this->defaultSeason, $this->getAllUsers[0]->id);
+        $found = $this->repo->checkIfSeasonIsStarted($season->id);
+        $this->assertEquals(count($found), 0);
+
+        //season is not started
+        $this->defaultSeason['name'] = "check if season is started not started";
+        $this->defaultSeason['begin'] = Carbon::now()->addDays(5)->format('Y-m-d');
+        $season = $this->repo->create($this->defaultSeason, $this->getAllUsers[0]->id);
+        $found = $this->repo->checkIfSeasonIsStarted($season->id);
+
+        $this->dataTests($this->defaultSeason, $found[0]);
     }
 
     public function test_get_seasons_from_group()
     {
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-          );
+        $tested_group = $this->testData[0]->group_id;
+        $found = $this->repo->getGroupOfSeason($tested_group);
+        $this->assertEquals($this->recordCount, count($found));
+
+        //create a season with another group
+        $this->defaultSeason['group_id'] = $this->getAllGroups[1]->id;
+        $found = $this->repo->getGroupOfSeason($tested_group);
+        $this->assertEquals($this->recordCount, count($found));
     }
 
     public function test_get_seasons_of_a_user()
     {
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-          );
+        $tested_user = $this->testData[0]->admin_id;
+        $found = $this->repo->getSeasonsOfUser($tested_user);
+        $this->assertEquals($this->recordCount, count($found));
     }
 
     public function test_create_season()
@@ -121,7 +157,6 @@ class SeasonTest extends TestCase
         $season = $this->repo->create($this->defaultSeason, $this->getAllUsers[0]->id);
         $this->dataTests($this->defaultSeason, $season);
     }
-
 
     public function test_update_season_with_season_draw_zero()
     {
