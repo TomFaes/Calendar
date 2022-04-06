@@ -4,45 +4,22 @@ namespace App\Http\Controllers\Group;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GroupRequest;
 use App\Http\Resources\GroupResource;
-use Illuminate\Http\Request;
 
 use App\Repositories\Contracts\IGroup;
-use App\Repositories\Contracts\IUser;
 use App\Repositories\Contracts\IGroupUser;
 
 class GroupController extends Controller
 {    
-    /** @var App\Repositories\Contracts\IGroup */
-    protected $group;
-    
-    /** @var App\Repositories\Contracts\IUser */
-    protected $user;
-
-    /** repo App\Repositories\Contracts\IGroupUser */
+    protected $groupRepo;
     protected $groupUser;
     
-    public function __construct(IGroup $group, IUser $user, IGroupUser $groupUser)
+    public function __construct(IGroup $group, IGroupUser $groupUser)
     {
-        //$this->middleware('auth:api');
         $this->middleware('group')->except('store');
-
-        $this->group = $group;
-        $this->user = $user;
-        
-        $this->groupUser = $groupUser;
+        $this->groupRepo = $group;
+        $this->groupUserRepo = $groupUser;
     }
     
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    /*
-    public function index()
-    {
-        return response()->json($this->group->getGroups(20), 200);
-    }
-    */
     /**
      * Store a newly created resource in storage.
      *
@@ -51,19 +28,18 @@ class GroupController extends Controller
      */
     public function store(GroupRequest $request)
     {
-        //when creating the admin of the group is always the logged in user
-        $userId = auth()->user()->id;
-        $group = $this->group->create($request->all(), $userId);
+        $adminId = auth()->user()->id;
+        $group = $this->groupRepo->create($request->all(), $adminId);
 
-        //add when the group users are created
+        //add the admin to the group users
         $data['firstname'] = auth()->user()->firstname;
         $data['name'] = auth()->user()->name;
         $data['email'] = auth()->user()->email;
         $data['group_id'] = $group->id;
         $data['user_id'] = auth()->user()->id;
-        $groupUser = $this->groupUser->create($data);
+        $groupUser = $this->groupUserRepo->create($data);
 
-        $this->groupUser->joinGroup($groupUser->code, $userId);
+        $this->groupUserRepo->joinGroup($groupUser->code, $adminId);
         
         return response()->json(new GroupResource($group), 200);
     }
@@ -76,7 +52,7 @@ class GroupController extends Controller
      */
     public function show($id)
     {
-        $group = $this->group->getGroup($id);
+        $group = $this->groupRepo->getGroup($id);
         return response()->json(new GroupResource($group), 200);
     }
     
@@ -89,7 +65,7 @@ class GroupController extends Controller
      */
     public function update(GroupRequest $request, $id)
     {
-        $group = $this->group->update($request->all(), $id);
+        $group = $this->groupRepo->update($request->all(), $id);
         return response()->json(new GroupResource($group), 201);
     }
     
@@ -101,7 +77,7 @@ class GroupController extends Controller
      */
     public function destroy($id)
     {
-        $this->group->delete($id);
+        $this->groupRepo->delete($id);
         return response()->json("Group is deleted", 202);
     }
 }

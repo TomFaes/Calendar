@@ -113,6 +113,12 @@ This version isn't completly finished. Next things are still in development:
     - updata php unit
     - update packages
 
+# Version 4.02: 05/04/2022
+    - update packages
+    - finetuning generator service
+    - rework security middleware
+    - fix bugs
+
 # Future
 Version 4.XX: 
     - create calendars for small teams. 

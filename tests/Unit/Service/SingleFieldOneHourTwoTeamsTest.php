@@ -14,6 +14,7 @@ use App\Repositories\TeamRepo;
 use App\Services\SeasonGeneratorService\GeneratorFactory;
 use Carbon\Carbon;
 use Database\Seeders\GeneratorSeeder;
+use DateTime;
 
 class SingleFieldOneHourTwoTeamsTest extends TestCase
 {
@@ -101,8 +102,8 @@ class SingleFieldOneHourTwoTeamsTest extends TestCase
 
     public function test_get_play_dates()
     {
-        $startDate = new \DateTime($this->newSeason->begin);
-        $endDate = new \DateTime($this->newSeason->end);
+        $startDate = new DateTime($this->newSeason->begin);
+        $endDate = new DateTime($this->newSeason->end);
         $daysInSeason = array();
 
         while ($startDate <= $endDate) {

@@ -5,25 +5,21 @@
         </div>
         <div v-else>
             <h3>Generated season</h3>
-            <div v-if="calendarData['seasonData']['type']  == 'TwoFieldTwoHourThreeTeams'">
+            <div v-if="calendarData['seasonData']['type'] ">
                 <button  class="btn btn-secondary" @click.prevent="generateSeason()">Regenerate season</button>
                 <button  class="btn btn-secondary" @click.prevent="saveSeason()">Save season</button>
+            </div>
+            <div v-if="calendarData['seasonData']['type']  == 'TwoFieldTwoHourThreeTeams'">
                 <two-field-two-hour-three-teams-page :calendarData="calendarData" :userData="calendarData['groupUserData']" :loggedInUser="user"  :generate="true"></two-field-two-hour-three-teams-page>              
             </div>
             <div v-else-if="calendarData['seasonData']['type']  == 'SingleFieldOneHourTwoTeams'">
-                <button  class="btn btn-secondary" @click.prevent="generateSeason()">Regenerate season</button>
-                <button  class="btn btn-secondary" @click.prevent="saveSeason()">Save season</button>
                 <single-field-one-hour-two-teams-page :calendarData="calendarData" :userData="calendarData['groupUserData']" :loggedInUser="user"  :generate="true"></single-field-one-hour-two-teams-page>  
             </div>
             <div v-else-if="calendarData['seasonData']['type']  == 'TwoFieldTwoHourFourTeams'">
-                <button  class="btn btn-secondary" @click.prevent="generateSeason()">Regenerate season</button>
-                <button  class="btn btn-secondary" @click.prevent="saveSeason()">Save season</button>
                 <two-field-two-hour-four-teams-page :calendarData="calendarData" :userData="calendarData['groupUserData']" :loggedInUser="user"  :generate="true"></two-field-two-hour-four-teams-page>              
             </div>
             <div v-else-if="calendarData['seasonData']['type']  == 'TestGenerator'" class="testGenerator">
                 {{  calendarData['seasonData']['seasonDraw'] }}
-                <button  class="btn btn-secondary" @click.prevent="generateSeason()">Regenerate season</button>
-                <button  class="btn btn-secondary" @click.prevent="saveSeason()">Save season test</button>
                 <test-generator-page :calendarData="calendarData" :userData="calendarData['groupUserData']" :loggedInUser="user"  :generate="true"></test-generator-page>              
             </div>
             <div v-else>
@@ -126,6 +122,10 @@
 </script>
 
 <style scoped>
+    button {
+        margin: 3px;
+    }
+
     div{
         text-align: center;
     }

@@ -9,29 +9,17 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Repositories\Contracts\ISeason;
 
-use App\Services\SeasonGeneratorService\GeneratorFactory;
-
 class ActiveSeasonController extends Controller
 {
-    /** @var App\Repositories\Contracts\ISeason */
-   protected $season;
+   protected $seasonRepo;
 
-    /** @var App\Repositories\Contracts\IAbsence */
-    protected $absence;
-    
     public function __construct(ISeason $seasonRepo)
     {
-        //$this->middleware('auth:api');
-        $this->season = $seasonRepo;
+        $this->seasonRepo = $seasonRepo;
     }
     
-    /**
-     * Get all active calendars
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        return response()->json(new SeasonCollection($this->season->getActiveSeasons(Auth::user()->id)), 200);
+        return response()->json(new SeasonCollection($this->seasonRepo->getActiveSeasons(Auth::user()->id)), 200);
     }
 }

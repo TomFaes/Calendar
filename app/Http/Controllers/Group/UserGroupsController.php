@@ -13,24 +13,16 @@ use Auth;
 
 class UserGroupsController extends Controller
 {
-    /** App\Repositories\Contracts\IGroup */
-    protected $group;
+    protected $groupRepo;
 
     public function __construct(IGroup $group) 
     {
-        //$this->middleware('auth:api');
-
-        $this->group = $group;
+        $this->groupRepo = $group;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $userId = auth()->user()->id;
-        return response()->json(new GroupCollection($this->group->getUserGroups($userId)), 200);
+        return response()->json(new GroupCollection($this->groupRepo->getUserGroups($userId)), 200);
     }
 }

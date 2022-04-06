@@ -94,25 +94,4 @@ class AuthenticationController extends BaseController
         Auth::guard('web')->logout();
         return $this->sendResponse('You are logged out', 'You have successfully logged out and the token was successfully deleted');
     }
-
-/*
-    public function login()
-    { 
-        if (Auth::attempt(['email' => request('email'), 'password' => request('password')]))
-        { 
-            $user = $this->userRepo->checkEmail(request('email'));
-            Auth::login($user, true);            
-            return redirect('/');
-        } else { 
-            return response()->json(['error'=>'Unauthorised'], 401); 
-        } 
-    }
-*/
-/*
-    public function logout()
-    {
-        Auth::logout();
-        return redirect('/');
-    }
-*/
 }

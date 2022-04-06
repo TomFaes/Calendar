@@ -14,41 +14,28 @@ use Auth;
 
 class ProfileController extends BaseController
 {
-    /** @var App\Repositories\Contracts\IUser */
-    protected $user;
+    protected $userRepo;
     
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function __construct(Iuser $user) 
     {
-        //$this->middleware('auth:api');
-        $this->user = $user;
+        $this->userRepo = $user;
     }
 
     public function index()
     {
-        return response()->json(new UserResource($this->user->getUser(auth()->user()->id)), 200);
+        return response()->json(new UserResource($this->userRepo->getUser(auth()->user()->id)), 200);
     }
     
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function update(ProfileRequest $request)
     {
         $userId = auth()->user()->id;
-        $user = $this->user->update($request->all(), $userId);
+        $user = $this->userRepo->update($request->all(), $userId);
         return response()->json(new UserResource($user), 201);
     }
 
     public function updatePassword(PasswordRequest $request){
         $userId = auth()->user()->id;
-        $user = $this->user->updatePassword($request->all(), $userId);
+        $user = $this->userRepo->updatePassword($request->all(), $userId);
         $user = new UserResource($user);
         return $this->sendResponse($user, 'Password is changed');
     }
@@ -56,7 +43,7 @@ class ProfileController extends BaseController
     public function destroy()
     {
         $userId = Auth::user()->id;
-        $this->user->forgetUser($userId);
+        $this->userRepo->forgetUser($userId);
         return response()->json("Profile is deleted", 204);
     }
 }

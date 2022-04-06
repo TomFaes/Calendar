@@ -52,11 +52,11 @@ class GroupRepo extends Repository implements Contracts\IGroup
         return $group;
     }
     
-    public function create(Array $data, $userId = "")
+    public function create(Array $data, $adminId = "")
     {
         $group = new Group();
         $group = $this->setGroup($group, $data);
-        $group->admin_id = $userId;
+        $group->admin_id = $adminId;
         $group->save();
         return $group;
     }

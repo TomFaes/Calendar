@@ -43,12 +43,10 @@
 </template>
 
 <script>
-    import apiCall from '../../services/ApiCall.js';
     export default {
         data (){
             return {
                 envirement: "",
-                
             }
         },
 
@@ -57,11 +55,14 @@
          },
 
         methods: {
-            logout(){                
-                if(this.envirement == "development"){
-                    return window.location.href = "http://localhost/tenniscalendar/public_html/logout";
-                }
-                return window.location.href = "https://tenniskalender.000webhostapp.com/logout";
+            logout(){
+                var baseUrl = process.env.MIX_APP_URL;
+                axios.get( baseUrl + 'api/logout').
+                then(function(result){
+                    return window.location.href = baseUrl;
+                }).catch(error => {
+                    console.log('navBar: handle server error from here');
+                }); 
             }
         },
 

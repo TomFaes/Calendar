@@ -4,7 +4,7 @@
         <div class="button-row">
             <button class="btn btn-primary" @click="navigation('group')"><i class="fa fa-home fa-1x" ></i></button>
             <button class="btn btn-primary" @click="navigation('editGroup')" v-if="group.type_member == 'Admin'"><i class="fas fa-pencil-alt fa-1x" ></i></button>
-            <button class="btn btn-secondary" @click="navigation('groupUsers')" v-if="group.type_member == 'Admin'"><i class="fas fa-users fa-1x" ></i></button>
+            <button class="btn btn-secondary" @click="navigation('groupUsers')"><i class="fas fa-users fa-1x" ></i></button>
             <button v-if="group.type_member == 'Admin'" class="btn btn-danger" @click.prevent="deleteGroup()"><i class="fas fa-trash fa-1x" ></i></button>
         </div>
         <router-view v-if="group != '' " name="groupDetails" :group=group></router-view>

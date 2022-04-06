@@ -100,9 +100,12 @@ export default new createStore({
       .catch((error) => console.error(error));
     },
 
-    getSelectedGroup({commit}, {id}) {
+    getSelectedGroup({commit, dispatch}, {id}) {
       axios.get( localPath +  '/api/group/' + id)
         .then((response) => {
+          if(response.status == 203){
+            dispatch('getMessage', {message: response.data, color: 'red'});
+          } 
           commit('setSelectedGroup', response.data);
         })
         .catch((error) => console.error(error));
@@ -124,9 +127,12 @@ export default new createStore({
       .catch((error) => console.error(error));
     },
 
-    getSelectedSeason({commit}, {id}){
+    getSelectedSeason({commit, dispatch}, {id}){
       axios.get( localPath +  '/api/season/' + id)
         .then((response) => {
+          if(response.status == 203){
+            dispatch('getMessage', {message: response.data, color: 'red'});
+          } 
           commit('setSelectedSeason', response.data);
         })
         .catch((error) => console.error(error));

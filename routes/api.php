@@ -16,6 +16,7 @@ use App\Http\Controllers\Season\AbsenceController;
 use App\Http\Controllers\Season\TeamController;
 
 Route::post('login', [AuthenticationController::class, 'login']);
+Route::get('/logout', [AuthenticationController::class, 'logout']);
 //Route::post('register', [AuthController::class, 'register']);
 
 Route::get('/season/{id}/public', [SeasonGeneratorController::class, 'public']);

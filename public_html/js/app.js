@@ -24216,8 +24216,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _services_ApiCall_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../services/ApiCall.js */ "./resources/js/services/ApiCall.js");
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -24229,11 +24227,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     logout: function logout() {
-      if (this.envirement == "development") {
-        return window.location.href = "http://localhost/tenniscalendar/public_html/logout";
-      }
-
-      return window.location.href = "https://tenniskalender.000webhostapp.com/logout";
+      var baseUrl = "/tenniscalendar/public_html/";
+      axios.get(baseUrl + 'api/logout').then(function (result) {
+        return window.location.href = baseUrl;
+      })["catch"](function (error) {
+        console.log('navBar: handle server error from here');
+      });
     }
   },
   mounted: function mounted() {
@@ -25363,11 +25362,14 @@ var _hoisted_7 = {
   key: 2
 };
 var _hoisted_8 = {
-  key: 3,
-  "class": "testGenerator"
+  key: 3
 };
 var _hoisted_9 = {
-  key: 4
+  key: 4,
+  "class": "testGenerator"
+};
+var _hoisted_10 = {
+  key: 5
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_two_field_two_hour_three_teams_page = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("two-field-two-hour-three-teams-page");
@@ -25378,7 +25380,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   var _component_test_generator_page = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("test-generator-page");
 
-  return $data.calendarData['seasonData'] != undefined ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [$data.calendarData['seasonData']['is_generated'] == 1 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, " Dit seizoen is al gemaakt. ")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_3, [_hoisted_4, $data.calendarData['seasonData']['type'] == 'TwoFieldTwoHourThreeTeams' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  return $data.calendarData['seasonData'] != undefined ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [$data.calendarData['seasonData']['is_generated'] == 1 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_2, " Dit seizoen is al gemaakt. ")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_3, [_hoisted_4, $data.calendarData['seasonData']['type'] ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "btn btn-secondary",
     onClick: _cache[0] || (_cache[0] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
       return $options.generateSeason();
@@ -25388,67 +25390,37 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[1] || (_cache[1] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
       return $options.saveSeason();
     }, ["prevent"]))
-  }, "Save season"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_two_field_two_hour_three_teams_page, {
+  }, "Save season")])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.calendarData['seasonData']['type'] == 'TwoFieldTwoHourThreeTeams' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_two_field_two_hour_three_teams_page, {
     calendarData: $data.calendarData,
     userData: $data.calendarData['groupUserData'],
     loggedInUser: $options.user,
     generate: true
   }, null, 8
   /* PROPS */
-  , ["calendarData", "userData", "loggedInUser"])])) : $data.calendarData['seasonData']['type'] == 'SingleFieldOneHourTwoTeams' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-    "class": "btn btn-secondary",
-    onClick: _cache[2] || (_cache[2] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
-      return $options.generateSeason();
-    }, ["prevent"]))
-  }, "Regenerate season"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-    "class": "btn btn-secondary",
-    onClick: _cache[3] || (_cache[3] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
-      return $options.saveSeason();
-    }, ["prevent"]))
-  }, "Save season"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_single_field_one_hour_two_teams_page, {
+  , ["calendarData", "userData", "loggedInUser"])])) : $data.calendarData['seasonData']['type'] == 'SingleFieldOneHourTwoTeams' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_single_field_one_hour_two_teams_page, {
     calendarData: $data.calendarData,
     userData: $data.calendarData['groupUserData'],
     loggedInUser: $options.user,
     generate: true
   }, null, 8
   /* PROPS */
-  , ["calendarData", "userData", "loggedInUser"])])) : $data.calendarData['seasonData']['type'] == 'TwoFieldTwoHourFourTeams' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-    "class": "btn btn-secondary",
-    onClick: _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
-      return $options.generateSeason();
-    }, ["prevent"]))
-  }, "Regenerate season"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-    "class": "btn btn-secondary",
-    onClick: _cache[5] || (_cache[5] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
-      return $options.saveSeason();
-    }, ["prevent"]))
-  }, "Save season"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_two_field_two_hour_four_teams_page, {
+  , ["calendarData", "userData", "loggedInUser"])])) : $data.calendarData['seasonData']['type'] == 'TwoFieldTwoHourFourTeams' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_two_field_two_hour_four_teams_page, {
     calendarData: $data.calendarData,
     userData: $data.calendarData['groupUserData'],
     loggedInUser: $options.user,
     generate: true
   }, null, 8
   /* PROPS */
-  , ["calendarData", "userData", "loggedInUser"])])) : $data.calendarData['seasonData']['type'] == 'TestGenerator' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.calendarData['seasonData']['seasonDraw']) + " ", 1
+  , ["calendarData", "userData", "loggedInUser"])])) : $data.calendarData['seasonData']['type'] == 'TestGenerator' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.calendarData['seasonData']['seasonDraw']) + " ", 1
   /* TEXT */
-  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-    "class": "btn btn-secondary",
-    onClick: _cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
-      return $options.generateSeason();
-    }, ["prevent"]))
-  }, "Regenerate season"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-    "class": "btn btn-secondary",
-    onClick: _cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
-      return $options.saveSeason();
-    }, ["prevent"]))
-  }, "Save season test"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_test_generator_page, {
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_test_generator_page, {
     calendarData: $data.calendarData,
     userData: $data.calendarData['groupUserData'],
     loggedInUser: $options.user,
     generate: true
   }, null, 8
   /* PROPS */
-  , ["calendarData", "userData", "loggedInUser"])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_9, " onbekende calendar view "))]))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true);
+  , ["calendarData", "userData", "loggedInUser"])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_10, " onbekende calendar view "))]))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true);
 }
 
 /***/ }),
@@ -27312,14 +27284,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[1] || (_cache[1] = function ($event) {
       return $options.navigation('editGroup');
     })
-  }, _hoisted_5)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $options.group.type_member == 'Admin' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
-    key: 1,
+  }, _hoisted_5)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "btn btn-secondary",
     onClick: _cache[2] || (_cache[2] = function ($event) {
       return $options.navigation('groupUsers');
     })
-  }, _hoisted_7)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $options.group.type_member == 'Admin' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
-    key: 2,
+  }, _hoisted_7), $options.group.type_member == 'Admin' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
+    key: 1,
     "class": "btn btn-danger",
     onClick: _cache[3] || (_cache[3] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
       return $options.deleteGroup();
@@ -31153,9 +31124,17 @@ if (true) {
       });
     },
     getSelectedGroup: function getSelectedGroup(_ref3, _ref4) {
-      var commit = _ref3.commit;
+      var commit = _ref3.commit,
+          dispatch = _ref3.dispatch;
       var id = _ref4.id;
       axios.get(localPath + '/api/group/' + id).then(function (response) {
+        if (response.status == 203) {
+          dispatch('getMessage', {
+            message: response.data,
+            color: 'red'
+          });
+        }
+
         commit('setSelectedGroup', response.data);
       })["catch"](function (error) {
         return console.error(error);
@@ -31179,9 +31158,17 @@ if (true) {
       });
     },
     getSelectedSeason: function getSelectedSeason(_ref8, _ref9) {
-      var commit = _ref8.commit;
+      var commit = _ref8.commit,
+          dispatch = _ref8.dispatch;
       var id = _ref9.id;
       axios.get(localPath + '/api/season/' + id).then(function (response) {
+        if (response.status == 203) {
+          dispatch('getMessage', {
+            message: response.data,
+            color: 'red'
+          });
+        }
+
         commit('setSelectedSeason', response.data);
       })["catch"](function (error) {
         return console.error(error);
@@ -36372,7 +36359,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\ndiv[data-v-fd7815c4]{\r\n        text-align: center;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\nbutton[data-v-fd7815c4] {\r\n        margin: 3px;\n}\ndiv[data-v-fd7815c4]{\r\n        text-align: center;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

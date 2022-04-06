@@ -59,15 +59,15 @@ class TwoFieldTwoHourThreeTeams extends AbstractDoubleGenerator implements IGene
             //choose a random team from the drawArray
             if (count($drawTeamArray) > 0) {
                 $random = $this->createRandomTeam($drawTeamArray, $gamesArray['person'], $teamnumber);
-                $player1 = isset($drawTeamArray[$random]['player1']) === true ? $drawTeamArray[$random]['player1'] : "";
-                $player2 = isset($drawTeamArray[$random]['player2']) === true ? $drawTeamArray[$random]['player2'] : "";
+                $player1 = $drawTeamArray[$random]['player1'] ?? "";
+                $player2 = $drawTeamArray[$random]['player2'] ?? "";
             }
 
             //choose a random team from the backup
             if (($player1 == "" OR $player2 == "") AND count($backupTeamArray) > 0) {
                 $random = $this->createRandomTeam($backupTeamArray, $gamesArray['person'], $teamnumber);
-                $player1 = isset($drawTeamArray[$random]['player1']) === true ? $drawTeamArray[$random]['player1'] : "";
-                $player2 = isset($drawTeamArray[$random]['player2']) === true ? $drawTeamArray[$random]['player2'] : "";
+                $player1 = $drawTeamArray[$random]['player1'] ?? "";
+                $player2 = $drawTeamArray[$random]['player2'] ?? "";
             }
 
             //if there are no 2 players then go to next team shuffle
