@@ -119,6 +119,11 @@ This version isn't completly finished. Next things are still in development:
     - rework security middleware
     - fix bugs
 
+# Version 4.03: 02/09/2022
+    - update packages
+    - create mailable for giving up absences
+    - create schedule and mailable for mailing next play day. 
+
 # Future
 Version 4.XX: 
     - create calendars for small teams. 

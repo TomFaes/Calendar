@@ -53,6 +53,7 @@ Route::middleware('auth:sanctum')->group( function () {
 
     Route::get('season/{season_id}/absence', [AbsenceController::class, 'index']);
     Route::post('season/{season_id}/absence', [AbsenceController::class, 'store']);
+    Route::get('season/{season_id}/absence/sent_mail_register_absence', [AbsenceController::class, 'sentMailRegisterAbsence']);
 
     Route::get('/season/{id}/generator', [SeasonGeneratorController::class, 'index']);
     Route::get('/season/{id}/generator/new', [SeasonGeneratorController::class, 'generateSeason']);

@@ -3,7 +3,7 @@ import axios from 'axios';
 //create a variable local path, in production there will be antohter path
 var localPath = "";
 if(process.env.NODE_ENV == 'development'){
-    localPath= "/tenniscalendar/public_html"
+    localPath = process.env.MIX_APP_URL;
 }
 
 export default {

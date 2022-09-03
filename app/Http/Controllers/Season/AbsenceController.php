@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Season;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AbsenceRequest;
 use App\Http\Resources\AbsenceResource;
-
+use App\Mail\RegisterAbsence;
+use App\Models\Season;
 use App\Repositories\Contracts\IAbsence;
 use App\Repositories\Contracts\ISeason;
+use Illuminate\Support\Facades\Mail;
 
 class AbsenceController extends Controller
 {
@@ -42,5 +44,31 @@ class AbsenceController extends Controller
     {
         $this->absenceRepo->delete($id);
         return response()->json("absence is removed", 204);
+    }
+
+    /**
+     * sent a mail to all the users in the group to give up their absences for the selected season
+     */
+    public function sentMailRegisterAbsence($seasonId)
+    {
+        $season = Season::find($seasonId);
+        $mailBCC = array();
+
+        foreach($season->group->groupUsers AS $groupUser){
+            if(isset($groupUser->user) === false){
+                continue;
+            }
+            if($groupUser->user->email == ""){
+                continue;
+            }
+
+            $mailBCC[] = $groupUser->user->email;
+        }
+    
+        Mail::to($season->admin->email)
+            ->bcc($mailBCC)
+            ->send(new RegisterAbsence($season));
+
+        return response()->json("Mails sent to users of the season: ".$season->name, 200);
     }
 }

@@ -57,7 +57,7 @@
         methods: {
             logout(){
                 var baseUrl = process.env.MIX_APP_URL;
-                axios.get( baseUrl + 'api/logout').
+                axios.get( baseUrl + '/api/logout').
                 then(function(result){
                     return window.location.href = baseUrl;
                 }).catch(error => {

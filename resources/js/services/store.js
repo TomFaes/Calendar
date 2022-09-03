@@ -1,13 +1,8 @@
-//import Vue from 'vue';
-//import Vuex from 'vuex';
-
 import { createStore } from 'vuex'
-
-//Vue.use(Vuex);
 
 var localPath = "";
 if(process.env.NODE_ENV == 'development'){
-    localPath= "/tenniscalendar/public_html"
+    localPath = process.env.MIX_APP_URL;
 }
 
 export default new createStore({
@@ -71,16 +66,6 @@ export default new createStore({
     setMessage(state, message){
       state.message = message;
     },
-
-
-    
-
-
-
-
-
-
-
   },
 
   actions: {
@@ -169,12 +154,6 @@ export default new createStore({
       commit('setSelectedSeason', {});
       commit('setSelectedCalendar', {});
     },
-
-    
-
-
-  
-
   },
   getters: {
 

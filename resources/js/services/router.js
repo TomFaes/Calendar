@@ -1,10 +1,6 @@
-//import Vue from 'vue';
-//import VueRouter from 'vue-router';
 import { createWebHistory, createRouter } from "vue-router";
 import store from '../services/store';
 import axios from 'axios';
-
-//Vue.use(VueRouter);
 
 //All components that will be used in the router
 import Home from '../pages/IndexPage/main.vue';
@@ -35,23 +31,10 @@ import PublicSeason from '../pages/SeasonPage/PublicSeason.vue';
 //create a variable local path, in production there will be antohter path
 var localPath = "";
 if(process.env.NODE_ENV == 'development'){
-    localPath= "/tenniscalendar/public_html"
+    localPath = process.env.MIX_APP_URL;
 }
 
-/*
-const routes = new VueRouter({
-    //export default new VueRouter({
-    mode: 'history', 
-    base: process.env.BASE_URL,
-    linkActiveClass: 'active',
-    transitionOnLoad: true,
-    history: true,
-*/
-
-
-//const routes = new VueRouter({
 const router = createRouter({
-    //export default new VueRouter({
     mode: 'history', 
     base: process.env.BASE_URL,
     linkActiveClass: 'active',
@@ -251,18 +234,15 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {    
     //check if authentication is needen for the route
-    
     if(to.meta.requiresAuth == true){
         //get the user: from the database or from the store
         let getUser = new Promise((resolve, reject) => {
             if(store.state.loggedInUser == ""){
-                
                 var user = axios({
                     method: 'get',
                     url : localPath + '/api/profile'
                 })
                 .then(function (response) {
-                    //console.log(response);
                     store.commit("setAuthentication", true);
                     store.commit("setRole", response.data.role);
                     store.commit("setLoggedInUser", response.data);
@@ -274,7 +254,7 @@ router.beforeEach((to, from, next) => {
             }else{
                var user = store.state.loggedInUser;
             }
-            resolve(user)  // Yay! Everything went well!
+            resolve(user)
         }, 250) ;
        
         getUser.then((user) =>{
@@ -293,16 +273,9 @@ router.beforeEach((to, from, next) => {
             } else {
                 next();
             }
-
         });
     }else{
          next();
     }
-   
 });
 export default router;
-
-
-
-
-

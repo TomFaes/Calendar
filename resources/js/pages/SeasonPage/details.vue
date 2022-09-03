@@ -3,9 +3,10 @@
         <h1>{{ season.name }}</h1>
         <hr>
          <div class="button-row">
-             <button class="btn btn-primary" @click="navigation('season')"><i class="fa fa-home fa-1x" ></i></button>
+            <button class="btn btn-primary" @click="navigation('season')"><i class="fa fa-home fa-1x" ></i></button>
             <button class="btn btn-primary" @click="navigation('editSeason')" v-if="season.type_member == 'Admin'"><i class="fas fa-pencil-alt fa-1x" ></i></button>
             <button class="btn btn-primary fa" @click="navigation('absence')" v-if="season.is_generated == 0">Afwezigheden</button>
+            <button class="btn btn-primary fa" @click.prevent="mailRegisterAbsence()" v-if="season.is_generated == 0">Mail to register absences</button>
             <button class="btn btn-primary fa" @click="navigation('calendar')" v-if="season.season_draw > 0"><i class="far fa-calendar-alt"></i></button>
             <button class="btn btn-primary fa" @click="navigation('dayCalendar')" v-if="season.is_generated == 1"><i class="fas fa-calendar-day"></i></button>
             <button class="btn btn-primary fa" @click="navigation('generate')"  v-if="season.is_generated == 0 && user.id == season.admin_id">Generate</button>
@@ -118,6 +119,16 @@
                     });
                 }
             },
+
+            mailRegisterAbsence(){
+                apiCall.getData('season/' +  this.id + '/absence/sent_mail_register_absence')
+                .then(response =>{
+                    this.$store.dispatch('getMessage', {message: response.data});
+                    
+                }).catch(() => {
+                    console.log('MailRegisterAbsence: handle server error from here');
+                });
+            }
         },
 
         mounted(){

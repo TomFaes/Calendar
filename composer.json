@@ -16,6 +16,7 @@
         "spatie/laravel-cookie-consent": "*"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.6",
         "filp/whoops": "*",
         "fzaninotto/faker": "*",
         "mockery/mockery": "*",

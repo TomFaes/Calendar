@@ -32,7 +32,7 @@ class GroupUser extends Model
      */
     public function user()
     {
-        return $this->belongsTo('App\Models\User', 'user_id', 'id')->select(['id', 'firstname', 'name'])->withDefault();
+        return $this->belongsTo('App\Models\User', 'user_id', 'id')->withDefault();
     }
 
     protected $appends = ['fullName'];
