@@ -140,7 +140,7 @@
             },
 
             deleteAbsence(absenceId, index){
-                apiCall.postData('absence/' + absenceId + '/delete')
+                apiCall.postData('season/' + this.season.id + '/absence/' + absenceId + '/delete')
                 .then(response =>{
                     this.playdateList.data[index]['absenceId'] = 0;
                 }).catch(() => {

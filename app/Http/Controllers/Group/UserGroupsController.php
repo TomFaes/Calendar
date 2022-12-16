@@ -3,26 +3,17 @@
 namespace App\Http\Controllers\Group;
 use App\Http\Controllers\Controller;
 
-use App\Group;
 use App\Http\Resources\GroupCollection;
-use Illuminate\Http\Request;
+use App\Services\GroupService;
 
-use App\Repositories\Contracts\IGroup;
-
-use Auth;
 
 class UserGroupsController extends Controller
 {
-    protected $groupRepo;
-
-    public function __construct(IGroup $group) 
-    {
-        $this->groupRepo = $group;
-    }
-
     public function index()
     {
+        $groupService = new GroupService();
         $userId = auth()->user()->id;
-        return response()->json(new GroupCollection($this->groupRepo->getUserGroups($userId)), 200);
+        $groupUsers = $groupService->getUserGroups($userId);
+        return response()->json(new GroupCollection($groupUsers), 200);
     }
 }

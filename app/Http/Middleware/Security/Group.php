@@ -1,5 +1,7 @@
 <?php
 namespace App\Http\Middleware\Security;
+
+use App\Models\Season;
 use Closure;
 
 class Group
@@ -15,11 +17,7 @@ class Group
     {
         $user = auth()->user();
 
-        if ($request->route('id') > 0) 
-        {
-            $groupRepo = app('App\Repositories\Contracts\IGroup');
-            $group = $groupRepo->getGroup($request->route('id'));
-        }
+        $group = $request->route('group') ?? null;
 
         //If the group doesn't exist return an error message
         if(isset($group) === false)
@@ -29,11 +27,10 @@ class Group
         //check if member is user
         $memberOfGroup = $this->checkIfUserIsMember($group, $user->id);
 
-        //if a group is deleted there has to been some checks
+        //if a group is to be deleted there has to been some checks
         if (last(request()->segments()) == "delete" OR $request->method() == "DELETE" ) 
         {
-            $seasonRepo = app('App\Repositories\Contracts\ISeason');
-            $groupSeasons = $seasonRepo->getGroupOfSeason($request->route('id'));
+            $groupSeasons = Season::where('group_id', $group->id)->get();
 
             if(count($groupSeasons) > 0)
             {
@@ -51,7 +48,7 @@ class Group
         //if you are not a member of the group
         if($memberOfGroup === false)
         {
-            $message = "1 You do not have the right to the ".$group->name;
+            $message = "You do not have the right to the ".$group->name;
             return response()->json($message, 203);
         }
 

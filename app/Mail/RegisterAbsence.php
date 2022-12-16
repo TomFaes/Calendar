@@ -37,6 +37,5 @@ class RegisterAbsence extends Mailable
                     ->subject('Geef je afwezigheden op voor het nieuwe seizoen: ' . $this->season->name)
                     ->with('season', $this->season)
                     ->with('url', $url);
-        
     }
 }

@@ -13,7 +13,7 @@ class Season extends Model
     use HasFactory;
     
     protected $fillable = [
-        'name','admin_id', 'group_id', 'begin', 'end', 'public', 'allow_replacement'
+        'name','admin_id', 'group_id', 'begin', 'end', 'public', 'allow_replacement', 'type', 'start_hour', 'day'
     ];
 
     public function admin()

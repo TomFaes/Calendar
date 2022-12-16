@@ -2,15 +2,15 @@
 
 namespace Tests\Unit\Service;
 
+use App\Models\Absence;
 use App\Models\Group;
 use App\Models\GroupUser as ModelsGroupUser;
 use Tests\TestCase;
 
 use App\Models\Season;
 use App\Models\User;
-use App\Repositories\AbsenceRepo;
-use App\Repositories\SeasonRepo;
 use App\Services\SeasonGeneratorService\GeneratorFactory;
+use App\Services\SeasonService;
 use Carbon\Carbon;
 use Database\Seeders\GeneratorSeeder;
 use DateTime;
@@ -39,7 +39,9 @@ class TwoFieldTwoHourFourTeamsTest extends TestCase
     /**
      * Build a default season with 5 absence dates. 
      * */ 
-    protected function createSeason(){
+    protected function createSeason()
+    {
+        $seasonService = new SeasonService();
         //default dataset
         $seasonData = [
             'name' => 'Test Season',
@@ -53,10 +55,9 @@ class TwoFieldTwoHourFourTeamsTest extends TestCase
             'is_generated' => 0,
             'allow_replacement' => 0, 
         ];
-        $seasonRepo = new SeasonRepo();
-        $this->newSeason = $seasonRepo->create($seasonData, $this->getAllUsers[0]->id);
-
-        $absenceRepo = new AbsenceRepo();
+        $seasonData['day'] = $seasonService->getDutchDay($seasonData['begin']);
+        //create new season
+        $this->newSeason = Season::create($seasonData);
 
         for($x = 1; $x <= 20;  $x++){
             $randomDay = rand(1, 30);
@@ -66,7 +67,7 @@ class TwoFieldTwoHourFourTeamsTest extends TestCase
                 'date' => Carbon::now()->addDays(7*$randomDay)->format('Y-m-d'),
                 'group_user_id' => $this->getAllGroupUsers[$randomGroupUser]->id,
             ];
-            $absenceRepo->create($data,  $this->newSeason->id);
+            Absence::create($data);
         }
     }
 
@@ -139,8 +140,7 @@ class TwoFieldTwoHourFourTeamsTest extends TestCase
         $saveSeason = $seasonGenerator->saveSeason(json_encode($generatedSeason));
         $this->assertNull($saveSeason);
 
-        $seasonRepo = new SeasonRepo();
-        $season = $seasonRepo->getSeason($this->newSeason->id);
+        $season = Season::find($this->newSeason->id);
         $seasonCalendar = $seasonGenerator->getSeasonCalendar($season);
 
         $this->defaultGeneratedSeasonTests($seasonCalendar);
@@ -174,8 +174,7 @@ class TwoFieldTwoHourFourTeamsTest extends TestCase
         $generatedSeason = $seasonGenerator->generateSeason($this->newSeason);
         $seasonGenerator->savePrefilledSeason(json_encode($generatedSeason['data']));
         
-        $seasonRepo = new SeasonRepo();
-        $season = $seasonRepo->getSeason($this->newSeason->id);
+        $season = Season::find($this->newSeason->id);
         $seasonCalendar = $seasonGenerator->getSeasonCalendar($season);
 
         $this->defaultGeneratedSeasonTests($seasonCalendar);

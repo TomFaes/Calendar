@@ -173,6 +173,8 @@ class TestGenerator extends AbstractDoubleGenerator implements IGenerator
                 $this->saveTeam($jsonArray->seasonData->id, $day->day, 'team2');
             }
         }
-        $this->season->seasonIsGenerated($jsonArray->seasonData->id);
+        $season = Season::find($jsonArray->seasonData->id);
+        $season->is_generated = 1;
+        $season->save();
     }
 }

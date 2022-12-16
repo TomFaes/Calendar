@@ -16,10 +16,14 @@ class UserSeeder extends Seeder
     {
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         
-        User::factory()
-            ->count(10)
+        User::factory(1)
+            ->create([
+                'role' => 'Admin'
+            ]);
+
+        User::factory(9)
             ->create();
         
-            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

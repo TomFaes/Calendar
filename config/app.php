@@ -212,10 +212,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'DeviceInfo' => App\Services\DeviceInfo::class,
-        'CalendarLink' => App\Services\CalendarLink::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-
     ],
-
 ];

@@ -3,24 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PasswordRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
-
-use App\Repositories\Contracts\IUser;
 
 use Illuminate\Support\Facades\Auth;
 
 class PasswordController extends Controller
-{
-    /** @var App\Repositories\Contracts\IUser */
-    protected $user;
-    
-    public function __construct(Iuser $user) {
+{    
+    public function __construct() {
         //User must be logged in
         $this->middleware('auth');
         //User must have the correct rights to update
         $this->middleware('admin:Admin', ['except' => ['updateProfilePassword']]);
-        
-        $this->user = $user;
     }
    
     /**
@@ -31,7 +25,9 @@ class PasswordController extends Controller
      */
     public function updateProfilePassword(PasswordRequest $request)
     {
-        $this->user->updatePassword($request, Auth::user()->id);
+        $user = User::find(Auth::user()->id);
+        $user->password = bcrypt($request['password']);
+        $user->save();
         return redirect()->to('/')->send();
     }
 
@@ -44,7 +40,9 @@ class PasswordController extends Controller
      */
     public function updatePassword(PasswordRequest $request, $id)
     {
-        $this->user->updatePassword($request, $id);
+        $user = User::find($id);
+        $user->password = bcrypt($request['password']);
+        $user->save();
         return redirect()->to('/user')->send();
     }
 }

@@ -157,7 +157,7 @@ class GroupTest extends TestCase
         $this->be($this->authenticatedUser());
 
         $data = GroupUser::factory()->make([
-            'group_id' => $this->allGroupUsers[0]->group_id_id, 
+            'group_id' => $this->allGroupUsers[0]->group_id, 
             'user_id' => $this->allUsers[0]->id
             ])->toArray();
 
@@ -188,7 +188,6 @@ class GroupTest extends TestCase
         $this->assertEquals(201, $response->status());
         $this->groupUserDataTests($data, $response_data);
         $this->assertNotEquals(null, $response_data->group_id);
-        $this->assertNotEquals(null, $response_data->user_id);
     }
 
     public function test_group_users_controller_destroy()
@@ -200,14 +199,6 @@ class GroupTest extends TestCase
         $this->assertEquals('Group user is deleted', $response->getData());
         $response->assertStatus(204);
         $this->assertEquals(204, $response->status());
-
-        $groupUser = GroupUser::where('id', $this->allGroupUsers[0]->id)->get();
-        
-        $groupUser = json_decode(json_encode($groupUser), true);
-
-        $this->assertEquals($this->allGroupUsers[0]->firstname, $groupUser[0]['firstname']);
-        $this->assertEquals($this->allGroupUsers[0]->name, $groupUser[0]['name']);
-        $this->assertEquals(null, $groupUser[0]['group_id']);
     }
 
     public function test_group_users_controller_join_group()

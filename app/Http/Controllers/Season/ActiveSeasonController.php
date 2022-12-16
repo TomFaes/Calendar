@@ -4,22 +4,17 @@ namespace App\Http\Controllers\Season;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SeasonCollection;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-use App\Repositories\Contracts\ISeason;
+use App\Services\SeasonService;
 
 class ActiveSeasonController extends Controller
-{
-   protected $seasonRepo;
-
-    public function __construct(ISeason $seasonRepo)
+{   
+    public function __invoke()
     {
-        $this->seasonRepo = $seasonRepo;
-    }
-    
-    public function index()
-    {
-        return response()->json(new SeasonCollection($this->seasonRepo->getActiveSeasons(Auth::user()->id)), 200);
+        $seasonService = new SeasonService();
+        $userId = Auth::user()->id;
+        $seasons = $seasonService->getActiveSeasons($userId);
+        return response()->json(new SeasonCollection($seasons), 200);
     }
 }

@@ -208,7 +208,7 @@ export default {
 
          saveTeams(){
             this.formData.append('teamRange', JSON.stringify(this.updateData));
-            apiCall.postData('team/range', this.formData)
+            apiCall.postData('season/'+ this.seasonId + '/team/range', this.formData)
             .then(response =>{
                 this.message = "Teams are updated";
                 this.$store.dispatch('getMessage', {message: this.message});
@@ -220,7 +220,7 @@ export default {
          },
 
          askForReplacement(groupUser, teamId){
-            apiCall.postData('team/' + teamId + '/ask_for_replacement')
+            apiCall.postData('season/'+ this.seasonId + '/team/' + teamId + '/ask_for_replacement')
             .then(response =>{
                 this.message = "Vervangingsaanvraag is aanvaard";
                 this.$store.dispatch('getMessage', {message: this.message});
@@ -231,7 +231,7 @@ export default {
          },
 
          cancelRequestForReplacement(groupUser, teamId){
-            apiCall.postData('team/' + teamId + '/cancel_request_for_replacement')
+            apiCall.postData('season/'+ this.seasonId + '/team/' + teamId + '/cancel_request_for_replacement')
             .then(response =>{
                 this.message = "Vervanging is geannulleerd";
                 this.$store.dispatch('getMessage', {message: this.message});
@@ -242,7 +242,7 @@ export default {
          }, 
 
          confirmReplacement(groupUser, teamId){
-            apiCall.postData('team/' + teamId + '/confirm_replacement')
+            apiCall.postData('season/'+ this.seasonId + '/team/' + teamId + '/confirm_replacement')
             .then(response =>{
                 this.message = "Vervanging aanvaard";
                 this.$store.dispatch('getMessage', {message: this.message});

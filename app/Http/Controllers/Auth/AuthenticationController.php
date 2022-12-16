@@ -2,36 +2,22 @@
 
 namespace App\Http\Controllers\Auth;
 
-/*
-use App\Http\Controllers\Controller;
-
-use Socialite;
-//use Auth;
-use App\Repositories\Contracts\IUser;
-use Illuminate\Support\Facades\Auth;
-*/
-
-//use Illuminate\Http\Request;
-use Illuminate\Foundation\Http\FormRequest;
-
-
 use App\Http\Controllers\BaseController as BaseController;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Validator;
 use Socialite;
 
-use App\Repositories\Contracts\IUser;
+use App\Services\UserService;
 
 class AuthenticationController extends BaseController
 {
-    /** @var App\Repositories\Contracts\IUser */
-    protected $userRepo;
+    protected $userService;
 
-   public function __construct(IUser $userRepo)
+   public function __construct(UserService $userService)
    {
-        $this->userRepo = $userRepo;
+        $this->userService = $userService;
    }
 
    /**
@@ -57,10 +43,11 @@ class AuthenticationController extends BaseController
             //get account info from the user who logged in
             $socialUser = Socialite::with($account)->user();
             //check if the user exist
-            $user = $this->userRepo->checkEmail($socialUser->getEmail());
+            $user = User::where('email', $socialUser->getEmail())->first();
             //if user doesn't exist create one
             if ($user == null) {
-                $user = $this->userRepo->createSocialUser($socialUser);
+                $user = $this->userService->setupSocialUser($socialUser);
+                $user->save();
             }
             //if the user exist or is created login
             Auth::login($user, true);
@@ -71,7 +58,6 @@ class AuthenticationController extends BaseController
             return 'error';
         }
     }
-
 
     public function login(LoginRequest $request)
     {

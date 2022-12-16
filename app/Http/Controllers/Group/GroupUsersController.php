@@ -6,42 +6,48 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\GroupUserRequest;
 use App\Http\Resources\GroupUserCollection;
 use App\Http\Resources\GroupUserResource;
+use App\Models\Group;
+use App\Models\GroupUser;
 use Illuminate\Http\Request;
 
-use App\Repositories\Contracts\IGroupUser;
+use App\Services\GroupUserService;
 
 class GroupUsersController extends Controller
 {
-    protected $groupUserRepo;
+    protected $groupUserService;
 
-    public function __construct(IGroupUser $groupUser) 
+    public function __construct(GroupUserService $groupUserService) 
     {
-        $this->middleware('groupuser')->except('joinGroup');
-
-        $this->groupUserRepo = $groupUser;
+        $this->groupUserService = $groupUserService;
     }
 
-    public function index($group_id)
+    public function index(Group $group)
     {        
-        $groupUsers = $this->groupUserRepo->getUsersOfGroup($group_id);
+        $groupUsers = GroupUser::with(['group', 'user'])
+                        ->where('group_id', $group->id)
+                        ->OrderBy('firstname', 'asc', 'name', 'asc')
+                        ->get();
         return response()->json(new GroupUserCollection($groupUsers), 200);
     }
 
-    public function store(GroupUserRequest $request)
+    public function store(GroupUserRequest $request, Group $group)
     {
-        $groupUser = $this->groupUserRepo->create($request->all());
+        $validated = $request->validated();
+        $validated['group_id'] = $group->id;
+        $validated['code'] = $this->groupUserService->createCode();
+        $groupUser = GroupUser::create($validated);
         return response()->json(new GroupUserResource($groupUser), 200);
     }
 
-    public function update(GroupUserRequest $request, $group_id, $id)
+    public function update(GroupUserRequest $request, Group $group, GroupUser $groupUser)
     {
-        $groupUser = $this->groupUserRepo->update($request->all(), $id);
+        $groupUser->update($request->validated());
         return response()->json(new GroupUserResource($groupUser), 201);
     }
 
-    public function destroy($group_id, $id)
+    public function destroy(Group $group, GroupUser $groupUser)
     {
-        $this->groupUserRepo->delete($id);
+        $groupUser->delete();
         return response()->json("Group user is deleted", 204);
     }
 
@@ -49,16 +55,16 @@ class GroupUsersController extends Controller
     {
         $userId = auth()->user()->id;
 
-        $groupUser = $this->groupUserRepo->joinGroup($request->code, $userId);
+        $groupUser = $this->groupUserService->joinGroup($request->code, $userId);
         if($groupUser == false){
             return response()->json("There is no match for this code", 204);
         }
         return response()->json(new GroupUserResource($groupUser), 201);
     }
 
-    public function regenerateGroupUserCode($group_id, $id)
+    public function regenerateGroupUserCode(Group $group, GroupUser $groupUser)
     {
-        $groupUser = $this->groupUserRepo->regenerateGroupUserCode($id);
+        $groupUser = $this->groupUserService->regenerateGroupUserCode($groupUser);
         return response()->json(new GroupUserResource($groupUser), 201);
     }
 }

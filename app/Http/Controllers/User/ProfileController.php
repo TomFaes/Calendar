@@ -4,46 +4,51 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\PasswordRequest;
-//use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Resources\UserResource;
-use Illuminate\Http\Request;
+use App\Models\User;
 
-use App\Repositories\Contracts\IUser;
+use App\Services\UserService;
 use Auth;
 
 class ProfileController extends BaseController
 {
-    protected $userRepo;
+    protected $userService;
     
-    public function __construct(Iuser $user) 
+    public function __construct(UserService $userService) 
     {
-        $this->userRepo = $user;
+        $this->userService = $userService;
     }
 
     public function index()
     {
-        return response()->json(new UserResource($this->userRepo->getUser(auth()->user()->id)), 200);
+        $userId = auth()->user()->id;
+        return response()->json(new UserResource(User::find($userId)), 200);
     }
     
     public function update(ProfileRequest $request)
     {
         $userId = auth()->user()->id;
-        $user = $this->userRepo->update($request->all(), $userId);
+        $user = User::find($userId);
+        $user->update($request->validated());
+        $user->save();
         return response()->json(new UserResource($user), 201);
     }
 
     public function updatePassword(PasswordRequest $request){
         $userId = auth()->user()->id;
-        $user = $this->userRepo->updatePassword($request->all(), $userId);
-        $user = new UserResource($user);
+        $user = User::find($userId);
+        $user->password = bcrypt($request['password']);
+        $user->save();
         return $this->sendResponse($user, 'Password is changed');
     }
 
     public function destroy()
     {
         $userId = Auth::user()->id;
-        $this->userRepo->forgetUser($userId);
+        $user = User::find($userId);
+        $user = $this->userService->randomizeUser($user);
+        $user->save();
         return response()->json("Profile is deleted", 204);
     }
 }

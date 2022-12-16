@@ -198,7 +198,9 @@ class TwoFieldTwoHourFourTeams extends AbstractDoubleGenerator implements IGener
                 $this->saveTeam($jsonArray->seasonData->id, $day->day, 'team4');
             }
         }
-        $this->season->seasonIsGenerated($jsonArray->seasonData->id);
+        $season = Season::find($jsonArray->seasonData->id);
+        $season->is_generated = 1;
+        $season->save();
     }
 
     

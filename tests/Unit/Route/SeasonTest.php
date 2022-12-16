@@ -2,20 +2,19 @@
 
 namespace Tests\Unit\Route;
 
+use App\Models\Absence;
 use App\Models\Group;
 use App\Models\GroupUser;
 use App\Models\Season;
-
+use App\Models\Team;
 use Carbon\Carbon;
 
 use Tests\TestCase;
 
 use App\Models\User;
-use App\Repositories\AbsenceRepo;
-use App\Repositories\GroupUserRepo;
-use App\Repositories\SeasonRepo;
-use App\Repositories\TeamRepo;
+use App\Services\GroupUserService;
 use App\Services\SeasonGeneratorService\GeneratorFactory;
+use App\Services\SeasonService;
 use Auth;
 use Database\Seeders\GeneratorSeeder;
 use Laravel\Sanctum\Sanctum;
@@ -49,31 +48,30 @@ class SeasonTest extends TestCase
      */
     protected function authenticatedUser($role = "Admin"){
         $user = Sanctum::actingAs(
-            $this->allUsers[0],
-            ['create-servers']
+            $this->allUsers[0]
         );
         $user->role = $role;
         return $user;
     }
 
     protected function createGeneratedSeason($public = 0){
+        $seasonService = new SeasonService();
         //create new season
         $seasonData = Season::factory()->make(['begin' => Carbon::now()->addDays(1)->format('Y-m-d')])->toArray();
         $seasonData['public'] = $public;
-        $seasonRepo = new SeasonRepo();
-        $this->newSeason = $seasonRepo->create($seasonData, $this->allUsers[0]->id);
+        $seasonData['admin_id'] = $this->allUsers[0]->id;
+        $seasonData['day'] = $seasonService->getDutchDay($seasonData['begin']);
+        $this->newSeason = Season::create($seasonData);
 
         //add a registered user to a group
         if($this->allGroupUsers[0]->user_id == null && $public == 0){
-            $groupUserRepo = new GroupUserRepo();
-            $groupUser = $groupUserRepo->regenerateGroupUserCode($this->allGroupUsers[0]->id);
-            $groupUser = $groupUserRepo->joinGroup($groupUser->code, Auth::user()->id);
+            $groupUserService = new GroupUserService();
+            $groupUser = $groupUserService->regenerateGroupUserCode($this->allGroupUsers[0]);
+            $groupUser = $groupUserService->joinGroup($groupUser->code, Auth::user()->id);
         }
         $this->allGroupUsers = GroupUser::all();
         
-
         //set some absences
-        $absenceRepo = new AbsenceRepo();
         for($x = 1; $x <= 20;  $x++){
             $randomDay = rand(1, 30);
             $randomGroupUser = rand(0, 9);
@@ -82,7 +80,7 @@ class SeasonTest extends TestCase
                 'date' => Carbon::now()->addDays(7*$randomDay)->format('Y-m-d'),
                 'group_user_id' => $this->allGroupUsers[$randomGroupUser]->id,
             ];
-            $absenceRepo->create($data,  $this->newSeason->id);
+            Absence::create($data);
         }
 
         $seasonGenerator = GeneratorFactory::generate($this->newSeason->type);
@@ -164,6 +162,20 @@ class SeasonTest extends TestCase
         $this->seasonDataTests($data, $response_data);
     }
 
+    public function test_season_controller_show()
+    {
+        $this->be($this->authenticatedUser());
+        $seasonId = $this->allSeasons[0]->id;
+
+        $response = $this->get('/api/season/'.$seasonId);
+        $response_data = $response->getData();
+       
+        $response->assertStatus(200);
+        $this->assertEquals(200, $response->status());
+
+        $this->SeasonDataTests($this->allSeasons[0], $response_data);
+    }
+
     public function test_season_controller_update()
     {
         $this->be($this->authenticatedUser());
@@ -221,11 +233,12 @@ class SeasonTest extends TestCase
         $this->assertEquals(1, count($response_data->data));
     }
 
-public function test_absence_controller_index()
+    public function test_absence_controller_index()
     {
         $this->be($this->authenticatedUser());
 
         $response = $this->get('/api/season/'.$this->allSeasons[0]->id.'/absence');
+
         $response->assertStatus(200);
         $this->assertEquals(200, $response->status());
     }
@@ -247,6 +260,26 @@ public function test_absence_controller_index()
         $this->assertEquals($data['date'], $response_data->date);
         $this->assertEquals($this->allGroupUsers[0]->id, $response_data->group_user_id);
         $this->assertEquals($this->allSeasons[0]->id, $response_data->season_id);
+    }
+
+    public function test_absence_controller_delete()
+    {
+
+        $this->be($this->authenticatedUser());
+        //create an absence
+        $data = [
+            'date' => Carbon::now()->addDays(8)->format('Y-m-d'),
+            'group_user_id' => $this->allGroupUsers[0]->id,
+        ];
+
+        $response = $this->postJson('/api/season/'.$this->allSeasons[0]->id.'/absence', $data);
+        $response_data = $response->getData();
+
+        $response = $this->postJson('/api/season/'.$this->allSeasons[0]->id.'/absence/'.$response_data->id.'/delete');
+        $response_data = $response->getData();
+
+        $this->assertEquals(204, $response->status());
+        $this->assertEquals('absence is removed', $response_data);
     }
 
     public function test_season_generator_controller_index()
@@ -417,7 +450,7 @@ public function test_absence_controller_index()
             $x++;
         }
         $data['teamRange'] = json_encode($updateRange);
-        $this->post('/api/team/range', $data);
+        $this->post('/api/season/'.$this->newSeason->id.'/team/range', $data);
         
 
         //get the updated season
@@ -441,17 +474,16 @@ public function test_absence_controller_index()
         $this->be($this->authenticatedUser());
         $this->createGeneratedSeason();
 
-        $teamRepo = new TeamRepo();
-        $teams = $teamRepo->getAllSeasonTeams($this->newSeason->id);
+        $teams = Team::where('season_id', $this->newSeason->id)->get();
 
         //make sure the first team has the logged in user
         $updateRange = array();
         $updateRange[$teams[0]->id] = $this->allGroupUsers[0]->id;
         $data['teamRange'] = json_encode($updateRange);
-        $this->post('/api/team/range', $data);
+        $this->post('/api/season/'.$this->newSeason->id.'/team/range', $data);
         
         //ask for the replacement
-        $response = $this->postJson('/api/team/'.$teams[0]->id.'/ask_for_replacement');
+        $response = $this->postJson('/api/season/'.$this->newSeason->id.'/team/'.$teams[0]->id.'/ask_for_replacement');
         $response_data = $response->getData();
 
         $response->assertStatus(200);
@@ -459,7 +491,7 @@ public function test_absence_controller_index()
         $this->assertEquals('Ask for replacement is set to true', $response_data);
 
         //check if the ask for replacement succeeded
-        $teams = $teamRepo->getAllSeasonTeams($this->newSeason->id);
+        $teams = Team::where('season_id', $this->newSeason->id)->get();
         $this->assertEquals($this->allGroupUsers[0]->id, $teams[0]->group_user_id);
         $this->assertEquals(1, $teams[0]->ask_for_replacement);
     }
@@ -469,21 +501,21 @@ public function test_absence_controller_index()
         $this->be($this->authenticatedUser());
         $this->createGeneratedSeason();
 
-        $teamRepo = new TeamRepo();
-        $teams = $teamRepo->getAllSeasonTeams($this->newSeason->id);
+        $teams = Team::where('season_id', $this->newSeason->id)->get();
 
         //make sure the first team has the logged in user
         $updateRange = array();
         $updateRange[$teams[0]->id] = $this->allGroupUsers[0]->id;
         $data['teamRange'] = json_encode($updateRange);
-        $response = $this->post('/api/team/range', $data);
+        $response = $this->post('/api/season/'.$this->newSeason->id.'/team/range', $data);
         
         //ask for the replacement
-        $response = $this->postJson('/api/team/'.$teams[0]->id.'/ask_for_replacement');
+        $response = $this->postJson('/api/season/'.$this->newSeason->id.'/team/'.$teams[0]->id.'/ask_for_replacement');
         $response_data = $response->getData();
 
         //cancel replacement
-        $response = $this->postJson('/api/team/'.$teams[0]->id.'/cancel_request_for_replacement');
+        $response = $this->postJson('/api/season/'.$this->newSeason->id.'/team/'.$teams[0]->id.'/cancel_request_for_replacement');
+
         $response_data = $response->getData();
 
         $response->assertStatus(200);
@@ -496,17 +528,17 @@ public function test_absence_controller_index()
         $this->be($this->authenticatedUser());
         $this->createGeneratedSeason();
 
-        $teamRepo = new TeamRepo();
-        $teams = $teamRepo->getAllSeasonTeams($this->newSeason->id);
+        $teams = Team::where('season_id', $this->newSeason->id)->get();
 
         //make sure the first team has the logged in user
         $updateRange = array();
         $updateRange[$teams[0]->id] = $this->allGroupUsers[0]->id;
         $data['teamRange'] = json_encode($updateRange);
-        $this->post('/api/team/range', $data);
+        $this->post('/api/season/'.$this->newSeason->id.'/team/range', $data);
+
         
         //ask for the replacement
-        $this->postJson('/api/team/'.$teams[0]->id.'/ask_for_replacement');
+        $this->postJson('/api/season/'.$this->newSeason->id.'team/'.$teams[0]->id.'/ask_for_replacement');
 
         //update teams so another user is in the replacement place
         $response = $this->get('/api/season/'.$this->newSeason->id.'/generator');
@@ -520,17 +552,17 @@ public function test_absence_controller_index()
             $x++;
         }
         $data['teamRange'] = json_encode($updateRange);
-        $this->post('/api/team/range', $data);
+        $this->post('/api/season/'.$this->newSeason->id.'/team/range', $data);
 
         //confirm replacement
-        $response = $this->postJson('/api/team/'.$teams[0]->id.'/confirm_replacement');
+        $response = $this->postJson('/api/season/'.$this->newSeason->id.'/team/'.$teams[0]->id.'/confirm_replacement');
         $response_data = $response->getData();
 
         $response->assertStatus(200);
         $this->assertEquals(200, $response->status());
         $this->assertEquals($response_data, "Confirm replacement");
 
-        $teams = $teamRepo->getAllSeasonTeams($this->newSeason->id);
+        $teams = Team::where('season_id', $this->newSeason->id)->get();
         $this->assertEquals($this->allGroupUsers[0]->id, $teams[0]->group_user_id);
         $this->assertEquals(0, $teams[0]->ask_for_replacement);
     }

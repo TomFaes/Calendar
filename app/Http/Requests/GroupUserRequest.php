@@ -26,7 +26,6 @@ class GroupUserRequest extends FormRequest
         return [
             'firstname' => 'required',
             'name' => 'required',
-            'email' => 'nullable|email',
         ];
     }
 
@@ -35,7 +34,6 @@ class GroupUserRequest extends FormRequest
         return [
             'firstname.required' => 'Firstname is required',
             'name.required' => 'Name is required',
-            'email.email' => 'This is not a valid email',
         ];
     }
 }

@@ -12,7 +12,7 @@ class GroupUser extends Model
     use HasFactory;
 
     protected $fillable = [
-        'firstname', 'name', 'email'
+        'firstname', 'name', 'code', 'group_id'
     ];
 
     protected $hidden = [

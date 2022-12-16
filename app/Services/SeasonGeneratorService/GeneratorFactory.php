@@ -4,24 +4,19 @@ namespace App\Services\SeasonGeneratorService;
 
 use Exception;
 
-use App\Repositories\SeasonRepo;
-use App\Repositories\AbsenceRepo;
-use App\Repositories\TeamRepo;
-
+use App\Services\AbsenceService;
 
 class GeneratorFactory
 {
     public static function generate($type)
     {
-        $seasonRepo = new SeasonRepo();
-        $absenceRepo = new AbsenceRepo();
-        $teamRepo = new TeamRepo();
+        $absenceService = new AbsenceService();
 
         // assumes the use of an autoloader
         $generateSeasonName = "App\Services\SeasonGeneratorService\\".$type;
 
         if (class_exists($generateSeasonName)) {
-            return new $generateSeasonName($seasonRepo, $absenceRepo, $teamRepo);
+            return new $generateSeasonName($absenceService);
         } else {
             return redirect()->to('season/')->with('error', 'er is geen type generator gevonden met volgende naam: '.$type)->send();
         }

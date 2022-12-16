@@ -3,41 +3,30 @@
 namespace App\Http\Controllers\Season;
 
 use App\Http\Controllers\Controller;
-
+use App\Models\Season;
+use App\Models\Team;
 use Illuminate\Http\Request;
 
-use App\Repositories\Contracts\ISeason;
-use App\Repositories\Contracts\ITeam;
-
 use App\Services\SeasonGeneratorService\GeneratorFactory;
+use App\Services\SeasonService;
 
 //change name to GeneratedSeasonController???
 class SeasonGeneratorController extends Controller
 {
-    protected $seasonRepo;
-    protected $teamRepo;
+    protected $seasonService;
     
-    public function __construct(ISeason $seasonRepo, Iteam $teamRepo)
+    public function __construct(SeasonService $seasonService)
     {
-        $this->middleware('season')->except('index', 'public', 'playDates');
-        $this->seasonRepo = $seasonRepo;
-        $this->teamRepo = $teamRepo;
+        $this->seasonService = $seasonService;
     }
     
-    /**
-     * Get the season
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index($seasonId)
+    public function index(Season $season)
     {
-        $season = $this->seasonRepo->getSeason($seasonId);
         $seasonGenerator = GeneratorFactory::generate($season->type);
         return response()->json($seasonGenerator->getSeasonCalendar($season), 200);
     }
 
-    public function public($seasonId){
-        $season = $this->seasonRepo->getSeason($seasonId);       
+    public function public(Season $season){     
         if($season->public == 0){
             return response()->json($season->name." is not a public season", 203);
         } 
@@ -45,15 +34,8 @@ class SeasonGeneratorController extends Controller
         return response()->json($seasonGenerator->getSeasonCalendar($season), 200);
     }
     
-     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request, $seasonId)
+    public function store(Request $request, Season $season)
     {
-        $season = $this->seasonRepo->getSeason($seasonId);
         $seasonGenerator = GeneratorFactory::generate($season->type);
 
         if ($request->input('jsonSeason') != "") {
@@ -64,51 +46,40 @@ class SeasonGeneratorController extends Controller
         return response()->json("season couldn't be generated", 200);
     }
     
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function update(Request $request, Season $season)
     {
-        $season = $this->seasonRepo->getSeason($id);
         $seasonGenerator = GeneratorFactory::generate($season->type);
 
         $seasonGenerator->savePrefilledSeason($request['teamRange']);
-        $this->seasonRepo->seasonIsGenerated($id);
+        $season->is_generated = 1;
+        $season->save();
         return response()->json("season is updated", 200);
     }
     
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy(Season $season)
     {
-        $season = $this->seasonRepo->checkIfSeasonIsStarted($id);
-        if(count($season) == 0){
+        
+        $seasonStarted = $this->seasonService->checkIfSeasonIsStarted($season);
+
+        if($seasonStarted === true){
             return response()->json(false, 200);
         }
-        $this->teamRepo->deleteTeamsFromSeason($id);
-        $this->seasonRepo->seasonIsNotGenerated($id);
+        
+        Team::where('season_id', $season->id)->delete();
+        $season->is_generated = 0;
+        $season->save();
         return response()->json('Calendar is deleted', 200); 
     }
 
-    public function playDates($seasonId)
+    public function playDates(Season $season)
     {
-        $season = $this->seasonRepo->getseason($seasonId);
         $seasonGenerator = GeneratorFactory::generate($season->type);
         $daysSeason['data'] = $seasonGenerator->getPlayDates($season->begin, $season->end);
         return response()->json($daysSeason, 200);
     }
 
-    public function generateSeason($seasonId)
+    public function generateSeason(Season $season)
     {
-        $season = $this->seasonRepo->getSeason($seasonId);
         $seasonGenerator = GeneratorFactory::generate($season->type);
         $calendar = $seasonGenerator->generateSeason($season);
         return response()->json($calendar, 200);
@@ -146,8 +117,7 @@ class SeasonGeneratorController extends Controller
         */
     }
 
-    public function createEmptySeason($seasonId){
-        $season = $this->seasonRepo->getSeason($seasonId);
+    public function createEmptySeason(Season $season){
         $seasonGenerator = GeneratorFactory::generate($season->type);
         $calendar = $seasonGenerator->generateEmptySeason($season);
         return response()->json($calendar, 200);

@@ -25,12 +25,14 @@ class AbsenceRequest extends FormRequest
     {
         return [
             'date' => 'required|',
+            'group_user_id' => 'required'
         ];
     }
 
     public function message(){
         return [
             'date.required' => 'Absence is a required field',
+            'group_user_id.required' => 'Group user id is required',
         ];
     }
 }

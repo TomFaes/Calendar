@@ -72,11 +72,12 @@
             },
 
             groupUsers(){
-                if(this.group === undefined){
+                if(this.group.id === undefined){
                     return;
                 }
 
                 if(this.$store.state.selectedGroupUsers.data == undefined){
+                    console.log("TEST GROUP ID:" + this.group.id)
                     this.$store.dispatch('getSelectedGroupUsers', {groupId: this.group.id});
                 }
                 return this.$store.state.selectedGroupUsers.data;

@@ -23,8 +23,7 @@ class UserTest extends TestCase
      */
     protected function authenticatedUser($role = "Admin"){
         $user = Sanctum::actingAs(
-            $this->allUsers[0],
-            ['create-servers']
+            $this->allUsers[0]
         );
         $user->role = $role;
         return $user;
@@ -35,20 +34,14 @@ class UserTest extends TestCase
      */
     protected function ProfileDataTests($data, $testData) : void
     {
-
         $this->assertEquals($data['firstname'], $testData->firstname);
         $this->assertEquals($data['name'], $testData->name);
         $this->assertEquals($data['firstname']." ".$data['name'], $testData->full_name);
-        if(isset($data['role']) === true){
-            $this->assertEquals($data['role'], $testData->role);
-        }else{
-            $this->assertEquals('User', $testData->role);
-        }
     }
 
     public function test_profile_controller_index()
     {
-        $this->be($this->authenticatedUser('User'));
+        $this->be($this->authenticatedUser());
 
         $response = $this->get('/api/profile');
         $response->assertStatus(200);
@@ -61,7 +54,7 @@ class UserTest extends TestCase
 
     public function test_profile_controller_update()
     {
-        $this->be($this->authenticatedUser('User'));
+        $this->be($this->authenticatedUser());
         $data = User::factory()->make()->toArray();
 
         $response = $this->postJson('/api/profile/', $data);
@@ -74,7 +67,7 @@ class UserTest extends TestCase
 
     public function test_ProfileController_destroy()
     {
-        $this->be($this->authenticatedUser('User'));
+        $this->be($this->authenticatedUser());
 
         $response = $this->postJson('/api/profile/delete');
         $response->assertStatus(204);

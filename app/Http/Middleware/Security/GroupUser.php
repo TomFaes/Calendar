@@ -15,10 +15,7 @@ class GroupUser
     public function handle($request, Closure $next, $method = 'API')
     {
         $user = auth()->user();
-
-        $groupRepo = app('App\Repositories\Contracts\IGroup');
-        $groupUserRepo = app('App\Repositories\Contracts\IGroupUser');
-        $group = $groupRepo->getGroup($request->route('group_id'));
+        $group = $request->route('group') ?? null;
 
         if(isset($group) === false)
         {
@@ -40,12 +37,11 @@ class GroupUser
         if($memberOfGroup != 'Admin')
         {
             return response()->json("Group user middleware: You do not have the right to change this group: ".$group->name, 203);
-        }
-        
+        } 
         //You can't delete the admin of a group without selecting another one
         if (last(request()->segments()) == "delete"OR $request->method() == "DELETE") 
         {
-            $groupUser = $groupUserRepo->getGroupUser($request->route('id'));
+            $groupUser = $request->route('group_user');
             if($groupUser->user_id == $group->admin_id){
                 return response()->json("You can't delete the admin of  a group, first choose another admin.", 202);
             }

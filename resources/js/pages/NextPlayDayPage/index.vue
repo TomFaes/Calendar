@@ -3,7 +3,7 @@
         <div v-if="calendarData != undefined">
             <div v-if="calendarData['currentPlayDay'] == undefined">
                 <h2 v-if="Date.now() > new Date(season.begin)">Season is over</h2>
-                <h2 v-if="Date.now() < new Date(season.begin)">Season will begin on {{season.begin}}</h2>
+                <h2 v-if="Date.now() < new Date(season.begin)">Season will begin on {{convertDate(season.begin)}}</h2>
             </div>
             <div v-else-if="calendarData['seasonData'] != undefined">
                 <h2>day view</h2>
@@ -81,6 +81,10 @@
                     return;
                 }
                 this.$store.dispatch('getSelectedCalendar', {id: this.season.id});
+            },
+
+            convertDate(value){
+                return Moment(value, "YYYY-MM-DD").format('DD/MM/YYYY');
             },
         },
 

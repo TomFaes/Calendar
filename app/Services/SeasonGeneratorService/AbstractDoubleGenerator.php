@@ -2,31 +2,22 @@
 
 namespace App\Services\SeasonGeneratorService;
 
+use App\Models\Absence;
 use App\Models\Group;
 use App\Models\Season;
 use App\Models\Team;
 
-use App\Repositories\Contracts\ITeam;
-use App\Repositories\Contracts\ISeason;
-use App\Repositories\Contracts\IAbsence;
+use App\Services\AbsenceService;
 use DateTime;
 
 abstract class AbstractDoubleGenerator
 {
-    /** @var App\Repositories\Contracts\ISeason */
-    protected $season;
-    /** @var App\Repositories\Contracts\IAbsence */
-    protected $absence;
-    /** @var App\Repositories\Contracts\ITeam */
-    protected $team;
-
+    protected $absenceService;
     protected $totalTeams = 0;
 
-    public function __construct(ISeason $seasonRepo, IAbsence $absenceRepo, ITeam $teamRepo) 
+    public function __construct(AbsenceService $absenceService) 
     {
-        $this->season = $seasonRepo;
-        $this->absence = $absenceRepo;
-        $this->team = $teamRepo;
+        $this->absenceService = $absenceService;
     }
 
     abstract protected function createPersonStats(Season $season);
@@ -44,11 +35,12 @@ abstract class AbstractDoubleGenerator
         $allPossibleTeamArray = $this->createAllPossibleTeams($season->group);
 
         $gamesArray = array();
-
         //create the personArray to store data for the season
         $gamesArray['person'] = $this->createPersonStats($season);
-        $gamesArray['seasonTeams'] = $this->team->getFilledDatesInSeason($season->id)->toArray();
-
+        $gamesArray['seasonTeams'] = Team::where('season_id', $season->id)
+                                        ->whereNotNull('group_user_id')
+                                        ->get();
+                                        //->toArray();
         //get all date for the season
         $seasonDates = $this->getPlayDates($season->begin, $season->end);
 
@@ -130,7 +122,7 @@ abstract class AbstractDoubleGenerator
         $team->date = $day;
         $team->team = $teamNumber;
         $team->group_user_id = $groupUserId;
-        $this->team->saveTeam($team);
+        $team->save();
     }
 
     /**
@@ -361,7 +353,7 @@ abstract class AbstractDoubleGenerator
      */
     protected function getUserAbsenceDays($groupUserId, $seasonId)
     {
-        $absences = $this->absence->getUserAbsence($seasonId, $groupUserId);
+        $absences = Absence::where('group_user_id', $groupUserId)->where('season_id', $seasonId)->orderBy('date', 'asc')->get();
         $absenceArray = array();
         foreach ($absences as $absence) {
             $absenceArray[$absence->date] = $absence->date;
@@ -385,9 +377,11 @@ abstract class AbstractDoubleGenerator
 
         $arrayJson = array();
         $arrayJson['seasonData']['id']  = $season->id;
+        $arrayJson['seasonData']['admin_id']  = $season->admin_id;
         $arrayJson['seasonData']['type']  = $season->type;
         $arrayJson['seasonData']['seasonDraw']  = $season->SeasonDraw;
-        $arrayJson['absenceData'] = $this->absence->getSeasonAbsenceArray($season->id);
+        $arrayJson['seasonData']['allow_replacement']  = $season->allow_replacement;
+        $arrayJson['absenceData'] = $this->absenceService->getSeasonAbsenceArray($season);
 
         foreach($season->group->groupUsers as $object)
         {        
@@ -485,11 +479,10 @@ abstract class AbstractDoubleGenerator
                 if($groupUser['teamId'] == ""){
                     continue;
                 }
-
-                $team = $this->team->getTeam($groupUser['teamId']);
+                $team = Team::find($groupUser['teamId']);
                 $team->group_user_id = $groupUser['groupUser'];
                 $team->team = $groupUser['team'];
-                $this->team->saveTeam($team);                
+                $team->save();               
             }
         }
     }

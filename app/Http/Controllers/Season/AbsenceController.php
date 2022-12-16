@@ -6,52 +6,44 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AbsenceRequest;
 use App\Http\Resources\AbsenceResource;
 use App\Mail\RegisterAbsence;
+use App\Models\Absence;
 use App\Models\Season;
-use App\Repositories\Contracts\IAbsence;
-use App\Repositories\Contracts\ISeason;
 use Illuminate\Support\Facades\Mail;
 
 class AbsenceController extends Controller
 {
-    protected $absenceRepo;
-    protected $seasonRepo;
-    
-    public function __construct(IAbsence $absenceRepo, ISeason $seasonRepo) 
+    public function index(Season $season) 
     {
-        $this->middleware('absence:', ['only' => ['store', 'index']]);
-        
-        $this->absenceRepo = $absenceRepo;
-        $this->seasonRepo = $seasonRepo;
-    }
-
-    public function index($seasonId) 
-    {
-        $season = $this->seasonRepo->getSeason($seasonId);
         $absence = array();
         foreach($season->group->groupUsers AS $groupUser){
-            $absence[$groupUser->id] = $this->absenceRepo->getUserAbsence($seasonId, $groupUser->id);
+            $absence[$groupUser->id] = Absence::where('group_user_id', $groupUser->id)
+                                        ->where('season_id', $season->id)
+                                        ->orderBy('date', 'asc')
+                                        ->get();
         }
         return response()->json($absence, 200);
     }
     
-    public function store(AbsenceRequest $request, $seasonId) 
+    public function store(AbsenceRequest $request, Season $season) 
     {
-        $absence = $this->absenceRepo->create($request->all(), $seasonId);
+        $validated = $request->validated();
+        $validated['season_id'] = $season->id;
+        $absence = Absence::create($validated);
         return response()->json(new AbsenceResource($absence), 200);
     }
     
-    public function destroy($id) 
+    public function destroy(Season $season, Absence $absence) 
     {
-        $this->absenceRepo->delete($id);
+        $absence->delete();
         return response()->json("absence is removed", 204);
     }
 
     /**
      * sent a mail to all the users in the group to give up their absences for the selected season
      */
-    public function sentMailRegisterAbsence($seasonId)
+    public function sentMailRegisterAbsence(Season $season)
     {
-        $season = Season::find($seasonId);
+        //$season = Season::find($season->id);
         $mailBCC = array();
 
         foreach($season->group->groupUsers AS $groupUser){
@@ -61,7 +53,6 @@ class AbsenceController extends Controller
             if($groupUser->user->email == ""){
                 continue;
             }
-
             $mailBCC[] = $groupUser->user->email;
         }
     

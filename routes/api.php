@@ -1,9 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-//use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\Group\GroupController;
@@ -15,63 +13,111 @@ use App\Http\Controllers\Season\SeasonGeneratorController;
 use App\Http\Controllers\Season\AbsenceController;
 use App\Http\Controllers\Season\TeamController;
 
+use App\Http\Middleware\Security\Group;
+use App\Http\Middleware\Security\GroupUser;
+use App\Http\Middleware\Security\SeasonAbsence;
+use App\Http\Middleware\Security\SeasonAdmin;
+use App\Http\Middleware\Security\SeasonUser;
+
+//Info: //delete method doesn't work on 000webhost
+
 Route::post('login', [AuthenticationController::class, 'login']);
 Route::get('/logout', [AuthenticationController::class, 'logout']);
 //Route::post('register', [AuthController::class, 'register']);
 
-Route::get('/season/{id}/public', [SeasonGeneratorController::class, 'public']);
+Route::get('/season/{season}/public', [SeasonGeneratorController::class, 'public']);
 
 Route::middleware('auth:sanctum')->group( function () {
-    //All routes for profiles
-    Route::get('/profile', [ProfileController::class, 'index']);
-    Route::post('/profile', [ProfileController::class, 'update']);
-    Route::post('update-password', [ProfileController::class, 'updatePassword']);
+    Route::controller(ProfileController::class)
+        ->prefix('profile')
+        ->group( function (){
+            Route::get('/', 'index');
+            Route::post('/', 'update');
+            Route::post('/delete', 'destroy');
+        });
 
     //All routes for groups
-    //Route::get('/group', [GroupController::class, 'index']);
     Route::post('/group', [GroupController::class, 'store']);
-    Route::get('group/{id}', [GroupController::class, 'show']);
-    Route::post('/group/{id}', [GroupController::class, 'update']);
+    Route::prefix('group/{group}')
+        ->group(function (){
+            Route::controller(GroupController::class)
+                ->middleware(Group::class)
+                ->group(function(){
+                    Route::get('/', 'show');
+                    Route::post('/', 'update');
+                    Route::post('/delete', 'destroy');
+                });
+
+            Route::controller(GroupUsersController::class)
+                ->middleware(GroupUser::class)
+                ->group(function(){
+                    Route::get('/users', 'index');
+                    Route::post('/user', 'store');
+                    Route::post('/user/{group_user}', 'update');
+                    Route::post('/user/{group_user}/delete', 'destroy');
+                    Route::post('/user/{group_user}/regenerate_code', 'regenerateGroupUserCode');
+                });
+        });
 
     Route::get('/user-group', [UserGroupsController::class, 'index']);
-
-    Route::get('group/{group_id}/users', [GroupUsersController::class, 'index']);
-    Route::post('/group/{group_id}/user', [GroupUsersController::class, 'store']);
-    Route::post('/group/{group_id}/user/{id}', [GroupUsersController::class, 'update']);
-
-    Route::post('group/{group_id}/user/{id}/regenerate_code', [GroupUsersController::class, 'regenerateGroupUserCode']);
     Route::post('join_group', [GroupUsersController::class, 'joinGroup']);
 
-    //All routes for Seasons
+     //All routes for Seasons
+    Route::prefix('season/{season}')->group(function (){
+        Route::controller(SeasonController::class)
+            ->middleware(SeasonAdmin::class)
+            ->group(function(){
+                Route::post('/', 'update');
+                Route::get('/is_generated', 'seasonIsGenerated');
+                Route::post('/delete', 'destroy');
+            });
+
+        Route::controller(SeasonController::class)
+            ->middleware(SeasonAdmin::class)
+            ->prefix('/generator')
+            ->group(function(){
+                Route::get('/new', [SeasonGeneratorController::class, 'generateSeason']);
+                Route::post('/', [SeasonGeneratorController::class, 'store']);
+                Route::post('/{season_id}', [SeasonGeneratorController::class, 'update']);
+                Route::get('/create_empty_season', [SeasonGeneratorController::class, 'createEmptySeason']);
+                Route::post('/{season_id}/delete', [SeasonGeneratorController::class, 'destroy']);
+            });
+        Route::get('/absence/sent_mail_register_absence', [AbsenceController::class, 'sentMailRegisterAbsence'])->middleware(SeasonAdmin::class);
+        Route::post('/team/range', [TeamController::class, 'updateRange'])->middleware(SeasonAdmin::class);
+
+        Route::middleware(SeasonUser::class)
+            ->group(function(){
+                Route::get('/', [SeasonController::class, 'show']);
+                Route::get('/generator', [SeasonGeneratorController::class, 'index']);
+                Route::get('/generator/play_dates', [SeasonGeneratorController::class, 'playDates']);
+            });
+
+        Route::middleware(SeasonAbsence::class)
+            ->group(function(){
+                Route::controller(AbsenceController::class)
+                    ->group(function(){
+                        Route::get('/absence', 'index');
+                        Route::post('/absence', 'store');
+                        Route::post('/absence/{absence}/delete', 'destroy');
+                    });
+            });
+            
+        Route::controller(TeamController::class)
+            ->prefix('/team/{team}')
+            ->group(function(){ 
+                Route::post('/ask_for_replacement', 'askForReplacement');
+                Route::post('/cancel_request_for_replacement', 'cancelRequestForReplacement');
+                Route::post('/confirm_replacement', 'confirmReplacement');
+            });
+        
+    });
+
     Route::get('/season', [SeasonController::class, 'index']);
-    Route::get('/season/{id}', [SeasonController::class, 'show']);
     Route::post('/season', [SeasonController::class, 'store']);
-    Route::post('/season/{id}', [SeasonController::class, 'update']);
-    Route::get('/season/{id}/is_generated', [SeasonController::class, 'seasonIsGenerated']);
+    Route::get('/active_seasons', ActiveSeasonController::class);
 
-    Route::get('/active_seasons', [ActiveSeasonController::class, 'index']);
 
-    Route::get('season/{season_id}/absence', [AbsenceController::class, 'index']);
-    Route::post('season/{season_id}/absence', [AbsenceController::class, 'store']);
-    Route::get('season/{season_id}/absence/sent_mail_register_absence', [AbsenceController::class, 'sentMailRegisterAbsence']);
+    
 
-    Route::get('/season/{id}/generator', [SeasonGeneratorController::class, 'index']);
-    Route::get('/season/{id}/generator/new', [SeasonGeneratorController::class, 'generateSeason']);
-    Route::post('/season/{id}/generator', [SeasonGeneratorController::class, 'store']);
-    Route::post('/season/{id}/generator/{season_id}', [SeasonGeneratorController::class, 'update']);
-    Route::get('/season/{id}/generator/play_dates', [SeasonGeneratorController::class, 'playDates']);
-    Route::get('/season/{id}/generator/create_empty_season', [SeasonGeneratorController::class, 'createEmptySeason']);
-
-    Route::post('team/range', [TeamController::class, 'updateRange']);
-    Route::post('team/{id}/ask_for_replacement', [TeamController::class, 'askForReplacement']);
-    Route::post('team/{id}/cancel_request_for_replacement', [TeamController::class, 'cancelRequestForReplacement']);
-    Route::post('team/{id}/confirm_replacement', [TeamController::class, 'confirmReplacement']);
-
-    //delete method doesn't work on 000webhost
-    Route::post('/profile/delete', [ProfileController::class, 'destroy']);
-    Route::post('/group/{id}/delete', [GroupController::class, 'destroy']);
-    Route::post('group/{group_id}/user/{id}/delete', [GroupUsersController::class, 'destroy']);
-    Route::post('/season/{id}/delete', [SeasonController::class, 'destroy']);
-    Route::post('/season/{id}/generator/{season_id}/delete', [SeasonGeneratorController::class, 'destroy']);
-    Route::post('/absence/{id}/delete', [AbsenceController::class, 'destroy']);
+    
 });

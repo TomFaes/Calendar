@@ -124,6 +124,12 @@ This version isn't completly finished. Next things are still in development:
     - create mailable for giving up absences
     - create schedule and mailable for mailing next play day. 
 
+# Version 4.04: 
+    - update packages
+    - replace repositories by services
+    - rework routes
+    - rework middleware
+
 # Future
 Version 4.XX: 
     - create calendars for small teams. 
