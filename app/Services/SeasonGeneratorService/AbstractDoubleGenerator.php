@@ -155,7 +155,13 @@ abstract class AbstractDoubleGenerator
         $teamArray = array();
         $z = 0;
         foreach ($group->groupUsers as $user1) {
+            if($user1->ignore_user == 1){
+                continue;
+            }
             foreach ($group->groupUsers as $user2) {
+                if($user2->ignore_user == 1){
+                    continue;
+                }
                 if ($user1->id < $user2->id) {
                     $teamArray[$z]['player1'] = $user1->id;
                     $teamArray[$z]['player2'] = $user2->id;
@@ -321,7 +327,32 @@ abstract class AbstractDoubleGenerator
                 continue;
             }
 
-            if ($personArray[$teamPlayer1]['totalGames'] < $highestGames AND $personArray[$teamPlayer2]['totalGames'] < $highestGames AND $personArray[$teamPlayer1][$teamNumber] < $highestTeamPlays AND $personArray[$teamPlayer2][$teamNumber] < $highestTeamPlays) {
+            //if player 1 has ignore plays then break if the second player meets the requirements
+            if(
+                $personArray[$teamPlayer1]['ignorePlayStats'] == 1 && 
+                $personArray[$teamPlayer2]['totalGames'] < $highestGames && 
+                $personArray[$teamPlayer2][$teamNumber] < $highestTeamPlays
+            ){
+                break;
+            }
+
+            //if player 1 has ignore plays then break if the second player meets the requirements
+            if(
+                $personArray[$teamPlayer2]['ignorePlayStats'] == 1 && 
+                $personArray[$teamPlayer1]['totalGames'] < $highestGames && 
+                $personArray[$teamPlayer1][$teamNumber] < $highestTeamPlays
+            ){
+                //echo $teamPlayer2."<br>";
+                break;
+            }
+
+            //check if the player meet the max games
+            if (
+                $personArray[$teamPlayer1]['totalGames'] < $highestGames AND 
+                $personArray[$teamPlayer2]['totalGames'] < $highestGames AND 
+                $personArray[$teamPlayer1][$teamNumber] < $highestTeamPlays AND 
+                $personArray[$teamPlayer2][$teamNumber] < $highestTeamPlays
+                ) {
                 break;
             }
         }

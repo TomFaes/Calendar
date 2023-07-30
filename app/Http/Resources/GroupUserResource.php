@@ -24,6 +24,8 @@ class GroupUserResource extends JsonResource
             'user_id' => $this->user_id,
             'user' => new UserPublicResource($this->user),
             'code' => $this->code,
+            'ignore_user' => $this->ignore_user,
+            'ignore_plays' => $this->ignore_plays,
         ];
     }
 }

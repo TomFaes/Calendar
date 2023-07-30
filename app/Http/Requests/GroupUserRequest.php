@@ -26,6 +26,8 @@ class GroupUserRequest extends FormRequest
         return [
             'firstname' => 'required',
             'name' => 'required',
+            'ignore_user' => 'nullable|boolean',
+            'ignore_plays' => 'nullable|boolean',
         ];
     }
 

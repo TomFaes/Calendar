@@ -124,14 +124,19 @@ This version isn't completly finished. Next things are still in development:
     - create mailable for giving up absences
     - create schedule and mailable for mailing next play day. 
 
-# Version 4.04: 
+# Version 4.04: 16/12/2022
     - update packages
     - replace repositories by services
     - rework routes
     - rework middleware
 
+# Version 4.05: 
+    - Ignore groupusers in the generation of a season
+    - Ignore played games of a user in the generation of a season
+    
+
 # Future
-Version 4.XX: 
+    - upgrade to laravel 10
     - create calendars for small teams. 
     - rework security middleware
     

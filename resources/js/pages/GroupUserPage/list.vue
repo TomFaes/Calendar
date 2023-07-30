@@ -31,7 +31,7 @@
                     </td>
                         <td v-if="group.type_member == 'Admin'" class="options-column">
                             
-                            <button class="btn btn-primary"  v-if="!data.user_id" @click.prevent="updateGroupUser(data)"> <i class="fa fa-edit" style="heigth:14px; width:14px"></i></button>
+                            <button class="btn btn-primary" @click.prevent="updateGroupUser(data)"> <i class="fa fa-edit" style="heigth:14px; width:14px"></i></button>
                             <button class="btn btn-secondary" v-if="!data.user_id" @click.prevent="regenerateCode(data)" ><i class="fas fa-sync" style="heigth:14px; width:14px" ></i></button>
                             <button class="btn btn-danger" @click.prevent="deleteGroupUser(data)" ><i class="fas fa-trash-alt" style="heigth:14px; width:14px" ></i></button>
                         </td>
@@ -77,7 +77,6 @@
                 }
 
                 if(this.$store.state.selectedGroupUsers.data == undefined){
-                    console.log("TEST GROUP ID:" + this.group.id)
                     this.$store.dispatch('getSelectedGroupUsers', {groupId: this.group.id});
                 }
                 return this.$store.state.selectedGroupUsers.data;

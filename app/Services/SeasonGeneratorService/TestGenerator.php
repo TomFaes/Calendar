@@ -129,6 +129,9 @@ class TestGenerator extends AbstractDoubleGenerator implements IGenerator
     {
         $personStat = array();
         foreach ($season->group->groupUsers as $groupUser) {
+            if($groupUser->ignore_user == 1){
+                continue;
+            }
             $personStat[$groupUser->id]['id'] = $groupUser->id;
             $personStat[$groupUser->id]['name'] = $groupUser->firstname." ".$groupUser->name;
             $personStat[$groupUser->id]['totalGames'] = 0;
@@ -136,6 +139,7 @@ class TestGenerator extends AbstractDoubleGenerator implements IGenerator
             $personStat[$groupUser->id]['team1'] = 0;
             $personStat[$groupUser->id]['team2'] = 0;
             $personStat[$groupUser->id]['nonPlayedWeeks'] = 0;
+            $personStat[$groupUser->id]['ignorePlayStats'] = $groupUser->ignore_plays;
         }
         return $personStat;
     }

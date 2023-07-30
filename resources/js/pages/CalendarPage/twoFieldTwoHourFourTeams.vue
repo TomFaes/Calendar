@@ -82,11 +82,11 @@
                         <tbody>
                             <tr v-for="user in userData" :key="user.id">
                                 <td style="width:3em; left:0;">{{ user.firstname }}</td>
-                                <td><span v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['team1'] }}</span></td>
-                                <td><span v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['team2'] }}</span></td>
-                                <td><span v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['team3'] }}</span></td>
-                                <td><span v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['team4'] }}</span></td>
-                                <td><span v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['total'] }}</span></td>
+                                <td><span v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['team1'] }}</span><span v-else>0</span></td>
+                                <td><span v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['team2'] }}</span><span v-else>0</span></td>
+                                <td><span v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['team3'] }}</span><span v-else>0</span></td>
+                                <td><span v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['team4'] }}</span><span v-else>0</span></td>
+                                <td><span v-if="calendarData['stats'][user.id]">{{ calendarData['stats'][user.id]['total'] }}</span><span v-else>0</span></td>
                             </tr>
                         </tbody>
                     </table>
